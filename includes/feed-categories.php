@@ -5,12 +5,15 @@
         </div>
         <div class="content">
             <ul>
-                <li><a href="#">- Nature Lifestyle</a></li>
-                <li><a href="#">- Awesome Layouts</a></li>
-                <li><a href="#">- Creative Ideas</a></li>
-                <li><a href="#">- Responsive Templates</a></li>
-                <li><a href="#">- HTML5 / CSS3 Templates</a></li>
-                <li><a href="#">- Creative &amp; Unique</a></li>
+                <?php
+                $query = "SELECT * FROM post_categories LIMIT 5;";
+                $select_all_categories_sidebar = mysqli_query($connection, $query);
+
+                while ($row = mysqli_fetch_assoc($select_all_categories_sidebar)) {
+                    $name = $row["name"];
+                    echo "<li><a href='#'>{$name}</a></li>";
+                }   
+                ?>
             </ul>
         </div>
     </div>
