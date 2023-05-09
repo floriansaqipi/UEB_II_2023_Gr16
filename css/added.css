@@ -1,0 +1,10 @@
+@media (min-width: 992px){
+    .post-a-job {
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
+}
+
+body{
+    background-color: #ffffff;
+}
