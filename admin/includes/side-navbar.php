@@ -3,13 +3,14 @@
             <!-- Sidebar Menu-->
             <ul class="sidebar-menu">
                 <li class="nav-level">--- Navigation</li>
-                <li class="<?php if($_SERVER['SCRIPT_NAME']=="/dashboard.php") { ?>  active   <?php   }  ?> treeview">
+                <li class="<?php echo $page == "index" ? "active" : " "?> treeview">
+                
                     <a class="waves-effect waves-dark" href="index.html">
                         <i class="icon-speedometer"></i><span> Dashboard</span>
                     </a>                
                 </li>
                 <li class="nav-level">--- Components</li>
-                <li class="<?php if($_SERVER['SCRIPT_NAME']=="/dashboard.php") { ?>  active   <?php   }  ?> treeview">
+                <li class="<?php echo $page == "categories" ? "active" : " "?> treeview">
                     <a class="waves-effect waves-dark" href="categories.php">
                         <i class="icon-list"></i><span> Categories</span>
                     </a>                
