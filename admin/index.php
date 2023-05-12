@@ -1,3 +1,4 @@
+<?php $page = "index"; ?>
 <?php include "includes/header.php"; ?>
    <div class="loader-bg">
       <div class="loader-bar">

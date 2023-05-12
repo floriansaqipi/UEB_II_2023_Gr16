@@ -1,3 +1,6 @@
 body {
     font-family: 'Heebo', sans-serif;
 }
+.categories-table td{
+    vertical-align: middle !important;
+}
