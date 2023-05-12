@@ -9,6 +9,48 @@
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 </head>
 <body>
+    <?php
+    if(isset($_POST["submit"])){
+        $fullName=$_POST["fullname"];
+        $email=$_POST["email"];
+        $password=$_POST["password"];
+        $passwordConfirm=$_POST["confirm_password"];
+        $errors=array();
+      //check if there is any empty values provided by the user by using if
+
+        if(empty($fullName) OR empty($email) OR empty($password) OR empty($passwordConfirm)){
+            array_push($errors,"All fields are required");
+        }
+        //chech if the email provided by the user is valid or not
+        if(!filter_var($email,FILTER_VALIDATE_EMAIL)){
+            array_push($errors,"Email is not valid");
+
+        }
+        //check password length
+        if(strlen($password)<8){
+            array_push($errors,"Password mus be at least 8 characters long");
+
+        }
+        //check if the password and password confrim are the same
+
+        if($password !== $passwordConfirm){
+            array_push($errors,"The password does noy match");
+        }
+
+        //if the array length is greater than 0 we havee errors and we can't register the datas
+        
+        if(count($errors)>0){
+            foreach($errors as $error ){
+                echo "<div class='alert alert-danger'>$error<>";
+            }
+        }else{
+            //insert the data in database
+        }
+    }
+
+
+
+    ?>
 	<div class="container infinity-container">
 		<div class="row">
 			<div class="col-md-1 infinity-left-space"></div>
@@ -67,7 +109,6 @@
 			<div class="col-md-1 infinity-right-space"></div>
 		</div>
 	</div>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </body>
 </html>
