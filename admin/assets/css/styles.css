@@ -4,3 +4,7 @@ body {
 .categories-table td{
     vertical-align: middle !important;
 }
+
+.pad{
+    padding: 24px !important;
+}
