@@ -17,8 +17,8 @@
             </li>
             <li class="treeview <?php echo $page == "posts" ? "active" : " " ?>"><a class="waves-effect waves-dark" href="posts.php?"><i class="icon-docs"></i><span>Posts</span><i class="icon-arrow-down"></i></a>
                 <ul class="treeview-menu">
-                    <li class="<?php echo $sub_page == "all-posts" ? "active" : " " ?>"><a class="waves-effect waves-dark" href="posts.php"><i class="icon-arrow-right"></i> View All Posts</a></li>
-                    <li class="<?php echo $sub_page == "add-post" ? "active" : " " ?>"><a class="waves-effect waves-dark" href="posts.php?source=add_post"><i class="icon-arrow-right"></i> Add Post</a></li>
+                    <li class="<?php echo !isset($_GET["source"]) ? "active" : "" ?>"><a class="waves-effect waves-dark" href="posts.php"><i class="icon-arrow-right"></i> View All Posts</a></li>
+                    <li class="<?php echo isset($_GET["source"]) ? ($_GET["source"] == "add_post" ? "active" : "" )  : "" ?>"><a class="waves-effect waves-dark" href="posts.php?source=add_post"><i class="icon-arrow-right"></i> Add Post</a></li>
 
                 </ul>
             </li>

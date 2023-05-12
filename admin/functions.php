@@ -66,7 +66,6 @@ function updateCategory()
     if (isset($_POST['update'])) {
         if (empty($_POST['category'])) {
             $updateNameErr = "Value can't be empty";
-            
         } else {
             $update_cat_name = trim($_POST['category']);
             $query = "UPDATE post_categories SET name = '{$update_cat_name}' WHERE category_id = {$update_cat_id}";
@@ -97,4 +96,42 @@ function deleteCategory()
         }
         header("Location: categories.php");
     }
+}
+
+function getAllPostsTable()
+{
+    global $connection;
+    $query = "SELECT * FROM posts ";
+    $select_posts = mysqli_query($connection, $query);
+
+    if (!$select_posts) {
+
+        die("QUERY FAILED" . mysqli_error($connection));
+    }
+
+    while ($row = mysqli_fetch_assoc($select_posts)) {
+        $post_id = $row["post_id"];
+        $post_author = $row["author"];
+        $post_title = $row["title"];
+        $post_category_id = $row["category_id"];
+        $post_status = $row["status"];
+        $post_image = $row["image"];
+        $post_tags = $row["tags"];
+        $post_comment_count = $row["comment_count"];
+        $post_date = $row["date"];
+
+        echo "<tr>";
+        echo "<td> $post_id </td>";
+        echo "<td>$post_author </td>";
+        echo "<td>$post_title </td>";
+        echo "<td>$post_category_id </td>";
+        echo "<td>$post_status </td>";
+        echo "<td><img width=100 class='img-responsive' src='../images/$post_image' alt = 'image'></td>";
+        echo "<td>$post_tags </td>";
+        echo "<td>$post_comment_count </td>";
+        echo "<td>$post_date</td>";
+        echo "</tr>";
+    }
+
+
 }

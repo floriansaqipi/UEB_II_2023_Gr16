@@ -8,3 +8,10 @@ body {
 .pad{
     padding: 24px !important;
 }
+
+.full-widthi{
+    width: 100%  !important;
+}
+.custom-file-control:lang(en)::after {
+    content: "";
+}

@@ -1,4 +1,4 @@
-<?php $page = "posts"; $sub_page = "all-posts"?>
+<?php $page = "posts";?>
 <?php include "includes/header.php"; ?>
 <?php include "functions.php"; ?>
 
