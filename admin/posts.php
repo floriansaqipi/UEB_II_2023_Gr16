@@ -1,4 +1,4 @@
-<?php $page = "categories"; ?>
+<?php $page = "posts"; $sub_page = "all-posts"?>
 <?php include "includes/header.php"; ?>
 <?php include "functions.php"; ?>
 
@@ -249,95 +249,22 @@
          <!-- Main content starts -->
          <div>
             <!-- Row Starts -->
-            <div class="row">
-               <div class="col-sm-12 p-0">
-                  <div class="main-header">
-                     <h4>Manage Categories</h4>
-                     <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
-                        <li class="breadcrumb-item"><a href="index.php"><i class="icofont icofont-home"></i></a>
-                        </li>
-                        <li class="breadcrumb-item"><a href="categories.php">Categories</a>
-                        </li>
-                        <li class="breadcrumb-item"><a href="form-elements-bootstrap.html">Manage Categories</a>
-                        </li>
-                     </ol>
-                  </div>
-               </div>
-            </div>
-            <!-- Row end -->
+            <?php 
+                if(isset($_GET["source"])){
+                    $source = $_GET["source"];
+                }else {
+                    $source = "";
+                }
 
-            <!-- Row start -->
-            <div class="row">
-               <!-- Form Control starts -->
-               <!-- Form Control ends -->
-
-               <!-- Textual inputs starts -->
-               <div class="col-lg-6">
-                  <div class="col-lg-12">
-                     <div class="card">
-                        <div class="card-header">
-                           <h5 class="card-header-text">Add category</h5>
-                        </div>
-
-                        <!-- end of modal -->
-                        <?php insertCategory(); ?>
-                        <div class="card-block">
-                           <form action="" method="post">
-                              <div class="form-group row <?php echo !empty($insertNameErr) ? "has-danger" : "" ?>">
-                                 <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Category</label>
-                                 <div class="col-sm-10">
-                                    <input class="form-control" type="text" name="category" value="<?php echo $cat_name; ?>" id="example-text-input" placeholder="Add a category">
-                                    <div class="form-control-feedback"><?php echo $insertNameErr; ?></div>
-                                 </div>
-                              </div>
-                              <div class="form-group row">
-                                 <div class="col-sm-10">
-                                    <button type="submit" name="submit" class="btn btn-inverse-success waves-effect waves-light">Add</button>
-                                 </div>
-                                 
-                              </div>
-                           </form>
-                        </div>
-                     </div>
-                  </div>
-                  <?php
-                  if (isset($_GET["edit"])) {
-                     include "includes/edit-category-form.php";
-                  }
-                  ?>
-
-
-               </div>
-               <div class="col-lg-6">
-                  <div class="card">
-                     <div class="card-header">
-                        <h5 class="card-header-text">Categories</h5>
-
-                     </div>
-                     <div class="card-block">
-                        <div class="row">
-                           <div class="col-sm-12 table-responsive">
-                              <table class="table categories-table">
-                                 <thead>
-                                    <tr>
-                                       <th>Id</th>
-                                       <th>Category Name</th>
-                                       <th></th>
-                                       <th></th>
-
-                                    </tr>
-                                 </thead>
-                                 <tbody>
-                                    <?php getAllCategoriesAdminTable(); ?>
-                                    <?php deleteCategory(); ?>
-                                 </tbody>
-                              </table>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
+                switch($source){
+                    case 'add_post';
+                        include "includes/add-post.php";
+                        break;
+                    default:
+                    
+                    include "includes/all-posts.php";
+                }
+            ?>
             <!-- Textual inputs ends -->
          </div>
          <!-- Row end -->
@@ -351,4 +278,4 @@
 </div>
 </div>
 
-<?php include "includes/footer.php"; ?>
+<?php include "includes/footer.php"?>  
