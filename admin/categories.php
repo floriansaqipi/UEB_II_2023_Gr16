@@ -2,11 +2,11 @@
 <?php include "includes/header.php"; ?>
 <?php include "functions.php"; ?>
 
-<div class="wrapper">
+<!-- <div class="wrapper">
    <div class="loader-bg">
       <div class="loader-bar">
       </div>
-   </div>
+   </div> -->
    <!-- Navbar-->
    <?php include "includes/navbar.php"; ?>
    <!-- Side-Nav-->
@@ -273,60 +273,40 @@
 
                <!-- Textual inputs starts -->
                <div class="col-lg-6">
-                  <div class="card">
-                     <div class="card-header">
-                        <h5 class="card-header-text">Add category</h5>
-                     </div>
+                  <div class="col-lg-12">
+                     <div class="card">
+                        <div class="card-header">
+                           <h5 class="card-header-text">Add category</h5>
+                        </div>
 
-                     <!-- end of modal -->
-                     <?php insertCategory(); ?>
-                     <div class="card-block">
-                        <form action="" method="post">
-                           <div class="form-group row <?php echo !empty($insertNameErr) ? "has-danger" : ""?>">
-                              <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Category</label>
-                              <div class="col-sm-10">
-                                 <input class="form-control" type="text" name="category" value = "<?php echo $cat_name;?>" id="example-text-input" placeholder="Add a category">
-                                 <div class="form-control-feedback"><?php echo $insertNameErr; ?></div>
+                        <!-- end of modal -->
+                        <?php insertCategory(); ?>
+                        <div class="card-block">
+                           <form action="" method="post">
+                              <div class="form-group row <?php echo !empty($insertNameErr) ? "has-danger" : "" ?>">
+                                 <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Category</label>
+                                 <div class="col-sm-10">
+                                    <input class="form-control" type="text" name="category" value="<?php echo $cat_name; ?>" id="example-text-input" placeholder="Add a category">
+                                    <div class="form-control-feedback"><?php echo $insertNameErr; ?></div>
+                                 </div>
                               </div>
-                           </div>
-                           <div class="form-group row">
-                              <div class="col-sm-10">
-                                 <button type="submit" name="submit" class="btn btn-inverse-success waves-effect waves-light">Add</button>
+                              <div class="form-group row">
+                                 <div class="col-sm-10">
+                                    <button type="submit" name="submit" class="btn btn-inverse-success waves-effect waves-light">Add</button>
+                                 </div>
+                                 
                               </div>
-
-                           </div>
-                        </form>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-lg-6">
-                  <div class="card">
-                     <div class="card-header">
-                        <h5 class="card-header-text">Edit Category</h5>
-                     </div>
-
-                     <!-- end of modal -->
-                     <?php 
-                     
-                     ?>
-                     <div class="card-block">
-                        <form action="" method="post">
-                           <div class="form-group row <?php echo !empty($updateNameErr) ? "has-danger" : ""?>">
-                              <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Category</label>
-                              <div class="col-sm-10">
-                                 <input class="form-control" type="text" name="category" value = "<?php echo $update_cat_name;?>" id="example-text-input" placeholder="Add a category">
-                                 <div class="form-control-feedback"><?php echo $updateNameErr; ?></div>
-                              </div>
-                           </div>
-                           <div class="form-group row">
-                              <div class="col-sm-10">
-                                 <button type="submit" name="submit" class="btn btn-inverse-success waves-effect waves-light">Add</button>
-                              </div>
-
-                           </div>
-                        </form>
+                           </form>
+                        </div>
                      </div>
                   </div>
+                  <?php
+                  if (isset($_GET["edit"])) {
+                     include "includes/edit-category-form.php";
+                  }
+                  ?>
+
+
                </div>
                <div class="col-lg-6">
                   <div class="card">
@@ -349,6 +329,7 @@
                                  </thead>
                                  <tbody>
                                     <?php getAllCategoriesAdminTable(); ?>
+                                    <?php deleteCategory(); ?>
                                  </tbody>
                               </table>
                            </div>

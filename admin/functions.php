@@ -34,6 +34,7 @@ function insertCategory()
 {
     global $connection;
     global $insertNameErr;
+    global $cat_name;
     // global $insertName;
     $insertNameErr = "";
     // $insertName = "";
@@ -57,21 +58,43 @@ function updateCategory()
 {
     global $connection;
     global $updateNameErr;
-    // global $updateName;
+    global $update_cat_name;
+    global $update_cat_id;
+    // echo $update_cat_id;
+    $update_cat_name = "";
     $updateNameErr = "";
-    // $updateName = "";
-    if (isset($_POST["submit"])) {
-        if (empty($_POST["category"])) {
+    if (isset($_POST['update'])) {
+        if (empty($_POST['category'])) {
             $updateNameErr = "Value can't be empty";
+            
         } else {
-            $cat_name = trim($_POST["category"]);
-            $query = "update INTO post_categories(name) VALUES ('{$cat_name}'); ";
+            $update_cat_name = trim($_POST['category']);
+            $query = "UPDATE post_categories SET name = '{$update_cat_name}' WHERE category_id = {$update_cat_id}";
+            echo $query;
             $update_category_query = mysqli_query($connection, $query);
 
             if (!$update_category_query) {
 
                 die("QUERY FAILED" . mysqli_error($connection));
             }
+            header("Location: categories.php");
         }
+    }
+}
+
+function deleteCategory()
+{
+    global $connection;
+    if (isset($_GET["delete"])) {
+        $delete_cat_id = $_GET["delete"];
+
+        $query = "DELETE FROM post_categories WHERE category_id =  {$delete_cat_id};";
+        $delete_cat_query = mysqli_query($connection, $query);
+
+        if (!$delete_cat_id) {
+
+            die("QUERY FAILED" . mysqli_error($connection));
+        }
+        header("Location: categories.php");
     }
 }
