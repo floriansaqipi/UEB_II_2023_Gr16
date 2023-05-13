@@ -65,46 +65,25 @@ if (isset($_GET["p_id"])) {
                 <div class="col-lg-12">
                     <div class="sidebar-item comments">
                         <div class="sidebar-heading">
-                            <h2>4 comments</h2>
+                            <?php 
+                                $query = "SELECT COUNT(*) comment_count FROM comments WHERE post_id = $post_id ";
+
+                                $comment_post_count_query = mysqli_query($connection, $query);
+                                
+                                confirmQuery($comment_post_count_query);
+
+                                while($row = mysqli_fetch_array($comment_post_count_query)){
+                                    $comment_count = $row["comment_count"];
+                                    echo "<h2>$comment_count Comments</h2>";
+                                }
+
+                            ?>
+                            <!-- <h2>4 comments</h2> -->
                         </div>
                         <div class="content">
                             <ul>
-                                <li>
-                                    <div class="author-thumb">
-                                        <img src="assets/images/comment-author-01.jpg" alt="">
-                                    </div>
-                                    <div class="right-content">
-                                        <h4>Charles Kate<span>May 16, 2020</span></h4>
-                                        <p>Fusce ornare mollis eros. Duis et diam vitae justo fringilla condimentum eu quis leo. Vestibulum id turpis porttitor sapien facilisis scelerisque. Curabitur a nisl eu lacus convallis eleifend posuere id tellus.</p>
-                                    </div>
-                                </li>
-                                <li class="replied">
-                                    <div class="author-thumb">
-                                        <img src="assets/images/comment-author-02.jpg" alt="">
-                                    </div>
-                                    <div class="right-content">
-                                        <h4>Thirteen Man<span>May 20, 2020</span></h4>
-                                        <p>In porta urna sed venenatis sollicitudin. Praesent urna sem, pulvinar vel mattis eget.</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="author-thumb">
-                                        <img src="assets/images/comment-author-03.jpg" alt="">
-                                    </div>
-                                    <div class="right-content">
-                                        <h4>Belisimo Mama<span>May 16, 2020</span></h4>
-                                        <p>Nullam nec pharetra nibh. Cras tortor nulla, faucibus id tincidunt in, ultrices eget ligula. Sed vitae suscipit ligula. Vestibulum id turpis volutpat, lobortis turpis ac, molestie nibh.</p>
-                                    </div>
-                                </li>
-                                <li class="replied">
-                                    <div class="author-thumb">
-                                        <img src="assets/images/comment-author-02.jpg" alt="">
-                                    </div>
-                                    <div class="right-content">
-                                        <h4>Thirteen Man<span>May 22, 2020</span></h4>
-                                        <p>Mauris sit amet justo vulputate, cursus massa congue, vestibulum odio. Aenean elit nunc, gravida in erat sit amet, feugiat viverra leo.</p>
-                                    </div>
-                                </li>
+                                <?php include "includes/post-comments.php" ;?>
+
                             </ul>
                         </div>
                     </div>
@@ -117,18 +96,18 @@ if (isset($_GET["p_id"])) {
                         </div>
                         <div class="col-md-12">
                             <label for="validationCustom03" class="form-label">Author</label>
-                            <input type="text" name="comment_author" class="form-control" value="<?php echo $comment_author; ?>" placeholder="Enter Author" id="validationCustom03" >
-                            
+                            <input type="text" name="comment_author" class="form-control" value="<?php echo $comment_author; ?>" placeholder="Enter Author" id="validationCustom03">
+
                         </div>
                         <div class="col-md-12">
                             <label for="validationTextarea" class="form-label">Content</label>
-                            <textarea name ="comment_content" class="form-control <?php echo !empty($contentErr) ? "is-invalid" : "" ?>"  id="validationTextarea" placeholder="Enter content" required><?php echo $comment_content; ?></textarea>
+                            <textarea name="comment_content" class="form-control <?php echo !empty($contentErr) ? "is-invalid" : "" ?>" id="validationTextarea" placeholder="Enter content" required><?php echo $comment_content; ?></textarea>
                             <div class="invalid-feedback">
-                                <?php echo $contentErr;?>
+                                <?php echo $contentErr; ?>
                             </div>
                         </div>
                         <div class="col-12">
-                            <button class="btn btn-primary" type="submit" name="post_comment" >Post Comment</button>
+                            <button class="btn btn-primary" type="submit" name="post_comment">Post Comment</button>
                         </div>
                     </form>
                 </div>
