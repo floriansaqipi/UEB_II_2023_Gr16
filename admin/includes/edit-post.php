@@ -56,9 +56,12 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-search-input" class="col-xs-2 col-form-label form-control-label">Post Category Id</label>
+                        <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Category</label>
                         <div class="col-sm-10">
-                            <input name="post_category_id" class="form-control" type="text" value="<?php echo $post_category_id; ?>" id="example-search-input" placeholder="Enter Category">
+                            <select class="form-control" name="post_category" id="exampleSelect1" >
+                                <?php getCurrentCategoryEdit(); ?>
+                                <?php getNotCurrentCategoriesEdit(); ?>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -83,6 +86,9 @@
                                 <input name="post_image" type="file" id="file" class="custom-file-input">
                                 <span class="custom-file-control" id="file-span">Choose file</span>
                             </label>
+                        </div>
+                        <div class="col-sm-2">
+
                         </div>
                         <div class="col-sm-10">
                             

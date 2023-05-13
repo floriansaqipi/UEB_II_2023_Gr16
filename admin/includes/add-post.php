@@ -46,7 +46,7 @@
             <!-- end of modal -->
             <div class="card-block">
                 <?php
-                    insertPostAdmin();
+                insertPostAdmin();
                 ?>
                 <form action="" method="post" enctype="multipart/form-data">
                     <div class="form-group row <?php echo !empty($titleErr) ? "has-danger" : "" ?>">
@@ -57,9 +57,11 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="example-search-input" class="col-xs-2 col-form-label form-control-label">Post Category Id</label>
+                        <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Category</label>
                         <div class="col-sm-10">
-                            <input name="post_category_id" class="form-control" type="text" value="" id="example-search-input" placeholder="Enter Category">
+                            <select class="form-control" name="post_category" id="exampleSelect1" >
+                                <?php generateOptionsCategories(); ?>
+                            </select>
                         </div>
                     </div>
                     <div class="form-group row">
@@ -84,8 +86,11 @@
                                 <span class="custom-file-control" id="file-span">Choose file</span>
                             </label>
                         </div>
+                        <div class="col-sm-2">
+
+                        </div>
                         <div class="col-sm-10">
-                            
+
                             <div class="form-control-feedback"><?php echo $imageErr; ?></div>
                         </div>
                     </div>

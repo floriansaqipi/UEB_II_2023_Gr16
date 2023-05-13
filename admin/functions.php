@@ -135,7 +135,8 @@ function getAllPostsTable()
         echo "<td> $post_id </td>";
         echo "<td>$post_author </td>";
         echo "<td>$post_title </td>";
-        echo "<td>$post_category_id </td>";
+
+        getCategoryNamesById($post_category_id);
         echo "<td>$post_status </td>";
         echo "<td><img width=100 class='img-responsive' src='../images/$post_image' alt = 'image'></td>";
         echo "<td>$post_tags </td>";
@@ -155,6 +156,21 @@ function getAllPostsTable()
     }
 }
 
+function getCategoryNamesById($post_category_id)
+{
+    global $connection;
+    $query = "SELECT * FROM post_categories WHERE category_id = $post_category_id ";
+    $category_name_query = mysqli_query($connection, $query);
+
+    confirmQuery($category_name_query);
+
+    while ($row = mysqli_fetch_assoc($category_name_query)) {
+        $post_category_name = $row["name"];
+    }
+
+    echo "<td>$post_category_name</td>";
+}
+
 function insertPostAdmin()
 {
     global $connection;
@@ -167,7 +183,7 @@ function insertPostAdmin()
 
         $post_title = $_POST["post_title"];
         $post_author = $_POST["post_author"];
-        $post_category_id = $_POST["post_category_id"];
+        $post_category_id = $_POST["post_category"];
         $post_status = $_POST["post_status"];
         $post_image = $_FILES["post_image"]["name"];
         $post_image_temp = $_FILES["post_image"]["tmp_name"];
@@ -186,33 +202,34 @@ function insertPostAdmin()
             }
         }
 
-        
-        if (file_exists($post_image_temp)) {
-            $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
-            
-            if (!in_array($file_extension, $allowed_extensions)) {
-                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
-            } else if ($post_image_size > 3000000) {
-                $imageErr = "Image can't be over 3MB";
-            } else {
-                
-                move_uploaded_file($post_image_temp, "../images/$post_image");
-                
-            }
-        }
         if (empty($post_content)) {
             $contentErr = "Title can not be empty";
         } else {
             $pattern = "/.{3,}/";
             if (!preg_match($pattern, trim($post_content))) {
                 $contentErr = "Title must be longer than 3 characters";
-            }else {
-                $query = "INSERT INTO posts (category_id, title, author, date, image, content, tags, status) ";
-                $query .= "VALUES ('$post_category_id', '$post_title', '$post_author', now(), '$post_image', '$post_content', '$post_tags', '$post_status') ";
-                $insert_post_admin_query = mysqli_query($connection, $query);
-                confirmQuery($insert_post_admin_query);
-                header("Location: posts.php");
             }
+        }
+
+        if (file_exists($post_image_temp)) {
+            $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
+
+            if (!in_array($file_extension, $allowed_extensions)) {
+                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($post_image_size > 3000000) {
+                $imageErr = "Image can't be over 3MB";
+            } else {
+
+                move_uploaded_file($post_image_temp, "../images/$post_image");
+            }
+        }
+
+        if (empty($titleErr) && empty($imageErr) && empty($contentErr)) {
+            $query = "INSERT INTO posts (category_id, title, author, date, image, content, tags, status) ";
+            $query .= "VALUES ('$post_category_id', '$post_title', '$post_author', now(), '$post_image', '$post_content', '$post_tags', '$post_status') ";
+            $insert_post_admin_query = mysqli_query($connection, $query);
+            confirmQuery($insert_post_admin_query);
+            header("Location: posts.php");
         }
     }
 }
@@ -264,11 +281,11 @@ function editPostAdmin()
     $titleErr = $imageErr = $contentErr = "";
     // $post_title = $post_image = $post_content = "";
     $allowed_extensions = ["jpg", "png", "gid", "jpeg"];
-    if (isset($_POST["add-post"])) {
+    if (isset($_POST["edit-post"])) {
 
         $post_title = $_POST["post_title"];
         $post_author = $_POST["post_author"];
-        $post_category_id = $_POST["post_category_id"];
+        $post_category_id = $_POST["post_category"];
         $post_status = $_POST["post_status"];
         $post_image = $_FILES["post_image"]["name"];
         $post_image_temp = $_FILES["post_image"]["tmp_name"];
@@ -287,49 +304,103 @@ function editPostAdmin()
             }
         }
 
-        
-        if (file_exists($post_image_temp)) {
-            $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
-            
-            if (!in_array($file_extension, $allowed_extensions)) {
-                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
-            } else if ($post_image_size > 3000000) {
-                $imageErr = "Image can't be over 3MB";
-            } else {
-                
-                move_uploaded_file($post_image_temp, "../images/$post_image");
-                
-            }
-        }else {
-            $query = "SELECT * FROM posts WHERE post_id = $post_id ";
-            $select_image_query = mysqli_query($connection, $query);
-            confirmQuery($select_image_query);
-            while($row = mysqli_fetch_assoc($select_image_query)){
-                $post_image = $row["image"];
-            }
-        }
         if (empty($post_content)) {
             $contentErr = "Title can not be empty";
         } else {
             $pattern = "/.{3,}/";
             if (!preg_match($pattern, trim($post_content))) {
                 $contentErr = "Title must be longer than 3 characters";
-            }else {
-                $query = "UPADTE posts SET";
-                $query .= " category_id = '$post_category_id', " ;
-                $query .= " title = '$post_title', " ;
-                $query .= " author = '$post_author', " ;
-                $query .= " date = now(), " ;
-                $query .= " image = '$post_image', " ;
-                $query .= " content = '$post_content', " ;
-                $query .= " tags = '$post_tags', " ;
-                $query .= " status = '$post_status' " ;
-                $query .= "WHERE post_id = $post_id ";
-                
-                $update_post_admin_query = mysqli_query($connection, $query);
-                confirmQuery($update_post_admin_query);
-                header("Location: posts.php");
             }
         }
-    }   
+
+        if (file_exists($post_image_temp)) {
+            $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
+
+            if (!in_array($file_extension, $allowed_extensions)) {
+                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($post_image_size > 3000000) {
+                $imageErr = "Image can't be over 3MB";
+            } else {
+
+                move_uploaded_file($post_image_temp, "../images/$post_image");
+            }
+        } else {
+            $query = "SELECT * FROM posts WHERE post_id = $post_id ";
+            $select_image_query = mysqli_query($connection, $query);
+            confirmQuery($select_image_query);
+            while ($row = mysqli_fetch_assoc($select_image_query)) {
+                $post_image = $row["image"];
+            }
+        }
+        echo $post_category_id;
+        if ($titleErr == "" && $imageErr == "" && $contentErr == "") {
+
+            $query = "UPDATE posts SET ";
+            $query .= "category_id = $post_category_id, ";
+            $query .= "title = '$post_title', ";
+            $query .= "author = '$post_author', ";
+            $query .= "date = now(), ";
+            $query .= "image = '$post_image', ";
+            $query .= "content = '$post_content', ";
+            $query .= "tags = '$post_tags', ";
+            $query .= "status = '$post_status' ";
+            $query .= "WHERE post_id = $post_id ";
+
+            $update_post_admin_query = mysqli_query($connection, $query);
+            confirmQuery($update_post_admin_query);
+            header("Location: posts.php");
+        }
+    }
+}
+
+
+function generateOptionsCategories()
+{
+    global $connection;
+    $query = "SELECT * FROM post_categories ";
+    $all_category_option_query = mysqli_query($connection, $query);
+
+    confirmQuery($all_category_option_query);
+
+    while ($row = mysqli_fetch_array($all_category_option_query)) {
+        $category_id = $row["category_id"];
+        $category_name = $row["name"];
+        echo "<option value='$category_id'>$category_name</option>";
+    }
+}
+
+function getCurrentCategoryEdit()
+{
+    global $connection, $post_category_id;
+
+    $query = "SELECT * FROM post_categories WHERE category_id = $post_category_id ";
+
+
+    $select_current_option_query = mysqli_query($connection, $query);
+
+    confirmQuery($select_current_option_query);
+
+    while ($row = mysqli_fetch_assoc($select_current_option_query)) {   
+        $category_id = $row["category_id"];
+        $category_name = $row["name"];
+        echo "<option value='$category_id'>$category_name</option>";
+    }
+}
+
+function getNotCurrentCategoriesEdit(){
+    global $connection, $post_category_id;
+
+    $query = "SELECT * FROM post_categories WHERE category_id != $post_category_id ";
+
+
+    $select_current_option_query = mysqli_query($connection, $query);
+
+    confirmQuery($select_current_option_query);
+
+    while ($row = mysqli_fetch_assoc($select_current_option_query)) {   
+        $category_id = $row["category_id"];
+        $category_name = $row["name"];
+        echo "<option value='$category_id'>$category_name</option>";
+    }
+
 }
