@@ -1,6 +1,5 @@
 <?php $page = "posts"; ?>
 <?php include "includes/header.php"; ?>
-<?php include "functions.php"; ?>
 
 <!-- <div class="wrapper">
    <div class="loader-bg">

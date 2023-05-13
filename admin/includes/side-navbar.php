@@ -5,7 +5,7 @@
             <li class="nav-level">--- Navigation</li>
             <li class="<?php echo $page == "index" ? "active" : " " ?> treeview">
 
-                <a class="waves-effect waves-dark" href="index.html">
+                <a class="waves-effect waves-dark" href="index.php">
                     <i class="icon-speedometer"></i><span> Dashboard</span>
                 </a>
             </li>
