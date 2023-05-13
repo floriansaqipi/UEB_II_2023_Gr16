@@ -61,11 +61,14 @@
                                     <th>Tags</th>
                                     <th>Comments</th>
                                     <th>Date</th>
+                                    <th>Edit</th>
+                                    <th>Delete</th>
 
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php getAllPostsTable(); ?>
+                                <?php deletePostAdmin() ;?>
                             </tbody>
                         </table>
                     </div>

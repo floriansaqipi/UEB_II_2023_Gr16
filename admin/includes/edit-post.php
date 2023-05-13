@@ -3,13 +3,13 @@
 <div class="row">
     <div class="col-sm-12 p-0">
         <div class="main-header">
-            <h4>Add a Post</h4>
+            <h4>Manage Your Posts</h4>
             <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
                 <li class="breadcrumb-item"><a href="index.php"><i class="icofont icofont-home"></i></a>
                 </li>
                 <li class="breadcrumb-item"><a href="posts.php">Posts</a>
                 </li>
-                <li class="breadcrumb-item"><a href="posts.php?source=add_post">Add a post</a>
+                <li class="breadcrumb-item"><a href="posts.php?source=edit&p_id=<?php echo $_GET["p_id"] ;?>">Edit a post</a>
                 </li>
 
             </ol>
@@ -20,7 +20,7 @@
         <div class="main-header">
             <div class="col-12">
 
-                <h4>Share your thoughts</h4>
+                <h4>Edit your post</h4>
             </div>
 
         </div>
@@ -45,9 +45,8 @@
 
             <!-- end of modal -->
             <div class="card-block">
-                <?php
-                    insertPostAdmin();
-                ?>
+                <?php editPostAdminInputs(); ?>
+                <?php editPostAdmin(); ?>
                 <form action="" method="post" enctype="multipart/form-data">
                     <div class="form-group row <?php echo !empty($titleErr) ? "has-danger" : "" ?>">
                         <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Title</label>
@@ -59,19 +58,19 @@
                     <div class="form-group row">
                         <label for="example-search-input" class="col-xs-2 col-form-label form-control-label">Post Category Id</label>
                         <div class="col-sm-10">
-                            <input name="post_category_id" class="form-control" type="text" value="" id="example-search-input" placeholder="Enter Category">
+                            <input name="post_category_id" class="form-control" type="text" value="<?php echo $post_category_id; ?>" id="example-search-input" placeholder="Enter Category">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="author-input" class="col-xs-2 col-form-label form-control-label">Author</label>
                         <div class="col-sm-10">
-                            <input name="post_author" class="form-control" type="text" value="" id="author-input" placeholder="Enter Author">
+                            <input name="post_author" class="form-control" type="text" value="<?php echo $post_author; ?>" id="author-input" placeholder="Enter Author">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label for="status-input" class="col-xs-2 col-form-label form-control-label">Post Status</label>
                         <div class="col-sm-10">
-                            <input name="post_status" class="form-control" type="text" value="" id="status-input" placeholder="Enter status">
+                            <input name="post_status" class="form-control" type="text" value="<?php echo $post_status; ?>" id="status-input" placeholder="Enter status">
                         </div>
                     </div>
                     <div class="form-group row <?php echo !empty($imageErr) ? "has-danger" : "" ?>">
@@ -79,7 +78,8 @@
                             <label for="file" class=" col-form-label form-control-label">Post Image</label>
                         </div>
                         <div class="col-sm-10">
-                            <label for="file" class="custom-file" style="width : 100%;">
+                            <img width="128"  src="../images/<?php echo $post_image ;?>" alt="image">
+                            <label for="file" class="custom-file" style="width : 100%; margin-top: 16px">
                                 <input name="post_image" type="file" id="file" class="custom-file-input">
                                 <span class="custom-file-control" id="file-span">Choose file</span>
                             </label>
@@ -92,7 +92,7 @@
                     <div class="form-group row">
                         <label for="tags-input" class="col-xs-2 col-form-label form-control-label">Post Tags</label>
                         <div class="col-sm-10">
-                            <input name="post_tags" class="form-control" type="text" value="" id="status-input" placeholder="Enter tags">
+                            <input name="post_tags" class="form-control" type="text" value="<?php echo $post_tags; ?>" id="status-input" placeholder="Enter tags">
                         </div>
                     </div>
                     <div class="form-group row <?php echo !empty($contentErr) ? "has-danger" : "" ?>">
@@ -105,7 +105,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-sm-10">
-                            <button type="submit" name="add-post" class="btn btn-inverse-success waves-effect waves-light">POST</button>
+                            <button type="submit" name="edit-post" class="btn btn-inverse-success waves-effect waves-light">EDIT POST</button>
                         </div>
                     </div>
 
