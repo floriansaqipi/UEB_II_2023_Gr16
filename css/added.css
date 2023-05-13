@@ -8,3 +8,7 @@
 body{
     background-color: #ffffff;
 }
+
+.form-control:valid{
+    border-color: none !important;
+}

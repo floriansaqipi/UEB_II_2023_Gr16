@@ -4,10 +4,7 @@ function confirmQuery($result)
 {
     global $connection;
     if (!$result) {
-        if (!$result) {
-
-            die("QUERY FAILED" . mysqli_error($connection));
-        }
+        die("QUERY FAILED" . mysqli_error($connection));
     }
 }
 function getAllCategoriesAdminTable()
@@ -203,11 +200,11 @@ function insertPostAdmin()
         }
 
         if (empty($post_content)) {
-            $contentErr = "Title can not be empty";
+            $contentErr = "Content can not be empty";
         } else {
             $pattern = "/.{3,}/";
             if (!preg_match($pattern, trim($post_content))) {
-                $contentErr = "Title must be longer than 3 characters";
+                $contentErr = "Content must be longer than 3 characters";
             }
         }
 
@@ -305,11 +302,11 @@ function editPostAdmin()
         }
 
         if (empty($post_content)) {
-            $contentErr = "Title can not be empty";
+            $contentErr = "Content can not be empty";
         } else {
             $pattern = "/.{3,}/";
             if (!preg_match($pattern, trim($post_content))) {
-                $contentErr = "Title must be longer than 3 characters";
+                $contentErr = "Content must be longer than 3 characters";
             }
         }
 
@@ -332,7 +329,7 @@ function editPostAdmin()
                 $post_image = $row["image"];
             }
         }
-        echo $post_category_id;
+        
         if ($titleErr == "" && $imageErr == "" && $contentErr == "") {
 
             $query = "UPDATE posts SET ";
@@ -380,14 +377,15 @@ function getCurrentCategoryEdit()
 
     confirmQuery($select_current_option_query);
 
-    while ($row = mysqli_fetch_assoc($select_current_option_query)) {   
+    while ($row = mysqli_fetch_assoc($select_current_option_query)) {
         $category_id = $row["category_id"];
         $category_name = $row["name"];
         echo "<option value='$category_id'>$category_name</option>";
     }
 }
 
-function getNotCurrentCategoriesEdit(){
+function getNotCurrentCategoriesEdit()
+{
     global $connection, $post_category_id;
 
     $query = "SELECT * FROM post_categories WHERE category_id != $post_category_id ";
@@ -397,10 +395,68 @@ function getNotCurrentCategoriesEdit(){
 
     confirmQuery($select_current_option_query);
 
-    while ($row = mysqli_fetch_assoc($select_current_option_query)) {   
+    while ($row = mysqli_fetch_assoc($select_current_option_query)) {
         $category_id = $row["category_id"];
         $category_name = $row["name"];
         echo "<option value='$category_id'>$category_name</option>";
     }
+}
 
+function getAllCommentsTable()
+{
+
+    global $connection;
+
+    $query = "SELECT * FROM comments ";
+    $select_comments = mysqli_query($connection, $query);
+
+    confirmQuery($select_comments);
+
+    while ($row = mysqli_fetch_assoc($select_comments)) {
+        $comment_id = $row["comment_id"];
+        $comment_author = $row["author"];
+        $comment_post_id = $row["post_id"];
+        $comment_content = substr($row["content"], 0, 100);
+        $comment_is_approved = $row["is_approved"];
+        $comment_date = $row["date"];
+
+        echo "<tr>";
+        echo "<td>{$comment_id}</td>";
+        echo "<td>{$comment_author}</td>";
+        getPostTitleByIdComment($comment_post_id);
+        echo "<td>{$comment_content}</td>";
+        echo "<td>$comment_is_approved ? 'Yes' ? 'No'</td>";
+        echo "<td>{$comment_date}</td>";
+        echo "<td>
+            <a href='categories.php?edit=' role='button' class='btn btn-inverse-success waves-effect waves-light'>
+                Approve
+            </a>
+        </td>";
+        echo "<td>
+            <a href='categories.php?edit=' role='button' class='btn btn-inverse-danger waves-effect waves-light'>
+                Disapprove
+            </a>
+        </td>";
+        echo "<td>
+            <a role='button' href='categories.php?delete=' class='btn btn-inverse-danger waves-effect waves-light'>
+                Delete
+            </a>
+        </td>";
+        echo "</tr>";
+    }
+}
+
+function getPostTitleByIdComment($comment_post_id)
+{
+    global $connection;
+    $query = "SELECT * FROM posts WHERE post_id = $comment_post_id ";
+    $posts_title_query = mysqli_query($connection, $query);
+
+    confirmQuery($posts_title_query);
+
+    while ($row = mysqli_fetch_assoc($posts_title_query)) {
+        $post_id = $row["post_id"];
+        $post_title = $row["title"];
+        echo "<td><a href='../post-details?p_id=$post_id'>$post_title</a></td>";
+    }
 }

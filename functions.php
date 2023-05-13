@@ -35,3 +35,36 @@ function getCategoryNamesById($post_category_id)
 
     echo "$post_category_name";
 }
+
+function insertComment(){
+    global $connection;
+    global $contentErr;
+    global $post_id;
+    global $comment_author, $comment_content;
+
+    if(isset($_POST["post_comment"])){
+        $comment_author = $_POST["comment_author"];
+        $comment_content = trim($_POST["comment_content"]);
+        
+
+        if (empty($comment_content)) {
+            $contentErr = "Content can not be empty";
+        } else {
+            $pattern = "/.{3,}/";
+            if (!preg_match($pattern, trim($comment_content))) {
+                $contentErr = "Content must be longer than 3 characters";
+            }
+        }
+
+        if(empty($contentErr)){
+            $query = "INSERT INTO comments (post_id, author, content, date) ";
+            $query .= "VALUES ($post_id, '$comment_author', '$comment_content', now()) ";
+
+            $insert_comment_query = mysqli_query($connection, $query);
+
+            confirmQuery($insert_comment_query);
+
+            header("Location: post-details.php?p_id=$post_id");
+        }
+    }
+}

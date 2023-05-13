@@ -110,23 +110,21 @@ if (isset($_GET["p_id"])) {
                     </div>
                 </div>
                 <div class="col-lg-12 down-content">
-                    
-                    <form class="row g-3 needs-validation was-validated" action="" method="post" novalidate>
+                    <?php insertComment(); ?>
+                    <form class="row g-3 needs-validation" action="" method="post" novalidate>
                         <div class="col-md-12">
                             <h4>Leave a Comment: </h4>
                         </div>
                         <div class="col-md-12">
                             <label for="validationCustom03" class="form-label">Author</label>
-                            <input type="text" name="comment_author" class="form-control" value="" placeholder="Enter Author" id="validationCustom03" required>
-                            <div class="invalid-feedback">
-
-                            </div>
+                            <input type="text" name="comment_author" class="form-control" value="<?php echo $comment_author; ?>" placeholder="Enter Author" id="validationCustom03" >
+                            
                         </div>
                         <div class="col-md-12">
                             <label for="validationTextarea" class="form-label">Content</label>
-                            <textarea name ="comment_content" class="form-control is-invalid" id="validationTextarea" placeholder="Required example textarea" required></textarea>
+                            <textarea name ="comment_content" class="form-control <?php echo !empty($contentErr) ? "is-invalid" : "" ?>"  id="validationTextarea" placeholder="Enter content" required><?php echo $comment_content; ?></textarea>
                             <div class="invalid-feedback">
-                                
+                                <?php echo $contentErr;?>
                             </div>
                         </div>
                         <div class="col-12">

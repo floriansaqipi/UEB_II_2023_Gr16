@@ -48,7 +48,7 @@
                 <?php editPostAdminInputs(); ?>
                 <?php editPostAdmin(); ?>
                 <form action="" method="post" enctype="multipart/form-data">
-                    <div class="form-group row <?php echo !empty($titleErr) ? "has-danger" : "" ?>">
+                    <div class="form-group row <?php echo !empty($titleErr) || !empty($contentErr) || !empty($imageErr) ? "has-danger" : "" ?>">
                         <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Title</label>
                         <div class="col-sm-10">
                             <input name="post_title" class="form-control" type="text" value="<?php echo $post_title; ?>" id="example-text-input" placeholder="Enter your post title">
