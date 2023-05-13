@@ -3,7 +3,7 @@
 <div class="row">
     <div class="col-sm-12 p-0">
         <div class="main-header">
-            <h4>View All Posts</h4>
+            <h4>View All Comments</h4>
             <ol class="breadcrumb breadcrumb-title breadcrumb-arrow">
                 <li class="breadcrumb-item"><a href="index.php"><i class="icofont icofont-home"></i></a>
                 </li>
@@ -20,14 +20,9 @@
         <div class="main-header">
             <div class="col-12">
 
-                <h4>Share your thoughts</h4>
+                <h4>Manage Comments</h4>
             </div>
-            <div class="col-12 pad">
-
-
-                <a class="btn btn-inverse-info waves-effect waves-light" href="posts.php?source=add_post" role="button">Add a Post</a>
-
-            </div>
+            
         </div>
     </div>
 </div>
@@ -43,7 +38,7 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-header-text">Categories</h5>
+                <h5 class="card-header-text">Comments</h5>
 
             </div>
             <div class="card-block">
@@ -66,7 +61,9 @@
                             </thead>
                             <tbody>
                                 <?php getAllCommentsTable(); ?>
-                                <?php deletePostAdmin() ;?>
+                                <?php deleteCommentFromTable() ;?>
+                                <?php approveCommentAdmin() ;?>
+                                <?php disapproveCommentAdmin() ;?>
                             </tbody>
                         </table>
                     </div>

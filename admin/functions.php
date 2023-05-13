@@ -425,20 +425,22 @@ function getAllCommentsTable()
         echo "<td>{$comment_author}</td>";
         getPostTitleByIdComment($comment_post_id);
         echo "<td>{$comment_content}</td>";
-        echo "<td>$comment_is_approved ? 'Yes' ? 'No'</td>";
+        echo "<td>";
+        echo $comment_is_approved ? "Yes" : "No" ;  
+        echo"</td>";
         echo "<td>{$comment_date}</td>";
         echo "<td>
-            <a href='categories.php?edit=' role='button' class='btn btn-inverse-success waves-effect waves-light'>
+            <a href='comments.php?approve=$comment_id' role='button' class='btn btn-inverse-success waves-effect waves-light'>
                 Approve
             </a>
         </td>";
         echo "<td>
-            <a href='categories.php?edit=' role='button' class='btn btn-inverse-danger waves-effect waves-light'>
+            <a href='comments.php?disapprove=$comment_id' role='button' class='btn btn-inverse-danger waves-effect waves-light'>
                 Disapprove
             </a>
         </td>";
         echo "<td>
-            <a role='button' href='categories.php?delete=' class='btn btn-inverse-danger waves-effect waves-light'>
+            <a role='button' href='comments.php?delete=$comment_id' class='btn btn-inverse-danger waves-effect waves-light'>
                 Delete
             </a>
         </td>";
@@ -458,5 +460,52 @@ function getPostTitleByIdComment($comment_post_id)
         $post_id = $row["post_id"];
         $post_title = $row["title"];
         echo "<td><a href='../post-details?p_id=$post_id'>$post_title</a></td>";
+    }
+}
+
+function deleteCommentFromTable(){
+    global $connection;
+    if(isset($_GET["delete"])){
+        $comment_id = $_GET["delete"];
+
+        $query = "DELETE FROM comments WHERE comment_id = $comment_id ";
+
+        $delete_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($delete_comment_query);
+
+        header("Location: comments.php");
+
+
+    }
+}
+
+function approveCommentAdmin(){
+    global $connection;
+    if(isset($_GET["approve"])){
+        $comment_id = $_GET["approve"];
+
+        $query = "UPDATE comments SET is_approved = 1 WHERE comment_id = $comment_id ";
+
+        $approve_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($approve_comment_query);
+
+        header("Location: comments.php");
+    }
+}
+
+function disapproveCommentAdmin(){
+    global $connection;
+    if(isset($_GET["disapprove"])){
+        $comment_id = $_GET["disapprove"];
+
+        $query = "UPDATE comments SET is_approved = 0 WHERE comment_id = $comment_id ";
+
+        $disapprove_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($disapprove_comment_query);
+
+        header("Location: comments.php");
     }
 }
