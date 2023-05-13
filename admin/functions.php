@@ -108,7 +108,7 @@ function deleteCategory()
 
 function getAllPostsTable()
 {
-    global $connection;
+    global $connection, $post_id;
     $query = "SELECT * FROM posts ";
     $select_posts = mysqli_query($connection, $query);
 
@@ -137,7 +137,7 @@ function getAllPostsTable()
         echo "<td>$post_status </td>";
         echo "<td><img width=100 class='img-responsive' src='../images/$post_image' alt = 'image'></td>";
         echo "<td>$post_tags </td>";
-        echo "<td>$post_comment_count </td>";
+        countSinglePostComments();
         echo "<td>$post_date</td>";
         echo "<td>
             <a href='posts.php?source=edit_post&p_id={$post_id}' role='button' class='btn btn-inverse-warning waves-effect waves-light'>
@@ -150,6 +150,22 @@ function getAllPostsTable()
             </a>
         </td>";
         echo "</tr>";
+    }
+}
+
+function countSinglePostComments()
+{
+    global $connection;
+    global $post_id;
+    $query = "SELECT COUNT(*) comment_count FROM comments WHERE post_id = $post_id ";
+
+    $comment_post_count_query = mysqli_query($connection, $query);
+
+    confirmQuery($comment_post_count_query);
+
+    while ($row = mysqli_fetch_array($comment_post_count_query)) {
+        $comment_count = $row["comment_count"];
+        echo "<td>$comment_count</td>";
     }
 }
 

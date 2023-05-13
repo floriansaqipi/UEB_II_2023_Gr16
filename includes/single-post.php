@@ -66,17 +66,7 @@ if (isset($_GET["p_id"])) {
                     <div class="sidebar-item comments">
                         <div class="sidebar-heading">
                             <?php 
-                                $query = "SELECT COUNT(*) comment_count FROM comments WHERE post_id = $post_id ";
-
-                                $comment_post_count_query = mysqli_query($connection, $query);
-                                
-                                confirmQuery($comment_post_count_query);
-
-                                while($row = mysqli_fetch_array($comment_post_count_query)){
-                                    $comment_count = $row["comment_count"];
-                                    echo "<h2>$comment_count Comments</h2>";
-                                }
-
+                                countSinglePostComments();
                             ?>
                             <!-- <h2>4 comments</h2> -->
                         </div>
