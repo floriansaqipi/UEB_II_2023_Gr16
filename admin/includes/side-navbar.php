@@ -22,6 +22,12 @@
 
                 </ul>
             </li>
+            <li class="<?php echo $page == "comments" ? "active" : " " ?> treeview">
+                <a class="waves-effect waves-dark" href="comments.php">
+                    <i class="icon-book-open"></i><span> Comments</span>
+                </a>
+            </li>
+            
             <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icon-briefcase"></i><span> UI Elements</span><i class="icon-arrow-down"></i></a>
                 <ul class="treeview-menu">
                     <li><a class="waves-effect waves-dark" href="accordion.html"><i class="icon-arrow-right"></i> Accordion</a></li>

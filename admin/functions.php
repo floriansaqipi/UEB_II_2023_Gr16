@@ -4,10 +4,7 @@ function confirmQuery($result)
 {
     global $connection;
     if (!$result) {
-        if (!$result) {
-
-            die("QUERY FAILED" . mysqli_error($connection));
-        }
+        die("QUERY FAILED" . mysqli_error($connection));
     }
 }
 function getAllCategoriesAdminTable()
@@ -111,7 +108,7 @@ function deleteCategory()
 
 function getAllPostsTable()
 {
-    global $connection;
+    global $connection, $post_id;
     $query = "SELECT * FROM posts ";
     $select_posts = mysqli_query($connection, $query);
 
@@ -140,7 +137,7 @@ function getAllPostsTable()
         echo "<td>$post_status </td>";
         echo "<td><img width=100 class='img-responsive' src='../images/$post_image' alt = 'image'></td>";
         echo "<td>$post_tags </td>";
-        echo "<td>$post_comment_count </td>";
+        countSinglePostComments();
         echo "<td>$post_date</td>";
         echo "<td>
             <a href='posts.php?source=edit_post&p_id={$post_id}' role='button' class='btn btn-inverse-warning waves-effect waves-light'>
@@ -153,6 +150,22 @@ function getAllPostsTable()
             </a>
         </td>";
         echo "</tr>";
+    }
+}
+
+function countSinglePostComments()
+{
+    global $connection;
+    global $post_id;
+    $query = "SELECT COUNT(*) comment_count FROM comments WHERE post_id = $post_id ";
+
+    $comment_post_count_query = mysqli_query($connection, $query);
+
+    confirmQuery($comment_post_count_query);
+
+    while ($row = mysqli_fetch_array($comment_post_count_query)) {
+        $comment_count = $row["comment_count"];
+        echo "<td>$comment_count</td>";
     }
 }
 
@@ -203,11 +216,11 @@ function insertPostAdmin()
         }
 
         if (empty($post_content)) {
-            $contentErr = "Title can not be empty";
+            $contentErr = "Content can not be empty";
         } else {
             $pattern = "/.{3,}/";
             if (!preg_match($pattern, trim($post_content))) {
-                $contentErr = "Title must be longer than 3 characters";
+                $contentErr = "Content must be longer than 3 characters";
             }
         }
 
@@ -305,11 +318,11 @@ function editPostAdmin()
         }
 
         if (empty($post_content)) {
-            $contentErr = "Title can not be empty";
+            $contentErr = "Content can not be empty";
         } else {
             $pattern = "/.{3,}/";
             if (!preg_match($pattern, trim($post_content))) {
-                $contentErr = "Title must be longer than 3 characters";
+                $contentErr = "Content must be longer than 3 characters";
             }
         }
 
@@ -332,7 +345,7 @@ function editPostAdmin()
                 $post_image = $row["image"];
             }
         }
-        echo $post_category_id;
+        
         if ($titleErr == "" && $imageErr == "" && $contentErr == "") {
 
             $query = "UPDATE posts SET ";
@@ -380,14 +393,15 @@ function getCurrentCategoryEdit()
 
     confirmQuery($select_current_option_query);
 
-    while ($row = mysqli_fetch_assoc($select_current_option_query)) {   
+    while ($row = mysqli_fetch_assoc($select_current_option_query)) {
         $category_id = $row["category_id"];
         $category_name = $row["name"];
         echo "<option value='$category_id'>$category_name</option>";
     }
 }
 
-function getNotCurrentCategoriesEdit(){
+function getNotCurrentCategoriesEdit()
+{
     global $connection, $post_category_id;
 
     $query = "SELECT * FROM post_categories WHERE category_id != $post_category_id ";
@@ -397,10 +411,117 @@ function getNotCurrentCategoriesEdit(){
 
     confirmQuery($select_current_option_query);
 
-    while ($row = mysqli_fetch_assoc($select_current_option_query)) {   
+    while ($row = mysqli_fetch_assoc($select_current_option_query)) {
         $category_id = $row["category_id"];
         $category_name = $row["name"];
         echo "<option value='$category_id'>$category_name</option>";
     }
+}
 
+function getAllCommentsTable()
+{
+
+    global $connection;
+
+    $query = "SELECT * FROM comments ";
+    $select_comments = mysqli_query($connection, $query);
+
+    confirmQuery($select_comments);
+
+    while ($row = mysqli_fetch_assoc($select_comments)) {
+        $comment_id = $row["comment_id"];
+        $comment_author = $row["author"];
+        $comment_post_id = $row["post_id"];
+        $comment_content = substr($row["content"], 0, 100);
+        $comment_is_approved = $row["is_approved"];
+        $comment_date = $row["date"];
+
+        echo "<tr>";
+        echo "<td>{$comment_id}</td>";
+        echo "<td>{$comment_author}</td>";
+        getPostTitleByIdComment($comment_post_id);
+        echo "<td>{$comment_content}</td>";
+        echo "<td>";
+        echo $comment_is_approved ? "Yes" : "No" ;  
+        echo"</td>";
+        echo "<td>{$comment_date}</td>";
+        echo "<td>
+            <a href='comments.php?approve=$comment_id' role='button' class='btn btn-inverse-success waves-effect waves-light'>
+                Approve
+            </a>
+        </td>";
+        echo "<td>
+            <a href='comments.php?disapprove=$comment_id' role='button' class='btn btn-inverse-danger waves-effect waves-light'>
+                Disapprove
+            </a>
+        </td>";
+        echo "<td>
+            <a role='button' href='comments.php?delete=$comment_id' class='btn btn-inverse-danger waves-effect waves-light'>
+                Delete
+            </a>
+        </td>";
+        echo "</tr>";
+    }
+}
+
+function getPostTitleByIdComment($comment_post_id)
+{
+    global $connection;
+    $query = "SELECT * FROM posts WHERE post_id = $comment_post_id ";
+    $posts_title_query = mysqli_query($connection, $query);
+
+    confirmQuery($posts_title_query);
+
+    while ($row = mysqli_fetch_assoc($posts_title_query)) {
+        $post_id = $row["post_id"];
+        $post_title = $row["title"];
+        echo "<td><a href='../post-details?p_id=$post_id'>$post_title</a></td>";
+    }
+}
+
+function deleteCommentFromTable(){
+    global $connection;
+    if(isset($_GET["delete"])){
+        $comment_id = $_GET["delete"];
+
+        $query = "DELETE FROM comments WHERE comment_id = $comment_id ";
+
+        $delete_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($delete_comment_query);
+
+        header("Location: comments.php");
+
+
+    }
+}
+
+function approveCommentAdmin(){
+    global $connection;
+    if(isset($_GET["approve"])){
+        $comment_id = $_GET["approve"];
+
+        $query = "UPDATE comments SET is_approved = 1 WHERE comment_id = $comment_id ";
+
+        $approve_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($approve_comment_query);
+
+        header("Location: comments.php");
+    }
+}
+
+function disapproveCommentAdmin(){
+    global $connection;
+    if(isset($_GET["disapprove"])){
+        $comment_id = $_GET["disapprove"];
+
+        $query = "UPDATE comments SET is_approved = 0 WHERE comment_id = $comment_id ";
+
+        $disapprove_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($disapprove_comment_query);
+
+        header("Location: comments.php");
+    }
 }
