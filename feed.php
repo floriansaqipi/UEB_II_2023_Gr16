@@ -1,3 +1,4 @@
+<?php $page = "feed"; ?>
 <?php include "includes/header.php"; ?>
 <!-- ***** Preloader Start ***** -->
 <!-- <div id="preloader">
