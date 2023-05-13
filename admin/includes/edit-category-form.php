@@ -8,7 +8,7 @@
         <div class="card-block">
             <form action="" method="post">
                 <?php include "edit-inputs.php"; ?>
-                <?php updateCategory(); ?> 
+                <?php //updateCategory(); ?> 
                 <div class="form-group row">
                     <div class="col-sm-10">
                         <button type="submit" name="update" class="btn btn-inverse-success waves-effect waves-light">Update</button>
