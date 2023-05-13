@@ -74,7 +74,7 @@ function countSinglePostComments()
 {
     global $connection;
     global $post_id;
-    $query = "SELECT COUNT(*) comment_count FROM comments WHERE post_id = $post_id ";
+    $query = "SELECT COUNT(*) comment_count FROM comments WHERE post_id = $post_id AND is_approved = 1";
 
     $comment_post_count_query = mysqli_query($connection, $query);
 
