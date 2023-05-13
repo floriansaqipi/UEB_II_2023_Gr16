@@ -109,43 +109,30 @@ if (isset($_GET["p_id"])) {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-12">
-                    <div class="sidebar-item submit-comment">
-                        <div class="sidebar-heading">
-                            <h2>Your comment</h2>
+                <div class="col-lg-12 down-content">
+                    
+                    <form class="row g-3 needs-validation was-validated" action="" method="post" novalidate>
+                        <div class="col-md-12">
+                            <h4>Leave a Comment: </h4>
                         </div>
-                        <div class="content">
-                            <form id="comment" action="#" method="post">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-12">
-                                        <fieldset>
-                                            <input name="name" type="text" id="name" placeholder="Your name" required="">
-                                        </fieldset>
-                                    </div>
-                                    <div class="col-md-6 col-sm-12">
-                                        <fieldset>
-                                            <input name="email" type="text" id="email" placeholder="Your email" required="">
-                                        </fieldset>
-                                    </div>
-                                    <div class="col-md-12 col-sm-12">
-                                        <fieldset>
-                                            <input name="subject" type="text" id="subject" placeholder="Subject">
-                                        </fieldset>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <fieldset>
-                                            <textarea name="message" rows="6" id="message" placeholder="Type your comment" required=""></textarea>
-                                        </fieldset>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <fieldset>
-                                            <button type="submit" id="form-submit" class="main-button">Submit</button>
-                                        </fieldset>
-                                    </div>
-                                </div>
-                            </form>
+                        <div class="col-md-12">
+                            <label for="validationCustom03" class="form-label">Author</label>
+                            <input type="text" name="comment_author" class="form-control" value="" placeholder="Enter Author" id="validationCustom03" required>
+                            <div class="invalid-feedback">
+
+                            </div>
                         </div>
-                    </div>
+                        <div class="col-md-12">
+                            <label for="validationTextarea" class="form-label">Content</label>
+                            <textarea name ="comment_content" class="form-control is-invalid" id="validationTextarea" placeholder="Required example textarea" required></textarea>
+                            <div class="invalid-feedback">
+                                
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <button class="btn btn-primary" type="submit" name="post_comment" >Post Comment</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
