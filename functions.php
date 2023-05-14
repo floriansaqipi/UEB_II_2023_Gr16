@@ -124,6 +124,9 @@ function logInUser()
         } else {
             $db_user_id = $row["user_id"];
             $db_username = $row["username"];
+            $db_user_firstname = $row["firstname"];
+            $db_user_lastname = $row["lastname"];
+            $db_user_image = $row["image"];
             $db_is_admin = $row["is_admin"];
             $db_password = $row["password"];
             if ($user_password !== $db_password) {
@@ -134,6 +137,9 @@ function logInUser()
         if (empty($emailErr) && empty($passwordErr)) {
             $_SESSION["user_id"] = $db_user_id;
             $_SESSION["username"] = $db_username;
+            $_SESSION["user_firstname"] = $db_user_firstname;
+            $_SESSION["user_lastname"] = $db_user_lastname;
+            $_SESSION["user_image"] = $db_user_image;
             $_SESSION["is_admin"] = $db_is_admin;
             if ($db_is_admin === "1") {
                 header("Location: admin/index.php");

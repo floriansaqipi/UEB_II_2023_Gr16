@@ -4,11 +4,7 @@
             <!-- Sidebar toggle button-->
             <a href="#!" data-toggle="offcanvas" class="sidebar-toggle"></a>
             <ul class="top-nav lft-nav">
-               <li>
-                  <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
-                     <i class="ti-files"> </i><span> Files</span>
-                  </a>
-               </li>               
+                             
                <li class="dropdown">
                   <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
                      <span>Dropdown </span><i class=" icofont icofont-simple-down"></i>
@@ -21,19 +17,11 @@
                      <li><a href="#">List item 5</a></li>
                   </ul>
                </li>
-               <li class="dropdown pc-rheader-submenu message-notification search-toggle">
-                  <a href="#!" id="morphsearch-search" class="drop icon-circle txt-white">
-                     <i class="ti-search"></i>
-                  </a>
-               </li>
+               
             </ul>
             <!-- Navbar Right Menu-->
             <div class="navbar-custom-menu f-right">
-              <div class="upgrade-button">
-                <a href="#" class="icon-circle txt-white btn btn-sm btn-primary upgrade-button">
-                    <span>Upgrade To Pro</span>
-                </a>
-              </div>
+              
 
                <ul class="top-nav">
                   <!--Notification Menu-->
@@ -90,8 +78,8 @@
                   <!-- User Menu-->
                   <li class="dropdown">
                      <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
-                        <span><img class="img-circle " src="assets/images/avatar-1.png" style="width:40px;" alt="User Image"></span>
-                        <span>John <b>Doe</b> <i class=" icofont icofont-simple-down"></i></span>
+                        <span><img class="img-circle " src="../images/<?php echo $_SESSION["user_image"] ;?>" style="width:40px;" alt="User Image"></span>
+                        <span><?php echo $_SESSION["user_firstname"] . " " . $_SESSION["user_lastname"] ; ?> <i class=" icofont icofont-simple-down"></i></span>
 
                      </a>
                      <ul class="dropdown-menu settings-menu">
@@ -102,7 +90,7 @@
                            <div class="dropdown-divider m-0"></div>
                         </li>
                         <li><a href="#"><i class="icon-lock"></i> Lock Screen</a></li>
-                        <li><a href="login1.html"><i class="icon-logout"></i> Logout</a></li>
+                        <li><a href="logout.php"><i class="icon-logout"></i> Logout</a></li>
 
                      </ul>
                   </li>
