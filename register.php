@@ -13,9 +13,80 @@
 
 <body>
 
-<?php include "includes/header.php"; ?>
 
 	<div class="container infinity-container">
+
+	<?php
+//Kontrollo nese butoni submit eshte klikuar
+if(isset($_POST['submit'])){
+    //Ruaj te dhenat e formes ne nje varg
+    $name = $_POST['firstName'];
+    $surname = $_POST['lastName'];
+	$username = $_POST['username'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
+
+    //Kontrollo validitetin e email-it
+    if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        echo "Email-i nuk është valid.<br>";
+    }
+    else{
+        //Kontrollo nëse email-i është përdorur më parë
+        //Kodi për kontrollin e email-it do të variojë në varësi të strukturës së databazës
+        if(emailExists($email)){
+            echo "Ky email është i përdorur më parë.<br>";
+        }
+        else{
+            //Kontrollo gjatësinë e password-it
+            if(strlen($password) < 8){
+                echo "Password-i duhet të jetë më i gjatë se 8 karaktere.<br>";
+            }
+            else{
+                //Kontrollo nëse password-i dhe konfirmimi i password-it janë të njëjtë
+                if($password != $confirm_password){
+                    echo "Password-et nuk janë të njëjta.<br>";
+                }
+                else{
+                    //Regjistro perdoruesin ne databaze ose ne sistemin tjeter
+                    registerUser($username,$name, $surname, $email, $password);
+                    echo "Regjistrimi u krye me sukses.<br>";
+                }
+            }
+        }
+    }
+}
+
+
+
+//Funksioni për të kontrolluar nëse email-i është përdorur më parë
+function emailExists($email){
+    //Kodi për kontrollin e email-it do të variojë në varësi të strukturës së databazës
+    //Kodi duhet të kthejë true nëse email-i është i përdorur më parë dhe false nëse nuk është i përdorur
+    return false;
+}
+function registerUser($username,$name, $surname, $email, $password){
+
+   include "db.php";
+   $sql = "SELECT * FROM users WHERE email='$email'";
+   $result = $connection->query($sql);
+   if ($result->num_rows > 0) {
+	   echo "Ky email është i përdorur më parë.<br>";
+   }   else {
+	//Krijo një fjalëkalim të hash-uar
+	$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+	//Inserto të dhënat e perdoruesit në tabelën users
+	$sql = "INSERT INTO users (username,, firstname, lastname,password, email, image) 
+			VALUES ('$username', '$name', '$surname', '$email', '$hashed_password', 'default.png')";
+	if ($connecction->query($sql) === TRUE) {
+		echo "Regjistrimi u krye me sukses.<br>";
+	} else {
+		echo "Gabim gjatë regjistrimit: ";
+	}
+}
+}
+?>
 		<div class="row">
 			<div class="col-md-1 infinity-left-space"></div>
 
@@ -26,7 +97,7 @@
 					<h4>Create an account</h4>
 				</div>
 				<!-- Form -->
-				<form action="register.php" method="POST" class="px-3" autocomplete="on">
+				<form action="register.php" method="POST" class="px-6" autocomplete="on">
 					<!-- Input Box -->
 					<div class="form-input">
 						<span><i class="fa fa-user"></i></span>
