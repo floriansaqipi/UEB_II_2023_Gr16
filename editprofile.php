@@ -22,8 +22,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css" rel="stylesheet"
         integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
-        crossorigin="anonymous"></script>
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous">
+    </script>
 
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
     <div class="container">
@@ -44,12 +44,6 @@
                     </div>
                 </div>
             </div>
-            <style>
-                body {
-                    margin-top: 20px;
-                    background: #f8f8f8
-                }
-            </style>
 
             <body>
                 <div class="col">
@@ -75,7 +69,7 @@
                                                     <p class="mb-0">@johnny.s</p>
                                                     <div class="text-muted"><small>Last seen 2 hours ago</small></div>
                                                     <div class="mt-2">
-                                                        <button class="btn btn-primary" type="button">
+                                                        <a href=""  class="btn btn-primary" >
                                                             <i class="fa fa-fw fa-camera"></i>
                                                             <span>Change Photo</span>
                                                         </button>
@@ -93,64 +87,89 @@
                                         <div class="tab-content pt-3">
                                             <div class="tab-pane active">
                                                 <form class="row g-3 needs-validation" novalidate>
+
                                                     <div class="col-md-4">
-                                                        <label for="validationCustom01" class="form-label">First
+                                                        <label for="validationServer01" class="form-label">First
                                                             name</label>
-                                                        <input type="text" class="form-control" id="validationCustom01"
-                                                            value="Mark" required>
+                                                        <input type="text" class="form-control is-valid"
+                                                            id="validationServer01" value="Mark" required>
                                                         <div class="valid-feedback">
                                                             Looks good!
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <label for="validationCustom02" class="form-label">Last
+                                                        <label for="validationServer02" class="form-label">Last
                                                             name</label>
-                                                        <input type="text" class="form-control" id="validationCustom02"
-                                                            value="Otto" required>
+                                                        <input type="text" class="form-control is-valid"
+                                                            id="validationServer02" value="Otto" required>
                                                         <div class="valid-feedback">
                                                             Looks good!
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <label for="validationCustomUsername"
+                                                        <label for="validationServerUsername"
                                                             class="form-label">Username</label>
                                                         <div class="input-group has-validation">
                                                             <span class="input-group-text"
-                                                                id="inputGroupPrepend">@</span>
-                                                            <input type="text" class="form-control"
-                                                                id="validationCustomUsername"
-                                                                aria-describedby="inputGroupPrepend" required>
-                                                            <div class="invalid-feedback">
+                                                                id="inputGroupPrepend3">@</span>
+                                                            <input type="text" class="form-control is-invalid"
+                                                                id="validationServerUsername"
+                                                                aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback"
+                                                                required>
+                                                            <div id="validationServerUsernameFeedback"
+                                                                class="invalid-feedback">
                                                                 Please choose a username.
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
-                                                        <label for="validationCustom03" class="form-label">City</label>
-                                                        <input type="text" class="form-control" id="validationCustom03"
-                                                            required>
-                                                        <div class="invalid-feedback">
+                                                        <label for="validationServer03" class="form-label">City</label>
+                                                        <input type="text" class="form-control is-invalid"
+                                                            id="validationServer03"
+                                                            aria-describedby="validationServer03Feedback" required>
+                                                        <div id="validationServer03Feedback" class="invalid-feedback">
                                                             Please provide a valid city.
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label for="validationCustom04" class="form-label">State</label>
-                                                        <select class="form-select" id="validationCustom04" required>
+                                                        <label for="validationServer04" class="form-label">State</label>
+                                                        <select class="form-select is-invalid" id="validationServer04"
+                                                            aria-describedby="validationServer04Feedback" required>
                                                             <option selected disabled value="">Choose...</option>
                                                             <option>...</option>
                                                         </select>
-                                                        <div class="invalid-feedback">
+                                                        <div id="validationServer04Feedback" class="invalid-feedback">
                                                             Please select a valid state.
                                                         </div>
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <label for="validationCustom05" class="form-label">Zip</label>
-                                                        <input type="text" class="form-control" id="validationCustom05"
-                                                            required>
-                                                        <div class="invalid-feedback">
+                                                        <label for="validationServer05" class="form-label">Zip</label>
+                                                        <input type="text" class="form-control is-invalid"
+                                                            id="validationServer05"
+                                                            aria-describedby="validationServer05Feedback" required>
+                                                        <div id="validationServer05Feedback" class="invalid-feedback">
                                                             Please provide a valid zip.
                                                         </div>
                                                     </div>
+                                                    <div class=" mb-3">
+                                                        <label for="inputEmail2"
+                                                            class="col-sm-2 col-form-label">Email</label>
+                                                        <div class="col-sm-12">
+                                                            <input type="email" class="form-control" id="inputEmail2">
+                                                        </div>
+                                                    </div>
+                                                    <div class=" mb-3">
+                                                        <label for="inputPassword2"
+                                                            class="col-sm-2 col-form-label">Password</label>
+                                                        <div class="col-sm-12">
+                                                            <input type="password" class="form-control"
+                                                                id="inputPassword2">
+                                                        </div>
+                                                    </div>
+
+
+
+
                                                     <div class="mb-3">
                                                         <label for="exampleFormControlTextarea1"
                                                             class="form-label">About</label>
@@ -158,72 +177,16 @@
                                                             rows="3"></textarea>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-12 col-sm-6 mb-3">
-                                                            <div class="mb-2"><b>Change Password</b></div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Current Password</label>
-                                                                        <input class="form-control" type="password"
-                                                                            placeholder="••••••">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>New Password</label>
-                                                                        <input class="form-control" type="password"
-                                                                            placeholder="••••••">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <div class="form-group">
-                                                                        <label>Confirm <span
-                                                                                class="d-none d-xl-inline">Password</span></label>
-                                                                        <input class="form-control" type="password"
-                                                                            placeholder="••••••">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-12 col-sm-5 offset-sm-1 mb-3">
-                                                            <div class="mb-2"><b>Keeping in Touch</b></div>
-                                                            <div class="row">
-                                                                <div class="col">
-                                                                    <label>Email Notifications</label>
-                                                                    <div class="custom-controls-stacked px-2">
-                                                                        <div class="custom-control custom-checkbox">
-                                                                            <input type="checkbox"
-                                                                                class="custom-control-input"
-                                                                                id="notifications-blog" checked="">
-                                                                            <label class="custom-control-label"
-                                                                                for="notifications-blog">Blog
-                                                                                posts</label>
-                                                                        </div>
-                                                                        <div class="custom-control custom-checkbox">
-                                                                            <input type="checkbox"
-                                                                                class="custom-control-input"
-                                                                                id="notifications-news" checked="">
-                                                                            <label class="custom-control-label"
-                                                                                for="notifications-news">Newsletter</label>
-                                                                        </div>
-                                                                        <div class="custom-control custom-checkbox">
-                                                                            <input type="checkbox"
-                                                                                class="custom-control-input"
-                                                                                id="notifications-offers" checked="">
-                                                                            <label class="custom-control-label"
-                                                                                for="notifications-offers">Personal
-                                                                                Offers</label>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
+
+                                          
+                                                    <div class="mb-3">
+                                                        <input type="file" class="form-control"
+                                                            aria-label="file example" required>
+                                                        <div class="invalid-feedback">Example invalid form file feedback
                                                         </div>
                                                     </div>
+
+
                                                     <div class="row">
                                                         <div class="col d-flex justify-content-end">
                                                             <button class="btn btn-primary" type="submit">Save
