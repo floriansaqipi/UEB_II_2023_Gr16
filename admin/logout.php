@@ -1,3 +1,3 @@
 <?php session_start(); ?>
-<?php include "includes/functions.php"; ?>
+<?php include "functions.php"; ?>
 <?php logOutAdmin(); ?>

@@ -20,13 +20,13 @@
                
             </ul>
             <!-- Navbar Right Menu-->
-            <div class="navbar-custom-menu f-right">
+            <div class="" >
               
 
                <ul class="top-nav">
                   <!--Notification Menu-->
                     
-                  <li class="dropdown notification-menu">
+                  <!-- <li class="dropdown notification-menu">
                      <a href="#!" data-toggle="dropdown" aria-expanded="false" class="dropdown-toggle">
                         <i class="icon-bell"></i>
                         <span class="badge badge-danger header-badge">9</span>
@@ -60,7 +60,7 @@
                         </li>
                      </ul>
                   </li>
-                  <!-- chat dropdown -->
+                
                   <li class="pc-rheader-submenu ">
                      <a href="#!" class="drop icon-circle displayChatbox">
                         <i class="icon-bubbles"></i>
@@ -68,13 +68,13 @@
                      </a>
 
                   </li>
-                  <!-- window screen -->
+                 
                   <li class="pc-rheader-submenu">
                      <a href="#!" class="drop icon-circle" onclick="javascript:toggleFullScreen()">
                         <i class="icon-size-fullscreen"></i>
                      </a>
 
-                  </li>
+                  </li> -->
                   <!-- User Menu-->
                   <li class="dropdown">
                      <a href="#!" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle drop icon-circle drop-image">
