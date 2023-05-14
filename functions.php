@@ -103,7 +103,8 @@ function logInUser(){
             $emailErr = "Email field can not be empty";
         }else if(!preg_match($pattern, trim($user_email))){
             $emailErr = "Email is inavlid";
-        }else {
+        }
+        else {
             $query = "SELECT * FROM users WHERE email = $user_email";
 
             $select_user_query = mysqli_query($connection, $query);
@@ -112,11 +113,34 @@ function logInUser(){
 
             $row = mysqli_fetch_assoc($select_user_query);
 
+
             if(empty($row)){
                 $emailErr = "User with this username does not exist";
-            }else if()
+            }else if(empty($user_password)) {
+                $passwordErr = "Password cannot be empty";
+            }else {
+                $db_user_id = $row["user_id"];
+                $db_username = $row["username"];
+                $db_user_role = $row["role"];
+                $db_password = $row["password"];
+                if($user_password !== $db_password){
+                    $emailErr = "Password is incorrect ";
+                }
+            }
 
 
+        }
+
+        if(empty($emailErr) && empty($passwordErr)){
+            $_SESSION["user_id"] = $db_user_id;
+            $_SESSION["username"] = $db_username;
+            $_SESSION["user_role"] = $db_user_role;
+            if($db_user_role === "admin"){
+                header("Location: admin/index.php");
+            }else {
+                header("Location: index.php");
+            }
+            
         }
     }
 }
