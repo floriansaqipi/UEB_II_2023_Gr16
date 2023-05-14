@@ -129,3 +129,9 @@
 .infinity-form .btn-twitter:hover {
     background: hsla(195, 78%, 54%, 1);
 }
+
+.form-spacing{
+
+    /* margin-top: 32px; */
+    margin-bottom: 32px;
+}
