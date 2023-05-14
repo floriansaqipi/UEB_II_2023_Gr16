@@ -27,6 +27,13 @@
                     <i class="icon-book-open"></i><span> Comments</span>
                 </a>
             </li>
+            <li class="treeview <?php echo $page == "users" ? "active" : " " ?>"><a class="waves-effect waves-dark" href="users.php?"><i class="icon-user"></i><span>Users</span><i class="icon-arrow-down"></i></a>
+                <ul class="treeview-menu">
+                    <li class="<?php echo !isset($_GET["source"]) ? "active" : "" ?>"><a class="waves-effect waves-dark" href="users.php"><i class="icon-arrow-right"></i> View All Users</a></li>
+                    <li class="<?php echo isset($_GET["source"]) ? ($_GET["source"] == "add_user" ? "active" : "" )  : "" ?>"><a class="waves-effect waves-dark" href="posts.php?source=add_user"><i class="icon-arrow-right"></i> Add User</a></li>
+
+                </ul>
+            </li>
             
             <li class="treeview"><a class="waves-effect waves-dark" href="#!"><i class="icon-briefcase"></i><span> UI Elements</span><i class="icon-arrow-down"></i></a>
                 <ul class="treeview-menu">
