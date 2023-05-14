@@ -85,3 +85,38 @@ function countSinglePostComments()
         echo "<h2>$comment_count Comments</h2>";
     }
 }
+
+function logInUser(){
+    global $connection;
+    global $emailErr, $passwordErr;
+    global $user_email, $user_password;
+
+    if(isset($_POST["login"])){
+        $user_email = $_POST["user_email"];
+        $user_password = $_POST["user_password"];
+
+        $user_email = mysqli_real_escape_string($connection, $user_email);
+        $user_password = mysqli_real_escape_string($connection, $user_password);
+
+        $pattern = "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/";
+        if(empty($user_email)){
+            $emailErr = "Email field can not be empty";
+        }else if(!preg_match($pattern, trim($user_email))){
+            $emailErr = "Email is inavlid";
+        }else {
+            $query = "SELECT * FROM users WHERE email = $user_email";
+
+            $select_user_query = mysqli_query($connection, $query);
+
+            confirmQuery($select_user_query);
+
+            $row = mysqli_fetch_assoc($select_user_query);
+
+            if(empty($row)){
+                $emailErr = "User with this username does not exist";
+            }else if()
+
+
+        }
+    }
+}
