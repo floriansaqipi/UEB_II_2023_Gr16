@@ -14,12 +14,14 @@
         box-shadow: 0 3px 6px hsla(0, 0%, 0%, 0.1);
         border-radius: 10px;
         width: 28rem;
+
     }
  
 }
 
 .infinity-form{
     background: white;
+
 }
 
 .infinity-form h4 {
@@ -135,3 +137,4 @@
     /* margin-top: 32px; */
     margin-bottom: 32px;
 }
+
