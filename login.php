@@ -1,4 +1,4 @@
-<?php $page = "home"; ?>
+<?php $page = "login"; ?>
 <?php include "includes/header.php"; ?>
 <?php include "includes/navabar.php"; ?>
 
