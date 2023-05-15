@@ -1,5 +1,6 @@
 <?php include "includes/header.php"; ?>
-<link href="css/register-login.css" rel="stylesheet">
+<link href="css/register.css" rel="stylesheet">
+<script src="js/register.js"></script>
 
     <div class="container-xxl bg-white p-0">
         <!-- Spinner Start -->
@@ -29,39 +30,36 @@
 					<h4>Create an account</h4>
 				</div>
 				<!-- Form -->
-				<form action="register.php" method="POST" class="px-6" autocomplete="on">
+				<form id="myForm" action="register.php" method="POST" class="px-6" autocomplete="on">
 					<!-- Input Box -->
-					<div class="form-input">
+					<div class="form-input ">
 						<span><i class="fa fa-user"></i></span>
-						<input class=" is-valid" type="text" name="firstName"  placeholder="First name" tabindex="10" required>
+						<input type="text" name="firstName"  placeholder="First name" tabindex="10" >
 					</div>
 					
 					<div class="form-input">
 						<span><i class="fa fa-user"></i></span>
-						<input class="is-valid" type="text" name="lastName" placeholder="Last name" tabindex="10">
+						<input  type="text" name="lastName"  placeholder="Last name" tabindex="10" >
 					</div>
-					<div class="form-input input-group has-validation">
+					<div class="form-input">
 						<span><i class="fa fa-user"></i></span>
-						<input type="text" name="username" class="form-control is-invalid" id="validationServerUsername" placeholder="Username" tabindex="10">
+						<input type="text" name="username"  placeholder="Username" tabindex="10" >
 					</div>
-					<div id="validationServerUsernameFeedback" class="invalid-feedback">
-        					Please choose a username.
-      				</div>
-					<div class="form-input input-group has-validation">
+				
+					<div class="form-input">
 						<span><i class="fa fa-envelope"> </i></span>
-						<input type="email" name="email"class="form-control is-invalid" id="validationServerEmail" placeholder="Email Address" tabindex="10">
+						<input type="email" name="email" placeholder="Email Address" tabindex="10">
 					</div>
-					<div id="validationServerEmailFeedback" class="invalid-feedback">
-        					Please choose a username.
-      				</div>
+					
 					<div class="form-input">
 						<span><i class="fa fa-lock"></i></span>
-						<input type="password" name="password" placeholder="Password">
-
+						<input id="password" type="password" name="password" placeholder="Password">
+						<div id="password-error" class="error-message"></div>
 					</div>
 					<div class="form-input">
 						<span><i class="fa fa-lock"></i></span>
-						<input type="password" name="confirm_password" placeholder="Confirm Password">
+						<input id="confirm-password" type="password" name="confirm_password" placeholder="Confirm Password">
+						<div id="confirm-password-error" class="error-message"></div>
 					</div>
 
 					<div class="form-input">

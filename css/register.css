@@ -14,23 +14,16 @@
     .infinity-form {
         box-shadow: 0 3px 6px hsla(0, 0%, 0%, 0.1);
         border-radius: 10px;
-        width: 28rem;
-
+     
     }
  
 }
 
 .infinity-form{
-<<<<<<< Updated upstream
-
-    background: white;
-
-=======
     background: white;
  
   
     
->>>>>>> Stashed changes
 }
 
 .infinity-form h4 {
@@ -117,33 +110,8 @@
     margin-bottom: 10px;
 }
 
-.infinity-form .btn-facebook {
-    background: #4866a8;
+
+.error-message{
+    color: red;
+    padding: 10px;
 }
-
-.infinity-form .btn-google {
-    background: #da3f34;
-}
-
-.infinity-form .btn-twitter {
-    background: #33ccff;
-}
-
-.infinity-form .btn-facebook:hover {
-    background: hsla(221, 40%, 40%, 1);
-}
-
-.infinity-form .btn-google:hover {
-    background: hsla(4, 59%, 47%, 1);
-}
-
-.infinity-form .btn-twitter:hover {
-    background: hsla(195, 78%, 54%, 1);
-}
-
-.form-spacing{
-
-    /* margin-top: 32px; */
-    margin-bottom: 32px;
-}
-
