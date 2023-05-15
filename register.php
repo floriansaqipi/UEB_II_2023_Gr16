@@ -19,12 +19,12 @@
 
 
        
-		<div class="container infinity-container">
+		<div style="background-image:url('bg.png');"  class="container infinity-container">
 		<div class="row">
-			<div class="col-md-1 infinity-left-space"></div>
+			<div  class="col-md-1 infinity-left-space"></div>
 
 			<!-- FORM BEGIN -->
-			<div class="col-lg-12 col-md-10 col-sm-12 col-xs-12 text-center infinity-form">
+			<div  class="col-lg-12 col-md-10 col-sm-12 col-xs-12 text-center infinity-form">
 
 				<div style="margin-top:20px;" class="text-center mb-4">
 					<h4>Create an account</h4>
@@ -83,7 +83,7 @@
 						<button value="Register" type="submit" class="btn btn-block">Register</button>
 					</div>
 					<div class="text-center mb-5" style="color: #777;">Already have an account? 
-						<a class="login-link" href="login.html">Login here</a>
+						<a class="login-link" href="login.php">Login here</a>
 			       	</div>
 				</form>
 			</div>
