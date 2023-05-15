@@ -8,3 +8,11 @@
 body{
     background-color: #ffffff;
 }
+
+.form-control:valid{
+    border-color: none !important;
+}
+
+.comment-space{
+    margin-top: 32px !important;
+}

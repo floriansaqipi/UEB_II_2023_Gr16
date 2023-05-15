@@ -7,11 +7,13 @@ if (!$select_all_posts_query) {
 }
 
 while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
+    $post_id = $row["post_id"];
+    $post_category_id = $row["category_id"];
     $post_title = $row["title"];
     $post_author = $row["author"];
     $post_date = $row["date"];
     $post_image = $row["image"];
-    $post_content = $row["content"];
+    $post_content = substr($row["content"],0, 200);
     $post_comment_count = $row["comment_count"];
     $post_tags = $row["tags"];
     $tags_array = explode(",", $post_tags);
@@ -20,11 +22,13 @@ while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
     <div class="col-lg-12">
         <div class="blog-post">
             <div class="blog-thumb">
-                <img src="images/<?php echo $post_image; ?>" alt="image">
+                <a href="post-details.php?p_id=<?php echo $post_id; ?>">
+                    <img src="images/<?php echo $post_image; ?>" alt="image">
+                </a>
             </div>
             <div class="down-content">
-                <span>Lifestyle</span>
-                <a href="post-details.html">
+                <span><?php getCategoryNamesById($post_category_id); ?></span>
+                <a href="post-details.php?p_id=<?php echo $post_id; ?>">
                     <h4><?php echo $post_title; ?></h4>
                 </a>
                 <ul class="post-info">

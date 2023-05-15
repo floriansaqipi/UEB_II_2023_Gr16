@@ -89,6 +89,7 @@
    <script type="text/javascript" src="assets/pages/dashboard.js"></script>
    <script type="text/javascript" src="assets/pages/elements.js"></script>
    <script src="assets/js/menu.min.js"></script>
+   <script type="text/javascript" src="assets/js/upload-input.js"></script>
 <script>
 var $window = $(window);
 var nav = $('.fixed-button');

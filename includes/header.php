@@ -1,5 +1,7 @@
 <?php ob_start(); ?>
+<?php session_start(); ?>
 <?php include "db.php"; ?>
+<?php include "functions.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -34,6 +36,7 @@
 
     <!-- Template Stylesheet -->
     <!-- <link rel="stylesheet" href="assets/css/fontawesome.css"> -->
+	<link href="css/register-login.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/template-blog.css">
     <link rel="stylesheet" href="assets/css/owl.css">
     <link href="css/style.css" rel="stylesheet">
