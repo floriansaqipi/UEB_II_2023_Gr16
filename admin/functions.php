@@ -536,3 +536,108 @@ function disapproveCommentAdmin()
         header("Location: comments.php");
     }
 }
+
+function getAllUsersTable(){
+    global $connection;
+
+    $query = "SELECT * FROM users ";
+    $select_users = mysqli_query($connection, $query);
+
+    confirmQuery($select_users);
+
+    while ($row = mysqli_fetch_assoc($select_users)) {
+        $user_id = $row["user_id"];
+        $username = $row["username"];
+        $user_firstname = $row["firstname"];
+        $user_lastname = $row["lastname"];
+        $user_email = $row["email"];
+        $user_image = $row["image"];
+        $user_is_admin = $row["is_admin"];
+
+        echo "<tr>";
+        echo "<td>{$user_id}</td>";
+        echo "<td>{$username}</td>";
+        echo "<td>{$user_firstname}</td>";
+        echo "<td>{$user_lastname}</td>";
+        echo "<td>{$user_email}</td>";
+        echo "<td><img width=100 class='img-responsive' src='../images/$user_image' alt = 'image'></td>";
+        echo "<td>";
+        echo $user_is_admin ? "Yes" : "No" ;  
+        echo"</td>";
+        echo "<td>
+            <a href='users.php?change_to_admin=$user_id' role='button' class='btn btn-inverse-warning waves-effect waves-light'>
+                Make Admin
+            </a>
+        </td>";
+        echo "<td>
+            <a href='users.php?change_to_regular=$user_id' role='button' class='btn btn-inverse-info waves-effect waves-light'>
+                Make Regular
+            </a>
+        </td>";
+        echo "<td>
+            <a href='users.php?source=edit_user&user_id=$user_id' role='button' class='btn btn-inverse-warning waves-effect waves-light'>
+                Edit
+            </a>
+        </td>";
+        echo "<td>
+            <a role='button' href='users.php?delete=$user_id' class='btn btn-inverse-danger waves-effect waves-light'>
+                Delete
+            </a>
+        </td>";
+        echo "</tr>";
+    }
+
+}
+
+function deleteUserAdmin(){
+    global $connection;
+    if(isset($_GET["delete"])){
+        $user_id = $_GET["delete"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "DELETE FROM users WHERE user_id = $user_id ";
+
+        $delete_user_query = mysqli_query($connection, $query);
+
+        confirmQuery($delete_user_query);
+
+        header("Location: users.php");
+
+
+    }
+}
+
+function changeUserToAdmin(){
+    global $connection;
+    if(isset($_GET["change_to_admin"])){
+        $user_id = $_GET["change_to_admin"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "UPDATE users SET is_admin = 1 WHERE user_id = $user_id ";
+
+        $change_user_to_admin_query = mysqli_query($connection, $query);
+
+        confirmQuery($change_user_to_admin_query);
+
+        header("Location: users.php");
+    }
+}
+
+function changeUserToRegular(){
+    global $connection;
+    if(isset($_GET["change_to_regular"])){
+        $user_id = $_GET["change_to_regular"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "UPDATE users SET is_admin = 0 WHERE user_id = $user_id ";
+
+        $change_user_to_regular_query = mysqli_query($connection, $query);
+
+        confirmQuery($change_user_to_regular_query);
+
+        header("Location: users.php");
+    }
+}
