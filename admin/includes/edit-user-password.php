@@ -23,25 +23,25 @@
 
             <!-- end of modal -->
             <div class="card-block">
-                <?php editUserAdminInputs(); ?>
-                <?php editUserAdmin(); ?>
+                <?php editUserPasswordAdminInputs(); ?>
+                <?php editUserPasswordAdmin(); ?>
                 <form action="" method="post" novalidate>
                     
-                    <div class="form-group row">
+                    <div class="form-group row <?php echo !empty($oldPasswordErr) ?  "has-danger" : "" ;?> ">
                         <label for="author-input" class="col-xs-2 col-form-label form-control-label">Old Password</label>
                         <div class="col-sm-10">
-                            <input name="user_password" class="form-control" type="password" value="<?php echo $user_password; ?>" id="author-input" placeholder="Enter Password">
-                            <div class="form-control-feedback"><?php echo $passwordErr; ?></div>
+                            <input name="user_old_password" class="form-control" type="password" value="<?php echo $user_old_password; ?>" id="author-input" placeholder="Enter old Password">
+                            <div class="form-control-feedback"><?php echo $oldPasswordErr; ?></div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row <?php echo !empty($passwordErr) ? "has-danger" : ""; ?>">
                         <label for="author-input" class="col-xs-2 col-form-label form-control-label">Password</label>
                         <div class="col-sm-10">
                             <input name="user_password" class="form-control" type="password" value="<?php echo $user_password; ?>" id="author-input" placeholder="Enter Password">
                             <div class="form-control-feedback"><?php echo $passwordErr; ?></div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row <?php echo !empty($confirmPasswordErr) ? "has-danger" : ""; ?>">
                         <label for="author-input" class="col-xs-2 col-form-label form-control-label">Confirm Password</label>
                         <div class="col-sm-10">
                             <input name="user_confirm_password" class="form-control" type="password" value="<?php echo $user_confirm_password; ?>" id="author-input" placeholder="Confirm password">

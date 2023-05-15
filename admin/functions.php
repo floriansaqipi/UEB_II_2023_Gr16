@@ -834,7 +834,7 @@ function editUserAdmin()
     }
 }
 
-function editUserPasswordInputs()
+function editUserPasswordAdminInputs()
 {
     global $user_id;
     if (isset($_GET["user_id"])) {
@@ -848,7 +848,12 @@ function editUserPasswordAdmin()
     global $user_id, $user_old_password, $user_password, $user_confirm_password;
     global $oldPasswordErr, $passwordErr, $confirmPasswordErr;
     $oldPasswordErr = $passwordErr = $confirmPasswordErr = "";
-    if (isset($_POST["user-edit-password"])) {
+    if (isset($_POST["edit-user-password"])) {
+        
+        
+        $user_old_password = $_POST["user_old_password"];
+        $user_password = $_POST["user_password"];
+        $user_confirm_password = $_POST["user_confirm_password"];
 
         $user_id = mysqli_real_escape_string($connection, $user_id);
 
@@ -860,16 +865,16 @@ function editUserPasswordAdmin()
             confirmQuery($get_user_password_query);
 
             while ($row = mysqli_fetch_assoc($get_user_password_query)) {
-                $user_old_password = $row["password"];
+                $db_password = $row["password"];
             }
-            if ($user_password != $user_old_password) {
+            if ($user_old_password != $db_password) {
                 $oldPasswordErr = "Your old password is different";
             }
         }
 
         $pattern = "/^(?=.*\d).{8,}$/";
         if (empty($user_password)) {
-            $passwordErr = "Username can not be empty";
+            $passwordErr = "Password can not be empty";
         } else if (!preg_match($pattern, trim($user_password))) {
             $passwordErr = "Password must have length of 8 or more and include one number";
         }
@@ -883,14 +888,14 @@ function editUserPasswordAdmin()
             $user_password = mysqli_real_escape_string($connection, $user_password);
 
             $query = "UPDATE users SET ";
-            $query .= " password = '$user_password', ";
+            $query .= " password = '$user_password' ";
             $query .= " WHERE user_id = $user_id ";
 
             $update_user_password_query = mysqli_query($connection, $query);
 
             confirmQuery($update_user_password_query);
 
-            header("Location : users.php?edit_user=$user_id");
+            header("Location: users.php?edit_user=$user_id");
         }
     }
 }

@@ -34,20 +34,6 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="author-input" class="col-xs-2 col-form-label form-control-label">Password</label>
-                        <div class="col-sm-10">
-                            <input name="user_password" class="form-control" type="password" value="<?php echo $user_password; ?>" id="author-input" placeholder="Enter Password">
-                            <div class="form-control-feedback"><?php echo $passwordErr; ?></div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="author-input" class="col-xs-2 col-form-label form-control-label">Confirm Password</label>
-                        <div class="col-sm-10">
-                            <input name="user_confirm_password" class="form-control" type="password" value="<?php echo $user_confirm_password; ?>" id="author-input" placeholder="Confirm password">
-                            <div class="form-control-feedback"><?php echo $confirmPasswordErr; ?></div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
                         <label for="author-input" class="col-xs-2 col-form-label form-control-label">Firstname</label>
                         <div class="col-sm-10">
                             <input name="user_firstname" class="form-control" type="text" value="<?php echo $user_firstname; ?>" id="author-input" placeholder="Enter Firstname">

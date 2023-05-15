@@ -33,8 +33,6 @@
 
     switch($sub_source){
         case "edit_user_password";
-    echo "this shit";
-
             include "includes/edit-user-password.php";
             break;
         default;
