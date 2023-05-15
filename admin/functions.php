@@ -677,21 +677,19 @@ function editUserAdminInputs()
 function editUserAdmin()
 {
     global $connection;
-    global $usernameErr, $passwordErr, $confirmPasswordErr, $firstnameErr, $lastnameErr,
+    global $usernameErr, $firstnameErr, $lastnameErr,
         $emailErr, $imageErr, $coverImageErr, $isAdminErr;
 
     global $user_id, $username, $user_password, $user_confirm_password, $user_firstname, $user_lastname, $user_email, $user_image,
         $user_cover_image, $user_is_admin, $user_bio, $user_about;
 
-    $usernameErr = $passwordErr = $confrimPasswordErr = $firstnameErr = $lastnameErr
+    $usernameErr = $firstnameErr = $lastnameErr
         = $emailErr = $imageErr = $coverImageErr = $isAdminErr = "";
     // $post_title = $post_image = $post_content = "";
     $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
     if (isset($_POST["edit-user"])) {
 
         $username = $_POST["username"];
-        $user_password = $_POST["user_password"];
-        $user_confirm_password = $_POST["user_confirm_password"];
         $user_firstname = $_POST["user_firstname"];
         $user_lastname = $_POST["user_lastname"];
         $user_email = $_POST["user_email"];
@@ -716,7 +714,7 @@ function editUserAdmin()
         } else if (!preg_match($pattern, trim($username))) {
             $usernameErr = "Username must be longer than 3 characters";
         } else {
-            $query = "SELECT * FROM users WHERE username = '$username' AND user_id != '$user_id' " ;
+            $query = "SELECT * FROM users WHERE username = '$username' AND user_id != '$user_id' ";
 
             $get_user_by_username_query = mysqli_query($connection, $query);
 
@@ -725,18 +723,6 @@ function editUserAdmin()
             if ($row = mysqli_fetch_assoc($get_user_by_username_query)) {
                 $usernameErr = "Username is taken";
             }
-        }
-
-        $pattern = "/^(?=.*\d).{8,}$/";
-        if (empty($user_password)) {
-            $passwordErr = "Username can not be empty";
-        } else if (!preg_match($pattern, trim($user_password))) {
-            $passwordErr = "Password must have length of 8 or more and include one number";
-        }
-
-        if (trim($user_password) != trim($user_confirm_password)) {
-            $passwordErr = "Passwords must match";
-            $confirmPasswordErr = "Passwords must match";
         }
 
 
@@ -754,7 +740,7 @@ function editUserAdmin()
         } else if (!preg_match($pattern, trim($user_email))) {
             $emailErr = "Email is inavlid";
         } else {
-            $query = "SELECT * FROM users WHERE email = '$user_email' AND user_id != '$user_id' " ;
+            $query = "SELECT * FROM users WHERE email = '$user_email' AND user_id != '$user_id' ";
 
             $get_user_by_email_query = mysqli_query($connection, $query);
 
@@ -811,8 +797,8 @@ function editUserAdmin()
         }
 
         if (
-            empty($usernameErr) && empty($passwordErr) && empty($confirmPasswordErr) &&
-            empty($firstnameErr) && empty($lastnameErr) && empty($emailErr) && empty($imageErr)
+            empty($usernameErr) && empty($firstnameErr) && empty($lastnameErr)
+            && empty($emailErr) && empty($imageErr)
             && empty($coverImageErr) && empty($isAdminErr)
         ) {
 
@@ -831,7 +817,6 @@ function editUserAdmin()
 
             $query = "UPDATE user SET ";
             $query .= "username = '$username', ";
-            $query .= "password = '$user_password', ";
             $query .= "firstname = '$user_firstname', ";
             $query .= "lastname = '$user_lastname', ";
             $query .= "email = '$user_email', ";
@@ -845,6 +830,67 @@ function editUserAdmin()
             $update_user_admin_query = mysqli_query($connection, $query);
             confirmQuery($update_user_admin_query);
             header("Location: users.php");
+        }
+    }
+}
+
+function editUserPasswordInputs()
+{
+    global $user_id;
+    if (isset($_GET["user_id"])) {
+        $user_id = $_GET["user_id"];
+    }
+}
+
+function editUserPasswordAdmin()
+{
+    global $connection;
+    global $user_id, $user_old_password, $user_password, $user_confirm_password;
+    global $oldPasswordErr, $passwordErr, $confirmPasswordErr;
+    $oldPasswordErr = $passwordErr = $confirmPasswordErr = "";
+    if (isset($_POST["user-edit-password"])) {
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        if (empty($user_old_password)) {
+            $oldPasswordErr = "Password can not be empty";
+        } else {
+            $query = "SELECT * FROM users WHERE user_id = $user_id ";
+            $get_user_password_query = mysqli_query($connection, $query);
+            confirmQuery($get_user_password_query);
+
+            while ($row = mysqli_fetch_assoc($get_user_password_query)) {
+                $user_old_password = $row["password"];
+            }
+            if ($user_password != $user_old_password) {
+                $oldPasswordErr = "Your old password is different";
+            }
+        }
+
+        $pattern = "/^(?=.*\d).{8,}$/";
+        if (empty($user_password)) {
+            $passwordErr = "Username can not be empty";
+        } else if (!preg_match($pattern, trim($user_password))) {
+            $passwordErr = "Password must have length of 8 or more and include one number";
+        }
+
+        if (trim($user_password) != trim($user_confirm_password)) {
+            $passwordErr = "Passwords must match";
+            $confirmPasswordErr = "Passwords must match";
+        }
+
+        if (empty($oldPasswordErr) && empty($passwordErr) && empty($confirmPasswordErr)) {
+            $user_password = mysqli_real_escape_string($connection, $user_password);
+
+            $query = "UPDATE users SET ";
+            $query .= " password = '$user_password', ";
+            $query .= " WHERE user_id = $user_id ";
+
+            $update_user_password_query = mysqli_query($connection, $query);
+
+            confirmQuery($update_user_password_query);
+
+            header("Location : users.php?edit_user=$user_id");
         }
     }
 }
