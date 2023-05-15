@@ -1,3 +1,4 @@
+<?php $page = "home"; ?>
 <?php include "includes/header.php"; ?>
     <div class="container-xxl bg-white p-0">
         <!-- Spinner Start -->

@@ -161,7 +161,7 @@
       <div class="col-lg-8">
         <div class="all-blog-posts">
           <div class="row">
-          <?php include "includes/feed-posts.php"; ?>  
+          <?php include "includes/category-posts.php"; ?>  
         <div class="col-lg-12">
           <div class="main-button">
             <a href="blog.html">View All Posts</a>
