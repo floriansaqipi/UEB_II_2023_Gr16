@@ -78,7 +78,7 @@
                                 <div class="h6 text-muted">Themes</div>
                                 <div class="h5">6758</div>
                             </li>
-                            <li>
+                            <li class="mt-4">
                                 <div class="button-container">
                                     <button class="btn btn-primary">
                                         <i class="fa fa-pencil"></i>
