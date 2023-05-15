@@ -1,4 +1,14 @@
 <?php
+
+function isLoggedInRegular(){
+    if(!isset($_SESSION["user_id"])){
+        header("Location: login.php");
+    }
+}
+function logOutRegular(){
+    session_destroy();
+    header("Location: index.php");
+}
 function confirmQuery($result)
 {
     global $connection;
@@ -83,5 +93,69 @@ function countSinglePostComments()
     while ($row = mysqli_fetch_array($comment_post_count_query)) {
         $comment_count = $row["comment_count"];
         echo "<h2>$comment_count Comments</h2>";
+    }
+}
+
+function logInUser()
+{
+    global $connection;
+    global $emailErr, $passwordErr;
+    global $user_email, $user_password;
+
+    if (isset($_POST["login"])) {
+        $user_email = $_POST["user_email"];
+        $user_password = $_POST["user_password"];
+
+        $user_email = mysqli_real_escape_string($connection, $user_email);
+        $user_password = mysqli_real_escape_string($connection, $user_password);
+
+        $pattern = "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/";
+        if (empty($user_email)) {
+            $emailErr = "Email field can not be empty";
+        } else if (!preg_match($pattern, trim($user_email))) {
+            $emailErr = "Email is inavlid";
+        }
+
+        if (empty($user_password)) {
+            $passwordErr = "Password cannot be empty";
+        }
+
+        $query = "SELECT * FROM users WHERE email = '$user_email' ";
+
+        $select_user_query = mysqli_query($connection, $query);
+
+        confirmQuery($select_user_query);
+
+        $row = mysqli_fetch_assoc($select_user_query);
+
+
+        if (empty($row)) {
+            $emailErr = "User with this username does not exist";
+        } else {
+            $db_user_id = $row["user_id"];
+            $db_username = $row["username"];
+            $db_user_firstname = $row["firstname"];
+            $db_user_lastname = $row["lastname"];
+            $db_user_image = $row["image"];
+            $db_is_admin = $row["is_admin"];
+            $db_password = $row["password"];
+            if ($user_password !== $db_password) {
+                $passwordErr = "Password is incorrect ";
+            }
+        }
+
+        if (empty($emailErr) && empty($passwordErr)) {
+            $_SESSION["user_id"] = $db_user_id;
+            $_SESSION["username"] = $db_username;
+            $_SESSION["user_firstname"] = $db_user_firstname;
+            $_SESSION["user_lastname"] = $db_user_lastname;
+            $_SESSION["user_image"] = $db_user_image;
+            $_SESSION["is_admin"] = $db_is_admin;
+            if ($db_is_admin === "1") {
+                header("Location: admin/index.php");
+            } else {
+                header("Location: index.php");
+            }
+        }
     }
 }

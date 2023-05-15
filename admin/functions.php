@@ -1,5 +1,15 @@
 <?php
 
+function logOutAdmin(){
+    session_destroy();
+    header("Location: ../index.php");
+}
+function isLoggedInAdmin()
+{
+    if (!isset($_SESSION["user_id"]) || $_SESSION["is_admin"] != "1") {
+        header("Location: ../login.php");
+    }
+}
 function confirmQuery($result)
 {
     global $connection;
@@ -345,7 +355,7 @@ function editPostAdmin()
                 $post_image = $row["image"];
             }
         }
-        
+
         if ($titleErr == "" && $imageErr == "" && $contentErr == "") {
 
             $query = "UPDATE posts SET ";
@@ -442,8 +452,8 @@ function getAllCommentsTable()
         getPostTitleByIdComment($comment_post_id);
         echo "<td>{$comment_content}</td>";
         echo "<td>";
-        echo $comment_is_approved ? "Yes" : "No" ;  
-        echo"</td>";
+        echo $comment_is_approved ? "Yes" : "No";
+        echo "</td>";
         echo "<td>{$comment_date}</td>";
         echo "<td>
             <a href='comments.php?approve=$comment_id' role='button' class='btn btn-inverse-success waves-effect waves-light'>
@@ -479,9 +489,10 @@ function getPostTitleByIdComment($comment_post_id)
     }
 }
 
-function deleteCommentFromTable(){
+function deleteCommentFromTable()
+{
     global $connection;
-    if(isset($_GET["delete"])){
+    if (isset($_GET["delete"])) {
         $comment_id = $_GET["delete"];
 
         $query = "DELETE FROM comments WHERE comment_id = $comment_id ";
@@ -491,14 +502,13 @@ function deleteCommentFromTable(){
         confirmQuery($delete_comment_query);
 
         header("Location: comments.php");
-
-
     }
 }
 
-function approveCommentAdmin(){
+function approveCommentAdmin()
+{
     global $connection;
-    if(isset($_GET["approve"])){
+    if (isset($_GET["approve"])) {
         $comment_id = $_GET["approve"];
 
         $query = "UPDATE comments SET is_approved = 1 WHERE comment_id = $comment_id ";
@@ -511,9 +521,10 @@ function approveCommentAdmin(){
     }
 }
 
-function disapproveCommentAdmin(){
+function disapproveCommentAdmin()
+{
     global $connection;
-    if(isset($_GET["disapprove"])){
+    if (isset($_GET["disapprove"])) {
         $comment_id = $_GET["disapprove"];
 
         $query = "UPDATE comments SET is_approved = 0 WHERE comment_id = $comment_id ";

@@ -9,7 +9,12 @@
         <div class="navbar-nav ms-auto p-4 p-lg-0">
             <a href="index.php" class="nav-item nav-link <?php echo $page == "home" ? "active" : " " ?>">Home</a>
             <a href="feed.php" class="nav-item nav-link <?php echo $page == "feed" ? "active" : " " ?>">Feed</a>
-            <a href="post-details.php" class="nav-item nav-link">Post</a>
+            <?php if (isset($_SESSION["user_id"])) {
+            ?>
+                <a href="userprofile.php" class="nav-item nav-link">Your Profile</a>
+            <?php
+                }
+            ?>
             <!-- <a href="blog.php" class="nav-item nav-link">Blog</a> -->
             <a href="about.php" class="nav-item nav-link">About</a>
             <div class="nav-item dropdown">
@@ -28,7 +33,19 @@
                 </div>
             </div>
             <a href="contact.php" class="nav-item nav-link">Contact</a>
-            <a href="admin/index.php" class="nav-item nav-link">Admin</a>
+            <?php
+            if (isset($_SESSION["user_id"])) {
+
+            ?>
+                <a href="logout.php" class="nav-item nav-link ">Log out</a>
+            <?php
+            } else {
+            ?>
+                <a href="login.php" class="nav-item nav-link  <?php echo $page == "login" ? "active" : "" ?>">Log in</a>
+
+            <?php
+            }
+            ?>
         </div>
         <a href="" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block post-a-job">Post A Job<i class="fa fa-arrow-right ms-3"></i></a>
     </div>
