@@ -16,67 +16,54 @@
     <!-- Navbar End -->
 
 
-    
-    <script>
-$("#btnSubmit").click(function(event) {
-    
-    var form = $("#loginForm");
-    
-    if (form[0].checkValidity() === false) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
-    
-    // if validation passed form
-    // would post to the server here
-    
-    form.addClass('was-validated');
-});
-</script>
-
-
-    <div class="container-xx1 bg-white p-1 d-flex align-items-center justify-content-center" >
-    <!-- form card change password -->
-    <div class="card card-outline-primary">
-        <div class="card-header">
-            <h3 class="mb-5">Change Password</h3>
+    <div class="container-xx1 bg-white p-1 d-flex align-items-center justify-content-center mt-30">
+        <!-- form card change password -->
+        <div class="card card-outline-primary">
+            <div class="card-header">
+                <h3 class="mb-5">Change Password</h3>
+            </div>
+            <div class="card-body">
+                <form class="form" role="form" autocomplete="off">
+                    <div class="form-group row">
+                        <label for="inputPasswordOld" class="col-sm-3 col-form-label">Current Password</label>
+                        <div class="col-sm-12">
+                            <input type="password" class="form-control" id="inputPasswordOld" required="">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPasswordNew" class="col-sm-3 col-form-label">New Password</label>
+                        <div class="col-sm-12">
+                         
+                            <input type="password" id="inputPassword5" class="form-control"
+                                aria-labelledby="passwordHelpBlock">
+                            <div id="passwordHelpBlock" class="form-text">
+                                Your password must be 8-20 characters long, contain letters and numbers, and must not
+                                contain spaces, special characters, or emoji.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputPasswordNewVerify" class="col-sm-3 col-form-label">Verify</label>
+                        <div class="col-sm-12">
+                            <input type="password" class="form-control" id="inputPasswordNewVerify" required="">
+                            <span class="form-text small text-muted">
+                                To confirm, type the new password again.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col d-flex justify-content-end">
+                            <button class="btn btn-primary" type="submit">Save
+                                Changes</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="card-body">
-            <form class="form" role="form" autocomplete="off">
-                <div class="form-group row">
-                    <label for="inputPasswordOld" class="col-sm-3 col-form-label">Current Password</label>
-                    <div class="col-sm-12">
-                        <input type="password" class="form-control" id="inputPasswordOld" required="">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="inputPasswordNew" class="col-sm-3 col-form-label">New Password</label>
-                    <div class="col-sm-12">
-                        <input type="password" class="form-control" id="inputPasswordNew" required="">
-                        <span class="form-text small text-muted">
-                            The password must be 8-20 characters, and must <em>not</em> contain spaces.
-                        </span>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label for="inputPasswordNewVerify" class="col-sm-3 col-form-label">Verify</label>
-                    <div class="col-sm-12">
-                        <input type="password" class="form-control" id="inputPasswordNewVerify" required="">
-                        <span class="form-text small text-muted">
-                            To confirm, type the new password again.
-                        </span>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <button type="submit" id="btnSubmit" class="btn btn-primary btn-lg float-right">Save changes</button>
-                </div>
-            </form>
-        </div>
+        <!-- /form card change password -->
     </div>
-    <!-- /form card change password -->
-</div>
 
 
 
-<!-- Footer Start -->
-<?php include "includes/footer.php"; ?>
+    <!-- Footer Start -->
+    <?php include "includes/footer.php"; ?>
