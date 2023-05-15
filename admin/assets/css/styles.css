@@ -6,7 +6,7 @@ body {
 }
 
 .pad{
-    padding: 24px !important;
+    padding: 24px !important;   
 }
 
 .full-widthi{
@@ -14,4 +14,8 @@ body {
 }
 .custom-file-control:lang(en)::after {
     content: "";
+}
+
+.change-password-column{
+    padding-top: 12px !important;
 }

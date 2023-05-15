@@ -649,7 +649,7 @@ function editUserAdminInputs()
 {
     global $connection;
     global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
-     $user_cover_image, $user_is_admin, $user_bio, $user_about;
+        $user_cover_image, $user_is_admin, $user_bio, $user_about;
     if (isset($_GET["user_id"])) {
         $user_id = $_GET["user_id"];
 
@@ -678,74 +678,73 @@ function editUserAdmin()
 {
     global $connection;
     global $usernameErr, $passwordErr, $confirmPasswordErr, $firstnameErr, $lastnameErr,
-     $emailErr, $imageErr, $coverImageErr, $isAdminErr;
+        $emailErr, $imageErr, $coverImageErr, $isAdminErr;
 
-     global $user_id, $username, $user_password, $user_confirm_password, $user_firstname, $user_lastname, $user_email, $user_image,
-     $user_cover_image, $user_is_admin, $user_bio, $user_about;
+    global $user_id, $username, $user_password, $user_confirm_password, $user_firstname, $user_lastname, $user_email, $user_image,
+        $user_cover_image, $user_is_admin, $user_bio, $user_about;
 
-    $usernameErr = $passwordErr = $confrimPasswordErr = $firstnameErr = $lastnameErr 
-    = $emailErr = $imageErr = $coverImageErr = $isAdminErr = "";
+    $usernameErr = $passwordErr = $confrimPasswordErr = $firstnameErr = $lastnameErr
+        = $emailErr = $imageErr = $coverImageErr = $isAdminErr = "";
     // $post_title = $post_image = $post_content = "";
     $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
     if (isset($_POST["edit-user"])) {
 
-        $user_id = $_POST["user_id"];
-            $username = $_POST["username"];
-            $user_password = $_POST["user_password"];
-            $user_confirm_password = $_POST["user_confirm_password"];
-            $user_firstname = $_POST["user_firstname"];
-            $user_lastname = $_POST["user_lastname"];
-            $user_email = $_POST["user_email"];
-            $user_image = $_FILES["user_image"]["name"];
-            $user_image_temp = $_FILES["user_image"]["tmp_name"];
-            $user_image_size = $_FILES["user_image"]["size"];
-            $user_cover_image = $_FILES["user_cover_image"]["name"];
-            $user_cover_image_temp = $_FILES["user_cover_image"]["tmp_name"];
-            $user_cover_image_size = $_FILES["user_cover_image"]["size"];
-            $user_is_admin = $_POST["user_is_admin"];
-            $user_bio = $_POST["user_bio"];
-            $user_about = $_POST["user_about"];
+        $username = $_POST["username"];
+        $user_password = $_POST["user_password"];
+        $user_confirm_password = $_POST["user_confirm_password"];
+        $user_firstname = $_POST["user_firstname"];
+        $user_lastname = $_POST["user_lastname"];
+        $user_email = $_POST["user_email"];
+        $user_image = $_FILES["user_image"]["name"];
+        $user_image_temp = $_FILES["user_image"]["tmp_name"];
+        $user_image_size = $_FILES["user_image"]["size"];
+        $user_cover_image = $_FILES["user_cover_image"]["name"];
+        $user_cover_image_temp = $_FILES["user_cover_image"]["tmp_name"];
+        $user_cover_image_size = $_FILES["user_cover_image"]["size"];
+        $user_is_admin = $_POST["user_is_admin"];
+        $user_bio = $_POST["user_bio"];
+        $user_about = $_POST["user_about"];
 
-            $user_id = mysqli_real_escape_string($connection,$user_id);
-            $username = mysqli_real_escape_string($connection,$username);
-       
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+        $username = mysqli_real_escape_string($connection, $username);
+        $user_email = mysqli_real_escape_string($connection, $user_email);
+
 
         $pattern = "/.{3,}/";
         if (empty($username)) {
             $usernameErr = "Username can not be empty";
         } else if (!preg_match($pattern, trim($username))) {
-                $usernameErr = "Username must be longer than 3 characters";
-        }else {
-            $query = "SELECT * FROM users WHERE username = '$username' ";
+            $usernameErr = "Username must be longer than 3 characters";
+        } else {
+            $query = "SELECT * FROM users WHERE username = '$username' AND user_id != '$user_id' " ;
 
             $get_user_by_username_query = mysqli_query($connection, $query);
 
             confirmQuery($get_user_by_username_query);
 
-            if($row = mysqli_fetch_assoc($get_user_by_username_query)){
+            if ($row = mysqli_fetch_assoc($get_user_by_username_query)) {
                 $usernameErr = "Username is taken";
             }
-
         }
 
         $pattern = "/^(?=.*\d).{8,}$/";
-        if(empty($user_password)){
+        if (empty($user_password)) {
             $passwordErr = "Username can not be empty";
-        }else if(!preg_match($pattern, trim($user_password))){
+        } else if (!preg_match($pattern, trim($user_password))) {
             $passwordErr = "Password must have length of 8 or more and include one number";
         }
 
-        if(trim($user_password) != trim($user_confirm_password)){
+        if (trim($user_password) != trim($user_confirm_password)) {
             $passwordErr = "Passwords must match";
             $confirmPasswordErr = "Passwords must match";
         }
 
-        
-        if(empty($user_firstname)){
+
+        if (empty($user_firstname)) {
             $firstnameErr = "Firstname can not be empty ";
         }
 
-        if(empty($user_lastname)){
+        if (empty($user_lastname)) {
             $lastnameErr = "Lastname can not be empty ";
         }
 
@@ -754,6 +753,16 @@ function editUserAdmin()
             $emailErr = "Email field can not be empty";
         } else if (!preg_match($pattern, trim($user_email))) {
             $emailErr = "Email is inavlid";
+        } else {
+            $query = "SELECT * FROM users WHERE email = '$user_email' AND user_id != '$user_id' " ;
+
+            $get_user_by_email_query = mysqli_query($connection, $query);
+
+            confirmQuery($get_user_by_email_query);
+
+            if ($row = mysqli_fetch_assoc($get_user_by_email_query)) {
+                $emailErr = "Username is taken";
+            }
         }
 
 
@@ -773,7 +782,7 @@ function editUserAdmin()
             $select_image_query = mysqli_query($connection, $query);
             confirmQuery($select_image_query);
             while ($row = mysqli_fetch_assoc($select_image_query)) {
-                $post_image = $row["image"];
+                $user_image = $row["image"];
             }
         }
 
@@ -781,38 +790,61 @@ function editUserAdmin()
             $file_extension = pathinfo($user_cover_image, PATHINFO_EXTENSION);
 
             if (!in_array($file_extension, $allowed_extensions)) {
-                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
-            } else if ($user_image_size > 3000000) {
-                $imageErr = "Image can't be over 3MB";
+                $coverImageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($user_cover_image_size > 4000000) {
+                $coverImageErr = "Image can't be over 4MB";
             } else {
 
-                move_uploaded_file($user_image_temp, "../images/$user_image");
+                move_uploaded_file($user_cover_image_temp, "../images/$user_cover_image");
             }
         } else {
             $query = "SELECT * FROM users WHERE user_id = $user_id ";
             $select_image_query = mysqli_query($connection, $query);
             confirmQuery($select_image_query);
             while ($row = mysqli_fetch_assoc($select_image_query)) {
-                $post_image = $row["image"];
+                $user_cover_image = $row["cover_image"];
             }
         }
 
-        if ($titleErr == "" && $imageErr == "" && $contentErr == "") {
+        if ($user_is_admin != "0" ||  $user_is_admin != "1") {
+            $isAdminErr = "Only accepted values are admin and regular";
+        }
 
-            $query = "UPDATE posts SET ";
-            $query .= "category_id = $post_category_id, ";
-            $query .= "title = '$post_title', ";
-            $query .= "author = '$post_author', ";
-            $query .= "date = now(), ";
-            $query .= "image = '$post_image', ";
-            $query .= "content = '$post_content', ";
-            $query .= "tags = '$post_tags', ";
-            $query .= "status = '$post_status' ";
-            $query .= "WHERE post_id = $post_id ";
+        if (
+            empty($usernameErr) && empty($passwordErr) && empty($confirmPasswordErr) &&
+            empty($firstnameErr) && empty($lastnameErr) && empty($emailErr) && empty($imageErr)
+            && empty($coverImageErr) && empty($isAdminErr)
+        ) {
 
-            $update_post_admin_query = mysqli_query($connection, $query);
-            confirmQuery($update_post_admin_query);
-            header("Location: posts.php");
+
+            $user_password = mysqli_real_escape_string($connection, $_POST["user_password"]);
+            $user_firstname = mysqli_real_escape_string($connection, $_POST["user_firstname"]);
+            $user_lastname = mysqli_real_escape_string($connection, $_POST["user_lastname"]);
+            $user_image = mysqli_real_escape_string($connection, $_FILES["user_image"]["name"]);
+            $user_cover_image = mysqli_real_escape_string($connection, $_FILES["user_cover_image"]["name"]);
+            $user_is_admin = mysqli_real_escape_string($connection, $_POST["user_is_admin"]);
+            $user_bio = mysqli_real_escape_string($connection, $_POST["user_bio"]);
+            $user_about = mysqli_real_escape_string($connection, $_POST["user_about"]);
+
+
+
+
+            $query = "UPDATE user SET ";
+            $query .= "username = '$username', ";
+            $query .= "password = '$user_password', ";
+            $query .= "firstname = '$user_firstname', ";
+            $query .= "lastname = '$user_lastname', ";
+            $query .= "email = '$user_email', ";
+            $query .= "image = '$user_image', ";
+            $query .= "cover_image = '$user_cover_image', ";
+            $query .= "is_admin = $user_is_admin, ";
+            $query .= "bio = '$user_bio', ";
+            $query .= "about = '$user_about' ";
+            $query .= "WHERE user_id = $user_id ";
+
+            $update_user_admin_query = mysqli_query($connection, $query);
+            confirmQuery($update_user_admin_query);
+            header("Location: users.php");
         }
     }
 }
