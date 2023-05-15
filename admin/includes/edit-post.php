@@ -9,7 +9,7 @@
                 </li>
                 <li class="breadcrumb-item"><a href="posts.php">Posts</a>
                 </li>
-                <li class="breadcrumb-item"><a href="posts.php?source=edit&p_id=<?php echo $_GET["p_id"] ;?>">Edit a post</a>
+                <li class="breadcrumb-item"><a href="posts.php?source=edit_post&p_id=<?php echo $_GET["p_id"] ;?>">Edit a post</a>
                 </li>
 
             </ol>

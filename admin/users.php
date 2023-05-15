@@ -256,10 +256,10 @@
          }
 
          switch ($source) {
-            case 'add_post';
+            case 'add_user';
                include "includes/add-user.php";
                break;
-            case 'edit_post';
+            case 'edit_user';
                include "includes/edit-user.php";
                break;
             default:
