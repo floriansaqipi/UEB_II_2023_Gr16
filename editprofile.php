@@ -10,7 +10,7 @@
     <!-- Spinner End -->
 
 
-    <!-- Navbar Start -->
+    <!-- Navbar Start -->     
     <?php include "includes/navabar.php"; ?>
 
     <!-- Navbar End -->
@@ -33,13 +33,14 @@
                     <div class="e-navlist e-navlist--active-bg">
                         <ul class="nav">
                             <li class="nav-item"><a class="nav-link px-2 active" href="#"><i
-                                        class="fa fa-fw fa-bar-chart mr-1"></i><span>Overview</span></a></li>
+                                        class="fa fa-fw fa-bar-chart mr-1"></i><span
+                                        class="text-dark">Overview</span></a></li>
                             <li class="nav-item"><a class="nav-link px-2"
                                     href="https://www.bootdey.com/snippets/view/bs4-crud-users" target="__blank"><i
-                                        class="fa fa-fw fa-th mr-1"></i><span>CRUD</span></a></li>
+                                        class="fa fa-fw fa-th mr-1"></i><span class="text-dark">CRUD</span></a></li>
                             <li class="nav-item"><a class="nav-link px-2"
                                     href="https://www.bootdey.com/snippets/view/bs4-edit-profile-page"
-                                    target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span>Settings</span></a></li>
+                                    target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span class="text-dark">Settings</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -69,14 +70,14 @@
                                                     <p class="mb-0">@johnny.s</p>
                                                     <div class="text-muted"><small>Last seen 2 hours ago</small></div>
                                                     <div class="mt-2">
-                                                        <a href=""  class="btn btn-primary" >
-                                                            <i class="fa fa-fw fa-camera"></i>
-                                                            <span>Change Photo</span>
-                                                        </button>
+                                                        <a href="./editpassword.php" class="btn btn-primary">
+                                                            <i class="fa fa-fw fa-lock"></i>
+                                                            <span>Change Paasword</span>
+                                                        </a>
                                                     </div>
                                                 </div>
                                                 <div class="text-center text-sm-right">
-                                                    <span class="badge badge-primary">administrator</span>
+                                                    <span class="badge badge-secondary">administrator</span>
                                                     <div class="text-muted"><small>Joined 09 Dec 2017</small></div>
                                                 </div>
                                             </div>
@@ -167,26 +168,18 @@
                                                         </div>
                                                     </div>
 
-
-
-
                                                     <div class="mb-3">
                                                         <label for="exampleFormControlTextarea1"
                                                             class="form-label">About</label>
                                                         <textarea class="form-control" id="exampleFormControlTextarea1"
                                                             rows="3"></textarea>
                                                     </div>
-
-
-                                          
                                                     <div class="mb-3">
                                                         <input type="file" class="form-control"
                                                             aria-label="file example" required>
                                                         <div class="invalid-feedback">Example invalid form file feedback
                                                         </div>
                                                     </div>
-
-
                                                     <div class="row">
                                                         <div class="col d-flex justify-content-end">
                                                             <button class="btn btn-primary" type="submit">Save
