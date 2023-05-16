@@ -5,6 +5,8 @@ function isLoggedInRegular(){
         header("Location: login.php");
     }
 }
+
+
 function logOutRegular(){
     session_destroy();
     header("Location: index.php");

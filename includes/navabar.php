@@ -33,6 +33,14 @@
                 </div>
             </div>
             <a href="contact.php" class="nav-item nav-link">Contact</a>
+            <?php 
+                if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] == "1") {
+            ?>
+                <a href="admin/index.php" class="nav-item nav-link ">Admin</a>
+
+            <?php 
+                }
+            ?>
             <?php
             if (isset($_SESSION["user_id"])) {
 
