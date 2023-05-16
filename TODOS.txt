@@ -3,3 +3,8 @@
 //create a user sign up / log in page 
 //create a add posts page 
 //create myposts page 
+
+
+//when the email is sent blank-page--->fix it 
+//choose-file
+//select-admin
