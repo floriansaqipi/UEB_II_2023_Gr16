@@ -1,5 +1,7 @@
+
 <?php $page = "register"; ?>
 <?php include 'includes/header.php'; ?>
+
 
 <?php include "includes/navabar.php"; ?>
 <link href="css/register.css" rel="stylesheet">
@@ -11,6 +13,16 @@
 
        
 		<div style="background-image:url('bg.png');"  class="container infinity-container">
+		<div class="alert text-success">
+				<?php
+				if (isset($_SESSION['status'])) {
+					echo "<h4>".$_SESSION['status']."</h4>";
+					unset($_SESSION['status']);
+				}
+
+				
+				?>
+			</div>
 		
 		<div class="row">
 			<div  class="col-md-1 infinity-left-space"></div>
@@ -80,6 +92,7 @@
 				</form>
 			</div>
 			<!-- FORM END -->
+			
 
 			<div class="col-md-1 infinity-right-space"></div>
 		</div>

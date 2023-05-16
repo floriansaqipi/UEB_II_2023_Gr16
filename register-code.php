@@ -2,8 +2,6 @@
 
 session_start();
 include ('includes/db.php');
-
-
 require 'vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
@@ -36,11 +34,11 @@ function sendemail_verify($firstName,$email,$verify_token){
     <h2>You haven been registered to Jobfinder</h2>
     <h5>Verify your email address to Login with the below given link</h5>
     <br><br>
-    <a href='//http://localhost/xampp/projekti_ueb_2/verify-email.php?token=$verify_token'>Click me</a>
+    <a href='localhost/xampp/projekti_ueb_2/verify-email.php?token=$verify_token'>Click me</a>
     ";
     $mail->Body=$email_template;
     $mail->send();
-    echo 'Message has been sent';
+    // echo 'Message has been sent';
 
 }
 global $connection;
@@ -70,8 +68,8 @@ if(isset($_POST['register'])){
 
 
 
-    sendemail_verify($firstName,$email,$verify_token);
-    echo "sent or not?";
+    // sendemail_verify("$firstName","$email","$verify_token");
+    // echo "sent or not?";
     //Email excists or not
     $check_email_query="SELECT email from users where email='$email' limit 1";
     $check_email_query_run=mysqli_query($connection, $check_email_query);
@@ -81,7 +79,7 @@ if (mysqli_num_rows($check_email_query_run)>0) {
     header("Location:");
 } else {
     //Insert user/Registered User Data
-    $query="INSERT INTO users(username,password,firstname,lastname,email,image,verify_token) VALUES('$username',''$password','$firstName','$lastName','$email','$image','$verify_token')";
+    $query="INSERT INTO users(username,password,firstname,lastname,email,image,verify_token) VALUES('$username','$password','$firstName','$lastName','$email','$image','$verify_token')";
     $query_run=mysqli_query($connection,$query);
 
     if ($query_run) {
