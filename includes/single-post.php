@@ -85,11 +85,6 @@ if (isset($_GET["p_id"])) {
                             <h4>Leave a Comment: </h4>
                         </div>
                         <div class="col-md-12">
-                            <label for="validationCustom03" class="form-label">Author</label>
-                            <input type="text" name="comment_author" class="form-control" value="<?php echo $comment_author; ?>" placeholder="Enter Author" id="validationCustom03">
-
-                        </div>
-                        <div class="col-md-12">
                             <label for="validationTextarea" class="form-label">Content</label>
                             <textarea name="comment_content" class="form-control <?php echo !empty($contentErr) ? "is-invalid" : "" ?>" id="validationTextarea" placeholder="Enter content" required><?php echo $comment_content; ?></textarea>
                             <div class="invalid-feedback">
