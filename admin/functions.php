@@ -855,6 +855,7 @@ function editUserPasswordAdmin()
         $user_password = $_POST["user_password"];
         $user_confirm_password = $_POST["user_confirm_password"];
 
+
         $user_id = mysqli_real_escape_string($connection, $user_id);
 
         if (empty($user_old_password)) {
@@ -867,7 +868,7 @@ function editUserPasswordAdmin()
             while ($row = mysqli_fetch_assoc($get_user_password_query)) {
                 $db_password = $row["password"];
             }
-            if ($user_old_password != $db_password) {
+            if (!password_verify($db_password, $user_old_password)) {
                 $oldPasswordErr = "Your old password is different";
             }
         }
@@ -886,6 +887,9 @@ function editUserPasswordAdmin()
 
         if (empty($oldPasswordErr) && empty($passwordErr) && empty($confirmPasswordErr)) {
             $user_password = mysqli_real_escape_string($connection, $user_password);
+
+            $user_password = password_hash($user_password, PASSWORD_DEFAULT);
+
 
             $query = "UPDATE users SET ";
             $query .= " password = '$user_password' ";

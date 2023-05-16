@@ -1,13 +1,15 @@
 <?php
 
-function isLoggedInRegular(){
-    if(!isset($_SESSION["user_id"])){
+function isLoggedInRegular()
+{
+    if (!isset($_SESSION["user_id"])) {
         header("Location: login.php");
     }
 }
 
 
-function logOutRegular(){
+function logOutRegular()
+{
     session_destroy();
     header("Location: index.php");
 }
@@ -158,6 +160,83 @@ function logInUser()
             } else {
                 header("Location: index.php");
             }
+        }
+    }
+}
+
+function getUserProfileData()
+{
+    global $connection;
+    global $username, $user_firstname, $user_lastname,  $user_email,
+        $user_image, $user_cover_image, $user_bio, $user_about;
+        // $user_is_admin ,
+    if (isset($_SESSION["user_id"])) {
+
+        $user_id = $_SESSION["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT * FROM users where user_id = $user_id ";
+
+        $session_user_query = mysqli_query($connection, $query);
+
+        confirmQuery($session_user_query);
+
+        if ($row = mysqli_fetch_assoc($session_user_query)) {
+            $username = $row["username"];
+            $user_firstname = $row["firstname"];
+            $user_lastname = $row["lastname"];
+            $user_email = $row["email"];
+            $user_image = $row["image"];
+            $user_cover_image = $row["cover_image"];
+            // $user_is_admin = $row["user_is_admin"];
+            $user_bio = $row["bio"];
+            $user_about = $row["about"];
+        }
+    }
+}
+
+
+function getUserPostCount(){
+    global $connection;
+    global $post_count;
+        // $user_is_admin ,
+    if (isset($_SESSION["user_id"])) {
+
+        $user_id = $_SESSION["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT COUNT(*) as post_count FROM posts WHERE user_id = $user_id ";
+
+        $session_user_post_count_query = mysqli_query($connection, $query);
+
+        confirmQuery($session_user_post_count_query);
+
+        if ($row = mysqli_fetch_assoc($session_user_post_count_query)) {
+            $post_count = $row["post_count"];
+        }
+    }
+}
+
+function getUserCommentCount(){
+    global $connection;
+    global $comment_count;
+        // $user_is_admin ,
+    if (isset($_SESSION["user_id"])) {
+
+        $user_id = $_SESSION["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT COUNT(*) as comment_count FROM comments where user_id = $user_id ";
+
+        $session_user_comment_count_query = mysqli_query($connection, $query);
+
+        confirmQuery($session_user_comment_count_query);
+
+        if ($row = mysqli_fetch_assoc($session_user_comment_count_query)) {
+            $comment_count = $row["comment_count"];
         }
     }
 }
