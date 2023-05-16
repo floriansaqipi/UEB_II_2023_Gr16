@@ -16,3 +16,7 @@ body{
 .comment-space{
     margin-top: 32px !important;
 }
+
+.user-profile-buttons__spacing{
+    padding: 16px !important;
+}
