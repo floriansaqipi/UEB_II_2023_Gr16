@@ -50,6 +50,24 @@ function getCategoryNamesById($post_category_id)
     echo "$post_category_name";
 }
 
+function getFirstnameLastnameById($user_id)
+{
+    global $connection;
+
+    $user_id = mysqli_real_escape_string($connection, $user_id);
+    $query = "SELECT * FROM users WHERE user_id = $user_id ";
+    $user_firstname_lastname_query = mysqli_query($connection, $query);
+
+    confirmQuery($user_firstname_lastname_query);
+
+    while ($row = mysqli_fetch_assoc($user_firstname_lastname_query)) {
+        $user_first_name = $row["firstname"];
+        $user_last_name = $row["lastname"];
+    }
+
+    echo "$user_first_name" . " " . "$user_last_name";
+}
+
 function insertComment()
 {
     global $connection;
