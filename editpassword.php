@@ -52,11 +52,20 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col d-flex justify-content-end">
-                            <button class="btn btn-primary" type="submit">Save
-                                Changes</button>
-                        </div>
-                    </div>
+                        <div class="col d-flex justify-content">
+                            <a href="./editprofile.php" class="btn btn-secondary" type="submit">Back
+</a>
+                     
+                        
+                    
+                    <div class="col d-flex justify-content-end">
+                                                            <button class="btn btn-block btn-primary">
+                                                                <i class="fa fa-sign-out"></i>
+                                                                <span>Save changes</span>
+                                                            </button>
+                                                        </div>
+                                                        </div>
+                                                        </div>
                 </form>
             </div>
         </div>
