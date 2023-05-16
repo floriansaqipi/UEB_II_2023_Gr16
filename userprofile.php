@@ -1,12 +1,12 @@
 <?php include "includes/header.php"; ?>
 <?php isLoggedInRegular(); ?>
-    <div class="container-xxl bg-white p-0">
-        <!-- Spinner Start -->
-        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
+<div class="container-xxl bg-white p-0">
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
+    </div>
     <!-- Spinner End -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
     <link href="css/userprofile.css" rel="stylesheet">
@@ -18,8 +18,12 @@
     <!-- Navbar End -->
 
 
+    <?php getUserProfileData(); ?>
+    <?php getUserPostCount(); ?>
+    <?php getUserCommentCount(); ?>
     <main>
         <div class="container">
+
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -38,13 +42,14 @@
                     </div>
                 </div>
             </div>
-            <div class="img" style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(https://bootdey.com/img/Content/flores-amarillas-wallpaper.jpeg);height: 350px;background-size: cover;"></div>
+            <div class="img" style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(images/<?php echo $user_cover_image; ?>);height: 350px;background-size: cover;"></div>
+
             <div class="card social-prof">
                 <div class="card-body">
                     <div class="wrapper">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="" class="user-profile">
-                        <h3>Jane Smith</h3>
-                        <p>Web Developer</p>
+                        <img src="images/<?php echo $user_image; ?>" alt="image" class="user-profile">
+                        <h3><?php echo $user_firstname . " " . $user_lastname; ?></h3>
+                        <p><?php echo $user_bio; ?></p>
                     </div>
                     <div class="row ">
                         <div class="col-lg-12">
@@ -61,19 +66,18 @@
                 <div class="col-lg-3">
                     <div class="card">
                         <div class="card-body">
-                            <div class="h5 text-primary">@JaneSmith</div>
-                            <div class="h7 "><strong>Name :</strong> Jane Smith</div>
-                            <div class="h7"><strong>About :</strong> Developer of web applications, JavaScript, PHP, Java, Python, Ruby, Java, Node.js, etc.
-                            </div>
+                            <div class="h5 text-primary">@<?php echo $username; ?></div>
+                            <div class="h7 "><strong>Name : </strong><?php echo $user_firstname . " " . $user_lastname; ?></div>
+                            <div class="h7"><strong>About : </strong><?php echo $user_about; ?></div>
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">
-                                <div class="h6 text-muted">Followers</div>
-                                <div class="h5">5.2342</div>
+                                <div class="h6 text-muted">Posts</div>
+                                <div class="h5"><?php echo $post_count; ?></div>
                             </li>
                             <li class="list-group-item">
-                                <div class="h6 text-muted">Following</div>
-                                <div class="h5">6758</div>
+                                <div class="h6 text-muted">Comments</div>
+                                <div class="h5"><?php echo $comment_count; ?></div>
                             </li>
                             <li class="list-group-item">
                                 <div class="h6 text-muted">Themes</div>
@@ -95,23 +99,16 @@
                     </div>
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title">Latest Photos</h3>
+                            <h3 class="card-title">Latest Posts</h3>
                             <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                                 <ol class="carousel-indicators">
+
                                     <li data-target="#carouselExampleIndicators" data-slide-to="0" class=""></li>
                                     <li data-target="#carouselExampleIndicators" data-slide-to="1" class=""></li>
                                     <li data-target="#carouselExampleIndicators" data-slide-to="2" class="active"></li>
                                 </ol>
                                 <div class="carousel-inner">
-                                    <div class="carousel-item">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="d-block w-100" alt="...">
-                                    </div>
-                                    <div class="carousel-item">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="d-block w-100" alt="...">
-                                    </div>
-                                    <div class="carousel-item active">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="d-block w-100" alt="...">
-                                    </div>
+                                    <?php include "includes/user-profile-post-slider.php" ?>
                                 </div>
                                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -279,87 +276,8 @@
                         <div class="card-body">
                             <h5 class="card-title">People you may know</h5>
                             <ul class="friend-list">
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar5.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="left">
-                                        <img src="https://bootdey.com/img/Content/avatar/avatar6.png" alt="">
-                                    </div>
-                                    <div class="right">
-                                        <h3>John Doe</h3>
-                                        <p>10 Friends</p>
-                                    </div>
-                                </li>
+                               <?php include "includes/other-users.php" ;?>
+
                             </ul>
                         </div>
                     </div>
