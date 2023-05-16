@@ -31,7 +31,7 @@ function sendemail_verify($firstName,$email,$verify_token){
     $mail->Subject = 'Email verification from Jobfinder';
 
     $email_template="
-    <h2>You haven been registered to Jobfinder</h2>
+    <h2>You have been registered to Jobfinder</h2>
     <h5>Verify your email address to Login with the below given link</h5>
     <br><br>
     <a href='localhost/xampp/projekti_ueb_2/verify-email.php?token=$verify_token'>Click me</a>
@@ -104,6 +104,7 @@ if(empty($_POST['username'])) {
    
 }
 
+
 // check if password and confirm password match
 if ($_POST['password'] != $_POST['confirm_password']) {
     $_SESSION['status'] = "Password and confirm password do not match.";
@@ -152,8 +153,10 @@ if (mysqli_num_rows($check_email_query_run)>0) {
 }
 
 
+header("Location: register.php");
 
 }
+
 
 
 ?>
