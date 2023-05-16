@@ -63,6 +63,64 @@ if(isset($_POST['register'])){
     $image = mysqli_real_escape_string($connection, $image);
     $useradmin = mysqli_real_escape_string($connection, $useradmin);
 
+    
+   
+
+// FirstName validation
+if(empty($firstName)) {
+    $_SESSION['error'] = "Please write your first name";
+    header('Location: register.php');
+    exit();
+} else {
+    $firstName = $_POST['firstName'];
+    if(!preg_match("/^[a-zA-Z ]*$/",$firstName)) {
+        $_SESSION['error'] = "First name can only contain letters and spaces.";
+        header('Location: register.php');
+        exit();
+    }
+}
+
+//Last name validation
+if(empty($lastName)) {
+    $_SESSION['error'] = "Please write your last name";
+    header('Location: register.php');
+    exit();
+} else {
+    $lastName = $_POST['lastName'];
+    if(!preg_match("/^[a-zA-Z ]*$/",$firstName)) {
+        $_SESSION['error'] = "Last name can only contain letters and spaces.";
+        header('Location: register.php');
+        exit();
+    }
+}
+
+//User name validation
+if(empty($_POST['username'])) {
+    $_SESSION['error'] = "Please write a username";
+    header('Location: register.php');
+    exit();
+} else {
+    $username =$_POST['username'];
+   
+}
+
+// check if password and confirm password match
+if ($_POST['password'] != $_POST['confirm_password']) {
+    $_SESSION['status'] = "Password and confirm password do not match.";
+    header("Location: register.php");
+    exit();
+}
+
+// check if password is at least 8 characters long
+if (strlen($_POST['password']) < 8) {
+    $_SESSION['status'] = "Password must be at least 8 characters long.";
+    header("Location: register.php");
+    exit();
+}
+
+$hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+
 
 
 
@@ -79,7 +137,7 @@ if (mysqli_num_rows($check_email_query_run)>0) {
     header("Location:");
 } else {
     //Insert user/Registered User Data
-    $query="INSERT INTO users(username,password,firstname,lastname,email,image,verify_token) VALUES('$username','$password','$firstName','$lastName','$email','$image','$verify_token')";
+    $query="INSERT INTO users(username,password,firstname,lastname,email,image,verify_token) VALUES('$username','$hashed_password','$firstName','$lastName','$email','$image','$verify_token')";
     $query_run=mysqli_query($connection,$query);
 
     if ($query_run) {
@@ -94,6 +152,9 @@ if (mysqli_num_rows($check_email_query_run)>0) {
 }
 
 
+
 }
+
+
 ?>
 
