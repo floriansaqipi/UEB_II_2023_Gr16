@@ -143,7 +143,7 @@ function logInUser()
             $db_user_image = $row["image"];
             $db_is_admin = $row["is_admin"];
             $db_password = $row["password"];
-            if ($user_password !== $db_password) {
+            if (!password_verify($db_password, $user_password)) {
                 $passwordErr = "Password is incorrect ";
             }
         }
