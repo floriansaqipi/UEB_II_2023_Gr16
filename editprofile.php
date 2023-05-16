@@ -10,7 +10,7 @@
     <!-- Spinner End -->
 
 
-    <!-- Navbar Start -->     
+    <!-- Navbar Start -->
     <?php include "includes/navabar.php"; ?>
 
     <!-- Navbar End -->
@@ -40,7 +40,8 @@
                                         class="fa fa-fw fa-th mr-1"></i><span class="text-dark">CRUD</span></a></li>
                             <li class="nav-item"><a class="nav-link px-2"
                                     href="https://www.bootdey.com/snippets/view/bs4-edit-profile-page"
-                                    target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span class="text-dark">Settings</span></a></li>
+                                    target="__blank"><i class="fa fa-fw fa-cog mr-1"></i><span
+                                        class="text-dark">Settings</span></a></li>
                         </ul>
                     </div>
                 </div>
@@ -181,9 +182,15 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col d-flex justify-content-end">
+                                                        <div class="col d-flex justify-content">
                                                             <button class="btn btn-primary" type="submit">Save
                                                                 Changes</button>
+                                                        </div>
+                                                        <div class="col d-flex justify-content-end">
+                                                            <button class="btn btn-block btn-primary">
+                                                                <i class="fa fa-sign-out"></i>
+                                                                <span>Logout</span>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </form>
@@ -199,10 +206,31 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="px-xl-3">
-                                        <button class="btn btn-block btn-primary">
+                                        <button class="btn btn-block btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">
                                             <i class="fa fa-sign-out"></i>
-                                            <span>Logout</span>
+                                            <span>Delete my account</span>
                                         </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Deleting your account will remove all your information from out databse.This cannot be undone.
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-danger">Delete Account</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

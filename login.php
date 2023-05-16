@@ -3,6 +3,7 @@
 <?php include "includes/navabar.php"; ?>
 
 <div class="container infinity-container">
+	
 
 	<div class="row">
 		<div class="col-md-1 infinity-left-space"></div>
@@ -10,6 +11,17 @@
 		<!-- FORM BEGIN -->
 		<div class="col-lg-10 col-md-10 col-sm-12 col-xs-12 text-center infinity-form">
 
+		<?php
+		if (isset($_SESSION['status'])) {
+			?>
+			<div class="alert alert-success"><h5><?=$_SESSION['status'];?></h5></div>
+			<?php
+			unset($_SESSION['status']);
+		} 
+		?>
+		
+		
+		
 
 			<div style="margin-top:20px;" class="text-center mb-4 ">
 				<h4>Login into account</h4>

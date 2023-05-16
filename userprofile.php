@@ -23,7 +23,27 @@
     <?php getUserCommentCount(); ?>
     <main>
         <div class="container">
+
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Delete Account</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete your account?</p>
+                            <p>This action cannot be undone and all your data will be permanently removed.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger">Delete Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="img" style="    background-image: linear-gradient(150deg, rgba(63, 174, 255, .3)15%, rgba(63, 174, 255, .3)70%, rgba(63, 174, 255, .3)94%), url(images/<?php echo $user_cover_image; ?>);height: 350px;background-size: cover;"></div>
+
             <div class="card social-prof">
                 <div class="card-body">
                     <div class="wrapper">
@@ -62,6 +82,18 @@
                             <li class="list-group-item">
                                 <div class="h6 text-muted">Themes</div>
                                 <div class="h5">6758</div>
+                            </li>
+                            <li class="mt-4">
+                                <div class="button-container">
+                                    <button class="btn btn-primary">
+                                        <i class="fa fa-pencil"></i>
+                                        <span>Edit profile</span>
+                                    </button>
+                                    <button class="btn btn-block btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        <i class="fa fa-sign-out"></i>
+                                        <span>Delete my account</span>
+                                    </button>
+                                </div>
                             </li>
                         </ul>
                     </div>
