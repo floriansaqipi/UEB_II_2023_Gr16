@@ -26,28 +26,28 @@
                 <?php editUserAdminInputs(); ?>
                 <?php editUserAdmin(); ?>
                 <form action="" method="post" enctype="multipart/form-data" novalidate>
-                    <div class="form-group row <?php echo !empty($usernameErr) || !empty($contentErr) || !empty($imageErr) ? "has-danger" : "" ?>">
+                    <div class="form-group row <?php echo !empty($usernameErr) ? "has-danger" : "" ?>">
                         <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Username</label>
                         <div class="col-sm-10">
                             <input name="username" class="form-control" type="text" value="<?php echo $username; ?>" id="example-text-input" placeholder="Enter your Username">
                             <div class="form-control-feedback"><?php echo $usernameErr; ?></div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row <?php echo !empty($firstnameErr) ? "has-danger" : "" ?>">
                         <label for="author-input" class="col-xs-2 col-form-label form-control-label">Firstname</label>
                         <div class="col-sm-10">
                             <input name="user_firstname" class="form-control" type="text" value="<?php echo $user_firstname; ?>" id="author-input" placeholder="Enter Firstname">
                             <div class="form-control-feedback"><?php echo $firstnameErr; ?></div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row <?php echo !empty($lastnameErr) ? "has-danger" : "" ?>">
                         <label for="author-input" class="col-xs-2 col-form-label form-control-label">Lastname</label>
                         <div class="col-sm-10">
                             <input name="user_lastname" class="form-control" type="text" value="<?php echo $user_lastname; ?>" id="author-input" placeholder="Enter Lastname">
                             <div class="form-control-feedback"><?php echo $lastnameErr; ?></div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row <?php echo !empty($emailErr) ? "has-danger" : "" ?>">
                         <label for="author-input" class="col-xs-2 col-form-label form-control-label">Email</label>
                         <div class="col-sm-10">
                             <input name="user_email" class="form-control" type="email" value="<?php echo $user_email; ?>" id="author-input" placeholder="Enter email">
@@ -92,12 +92,17 @@
                             <div class="form-control-feedback"><?php echo $imageErr; ?></div>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="form-group row <?php echo !empty($isAdminErr) ? "has-danger" : "" ?>">
                         <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">User role</label>
                         <div class="col-sm-10">
                             <select class="form-control" name="user_is_admin" id="exampleSelect1" >
+
                                 <?php 
-                                    echo $user_is_admin == 0 ? "<option value='0'>Regular</option>" : "<option value='1'>Admin</option>";   
+                                    echo $user_is_admin == 0 ? 
+                                    "<option value='0'>Regular</option>" . 
+                                    "<option value='1'>Admin</option>" 
+                                    : "<option value='1'>Admin</option>" .   
+                                      "<option value='0'>Regular</option>";   
                                 ?>
                             </select>
                             <div class="form-control-feedback"><?php echo $isAdminErr; ?></div>

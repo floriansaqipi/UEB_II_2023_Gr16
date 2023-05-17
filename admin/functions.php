@@ -18,6 +18,13 @@ function confirmQuery($result)
         die("QUERY FAILED" . mysqli_error($connection));
     }
 }
+
+function checkQuery($result)
+{
+    if (!$result) {
+        die("QUERY FAILED" . $result->error);
+    }
+}
 function getAllCategoriesAdminTable()
 {
     global $connection;
@@ -109,10 +116,7 @@ function deleteCategory()
         $query = "DELETE FROM post_categories WHERE category_id =  {$delete_cat_id};";
         $delete_cat_query = mysqli_query($connection, $query);
 
-        if (!$delete_cat_id) {
-
-            die("QUERY FAILED" . mysqli_error($connection));
-        }
+        confirmQuery($delete_cat_query);
         header("Location: categories.php");
     }
 }
@@ -123,10 +127,7 @@ function getAllPostsTable()
     $query = "SELECT * FROM posts ";
     $select_posts = mysqli_query($connection, $query);
 
-    if (!$select_posts) {
-
-        die("QUERY FAILED" . mysqli_error($connection));
-    }
+    confirmQuery($select_posts);
 
     while ($row = mysqli_fetch_assoc($select_posts)) {
         $post_id = $row["post_id"];
@@ -140,11 +141,11 @@ function getAllPostsTable()
 
         echo "<tr>";
         echo "<td> $post_id </td>";
-        getUserFirstNameLastName();
+        getUserFirstNameLastNameById($user_id);
         echo "<td><a href='../post-details.php?p_id=$post_id'>$post_title </a></td>";
 
         getCategoryNamesById($post_category_id);
-        echo "<td>" ;
+        echo "<td>";
         echo $post_is_published ? "published" : "draft";
         echo  "</td>";
         echo "<td><img width=100 class='img-responsive' src='../images/$post_image' alt = 'image'></td>";
@@ -181,8 +182,9 @@ function countSinglePostComments()
     }
 }
 
-function getUserFirstNameLastName(){
-    global $connection, $user_id;
+function getUserFirstNameLastNameById($user_id)
+{
+    global $connection;
 
 
     $user_id = mysqli_real_escape_string($connection, $user_id);
@@ -193,7 +195,7 @@ function getUserFirstNameLastName(){
 
     confirmQuery($query);
 
-    if($row = mysqli_fetch_assoc($select_user_firstname_lastname_query)){
+    if ($row = mysqli_fetch_assoc($select_user_firstname_lastname_query)) {
         $user_firstname = $row["firstname"];
         $user_lastname = $row["lastname"];
     }
@@ -219,17 +221,17 @@ function getCategoryNamesById($post_category_id)
 function insertPostAdmin()
 {
     global $connection;
-    global $titleErr, $imageErr, $contentErr;
+    global $titleErr, $imageErr, $contentErr, $isPublishedErr, $categoryErr;
     global $post_title, $post_image, $post_content;
-    $titleErr = $imageErr = $contentErr = "";
+    $titleErr = $imageErr = $contentErr = $isPublishedErr = "";
     $post_title = $post_image = $post_content = "";
     $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
-    if (isset($_POST["add-post"])) {
+    if (isset($_POST["add-post"]) && isset($_SESSION["user_id"])) {
 
+        $post_user_id = $_SESSION["user_id"];
         $post_title = $_POST["post_title"];
-        $post_author = $_POST["post_author"];
         $post_category_id = $_POST["post_category"];
-        $post_status = $_POST["post_status"];
+        $post_is_published = $_POST["post_is_published"];
         $post_image = $_FILES["post_image"]["name"];
         $post_image_temp = $_FILES["post_image"]["tmp_name"];
         $post_image_size = $_FILES["post_image"]["size"];
@@ -237,7 +239,6 @@ function insertPostAdmin()
         $post_content = $_POST["post_content"];
         // $post_date = date('d-m-y');
         // $post_comment_count = 4;
-
         if (empty($post_title)) {
             $titleErr = "Title can not be empty";
         } else {
@@ -247,6 +248,11 @@ function insertPostAdmin()
             }
         }
 
+        $category_ids = getPostCategoryIdsArray();
+        if (!in_array($post_category_id, $category_ids)) {
+            $categoryErr = "Tampered with the select values";
+        }
+
         if (empty($post_content)) {
             $contentErr = "Content can not be empty";
         } else {
@@ -254,6 +260,10 @@ function insertPostAdmin()
             if (!preg_match($pattern, trim($post_content))) {
                 $contentErr = "Content must be longer than 3 characters";
             }
+        }
+
+        if ($post_is_published != "0" && $post_is_published != "1") {
+            $isPublishedErr = "Only accepted values are Regular and Draft";
         }
 
         if (file_exists($post_image_temp)) {
@@ -267,16 +277,45 @@ function insertPostAdmin()
 
                 move_uploaded_file($post_image_temp, "../images/$post_image");
             }
+        }else {
+            $post_image = "default_post.jpg";
         }
 
-        if (empty($titleErr) && empty($imageErr) && empty($contentErr)) {
-            $query = "INSERT INTO posts (category_id, title, author, date, image, content, tags, status) ";
-            $query .= "VALUES ('$post_category_id', '$post_title', '$post_author', now(), '$post_image', '$post_content', '$post_tags', '$post_status') ";
-            $insert_post_admin_query = mysqli_query($connection, $query);
-            confirmQuery($insert_post_admin_query);
-            header("Location: posts.php");
+
+        if (empty($titleErr) && empty($imageErr) && empty($contentErr) && empty($isPublishedErr) && empty($categoryErr)) {
+            try {
+                $query = "INSERT INTO posts (category_id, user_id, title, date, image, content, tags, is_published) ";
+                $query .= "VALUES (?,  ?, ? , ?, ?, ?, ? , ?) ";
+
+                $statement = $connection->prepare($query);
+                $date = date("y-m-d");
+                $statement->bind_param("iisssssi", $post_category_id,  $post_user_id, $post_title, $date, $post_image, $post_content, $post_tags, $post_is_published);
+                $statement->execute();
+                $statement->close();
+                // $insert_post_admin_query = mysqli_query($connection, $query);
+                // confirmQuery($insert_post_admin_query);
+                header("Location: posts.php");
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
         }
     }
+}
+
+function getPostCategoryIdsArray()
+{
+    global $connection;
+    $categories = [];
+    $query = "SELECT * FROM post_categories ";
+
+    $all_categories_query = mysqli_query($connection, $query);
+    confirmQuery($all_categories_query);
+    while ($row = mysqli_fetch_assoc($all_categories_query)) {
+        $category_id = $row["category_id"];
+        $categories[] = $category_id;
+    }
+    return $categories;
 }
 
 function deletePostAdmin()
@@ -297,7 +336,7 @@ function deletePostAdmin()
 function editPostAdminInputs()
 {
     global $connection;
-    global $post_id, $post_title, $post_category_id, $post_author, $post_status, $post_image, $post_tags, $post_content;
+    global $post_id, $post_title, $post_category_id, $post_user_id, $post_is_published, $post_image, $post_tags, $post_content;
     if (isset($_GET["p_id"])) {
         $post_id = $_GET["p_id"];
         $query = "SELECT * FROM posts WHERE post_id = $post_id ";
@@ -308,8 +347,8 @@ function editPostAdminInputs()
             $post_id = $row["post_id"];
             $post_title = $row["title"];
             $post_category_id = $row["category_id"];
-            $post_author = $row["author"];
-            $post_status = $row["status"];
+            $post_user_id = $row["user_id"];
+            $post_is_published = $row["is_published"];
             $post_image = $row["image"];
             $post_tags = $row["tags"];
             $post_content = $row["content"];
@@ -321,17 +360,15 @@ function editPostAdminInputs()
 function editPostAdmin()
 {
     global $connection;
-    global $titleErr, $imageErr, $contentErr;
-    global $post_id, $post_title, $post_image, $post_content;
-    $titleErr = $imageErr = $contentErr = "";
-    // $post_title = $post_image = $post_content = "";
+    global $titleErr, $imageErr, $contentErr, $isPublishedErr, $categoryErr;
+    global $post_title, $post_image, $post_content, $post_id;
+    $titleErr = $imageErr = $contentErr = $isPublishedErr = "";
     $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
     if (isset($_POST["edit-post"])) {
 
         $post_title = $_POST["post_title"];
-        $post_author = $_POST["post_author"];
         $post_category_id = $_POST["post_category"];
-        $post_status = $_POST["post_status"];
+        $post_is_published = $_POST["post_is_published"];
         $post_image = $_FILES["post_image"]["name"];
         $post_image_temp = $_FILES["post_image"]["tmp_name"];
         $post_image_size = $_FILES["post_image"]["size"];
@@ -339,7 +376,6 @@ function editPostAdmin()
         $post_content = $_POST["post_content"];
         // $post_date = date('d-m-y');
         // $post_comment_count = 4;
-
         if (empty($post_title)) {
             $titleErr = "Title can not be empty";
         } else {
@@ -349,6 +385,11 @@ function editPostAdmin()
             }
         }
 
+        $category_ids = getPostCategoryIdsArray();
+        if (!in_array($post_category_id, $category_ids)) {
+            $categoryErr = "Tampered with the select values";
+        }
+
         if (empty($post_content)) {
             $contentErr = "Content can not be empty";
         } else {
@@ -356,6 +397,10 @@ function editPostAdmin()
             if (!preg_match($pattern, trim($post_content))) {
                 $contentErr = "Content must be longer than 3 characters";
             }
+        }
+
+        if ($post_is_published != "0" && $post_is_published != "1") {
+            $isPublishedErr = "Only accepted values are Regular and Draft";
         }
 
         if (file_exists($post_image_temp)) {
@@ -373,30 +418,32 @@ function editPostAdmin()
             $query = "SELECT * FROM posts WHERE post_id = $post_id ";
             $select_image_query = mysqli_query($connection, $query);
             confirmQuery($select_image_query);
-            while ($row = mysqli_fetch_assoc($select_image_query)) {
+            if ($row = mysqli_fetch_assoc($select_image_query)) {
                 $post_image = $row["image"];
             }
         }
 
-        if ($titleErr == "" && $imageErr == "" && $contentErr == "") {
+        if (empty($titleErr) && empty($imageErr) && empty($contentErr) && empty($isPublishedErr) && empty($categoryErr)) {
+            try {
+                $query = "UPDATE posts SET category_id = ?, title = ?, date = ?, image = ?, content = ?, tags = ?, is_published = ? ";
+                $query .= "WHERE post_id = ? ";
 
-            $query = "UPDATE posts SET ";
-            $query .= "category_id = $post_category_id, ";
-            $query .= "title = '$post_title', ";
-            $query .= "author = '$post_author', ";
-            $query .= "date = now(), ";
-            $query .= "image = '$post_image', ";
-            $query .= "content = '$post_content', ";
-            $query .= "tags = '$post_tags', ";
-            $query .= "status = '$post_status' ";
-            $query .= "WHERE post_id = $post_id ";
-
-            $update_post_admin_query = mysqli_query($connection, $query);
-            confirmQuery($update_post_admin_query);
-            header("Location: posts.php");
+                $statement = $connection->prepare($query);
+                $date = date("y-m-d");
+                $statement->bind_param("isssssii", $post_category_id, $post_title, $date, $post_image, $post_content, $post_tags, $post_is_published, $post_id);
+                $statement->execute();
+                $statement->close();
+                // $insert_post_admin_query = mysqli_query($connection, $query);
+                // confirmQuery($insert_post_admin_query);
+                header("Location: posts.php");
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
         }
     }
 }
+
 
 
 function generateOptionsCategories()
@@ -462,7 +509,7 @@ function getAllCommentsTable()
 
     while ($row = mysqli_fetch_assoc($select_comments)) {
         $comment_id = $row["comment_id"];
-        $comment_author = $row["author"];
+        $comment_user_id = $row["user_id"];
         $comment_post_id = $row["post_id"];
         $comment_content = substr($row["content"], 0, 100);
         $comment_is_approved = $row["is_approved"];
@@ -470,7 +517,7 @@ function getAllCommentsTable()
 
         echo "<tr>";
         echo "<td>{$comment_id}</td>";
-        echo "<td>{$comment_author}</td>";
+        getUserFirstNameLastNameById($comment_user_id);
         getPostTitleByIdComment($comment_post_id);
         echo "<td>{$comment_content}</td>";
         echo "<td>";
@@ -788,8 +835,10 @@ function editUserAdmin()
             $query = "SELECT * FROM users WHERE user_id = $user_id ";
             $select_image_query = mysqli_query($connection, $query);
             confirmQuery($select_image_query);
-            while ($row = mysqli_fetch_assoc($select_image_query)) {
+            if ($row = mysqli_fetch_assoc($select_image_query)) {
                 $user_image = $row["image"];
+            }else {
+                $user_image = "default.jpg";
             }
         }
 
@@ -808,12 +857,14 @@ function editUserAdmin()
             $query = "SELECT * FROM users WHERE user_id = $user_id ";
             $select_image_query = mysqli_query($connection, $query);
             confirmQuery($select_image_query);
-            while ($row = mysqli_fetch_assoc($select_image_query)) {
+            if ($row = mysqli_fetch_assoc($select_image_query)) {
                 $user_cover_image = $row["cover_image"];
+            }else {
+                $user_cover_image = "cover_default.jpg";
             }
         }
 
-        if ($user_is_admin != "0" ||  $user_is_admin != "1") {
+        if ($user_is_admin != "0" && $user_is_admin != "1") {
             $isAdminErr = "Only accepted values are admin and regular";
         }
 
@@ -824,19 +875,18 @@ function editUserAdmin()
         ) {
 
 
-            $user_password = mysqli_real_escape_string($connection, $_POST["user_password"]);
-            $user_firstname = mysqli_real_escape_string($connection, $_POST["user_firstname"]);
-            $user_lastname = mysqli_real_escape_string($connection, $_POST["user_lastname"]);
-            $user_image = mysqli_real_escape_string($connection, $_FILES["user_image"]["name"]);
-            $user_cover_image = mysqli_real_escape_string($connection, $_FILES["user_cover_image"]["name"]);
-            $user_is_admin = mysqli_real_escape_string($connection, $_POST["user_is_admin"]);
-            $user_bio = mysqli_real_escape_string($connection, $_POST["user_bio"]);
-            $user_about = mysqli_real_escape_string($connection, $_POST["user_about"]);
+            $user_firstname = mysqli_real_escape_string($connection, $user_firstname);
+            $user_lastname = mysqli_real_escape_string($connection, $user_lastname);
+            $user_image = mysqli_real_escape_string($connection, $user_image);
+            $user_cover_image = mysqli_real_escape_string($connection, $user_cover_image);
+            $user_is_admin = mysqli_real_escape_string($connection, $user_is_admin);
+            $user_bio = mysqli_real_escape_string($connection, $user_bio);
+            $user_about = mysqli_real_escape_string($connection, $user_about);
 
 
 
 
-            $query = "UPDATE user SET ";
+            $query = "UPDATE users SET ";
             $query .= "username = '$username', ";
             $query .= "firstname = '$user_firstname', ";
             $query .= "lastname = '$user_lastname', ";
@@ -870,8 +920,8 @@ function editUserPasswordAdmin()
     global $oldPasswordErr, $passwordErr, $confirmPasswordErr;
     $oldPasswordErr = $passwordErr = $confirmPasswordErr = "";
     if (isset($_POST["edit-user-password"])) {
-        
-        
+
+
         $user_old_password = $_POST["user_old_password"];
         $user_password = $_POST["user_password"];
         $user_confirm_password = $_POST["user_confirm_password"];
@@ -889,9 +939,9 @@ function editUserPasswordAdmin()
             while ($row = mysqli_fetch_assoc($get_user_password_query)) {
                 $db_password = $row["password"];
             }
-            if (!password_verify($db_password, $user_old_password)) {
+            if (!password_verify($user_old_password, $db_password)) {
                 $oldPasswordErr = "Your old password is different";
-            }
+            }   
         }
 
         $pattern = "/^(?=.*\d).{8,}$/";
