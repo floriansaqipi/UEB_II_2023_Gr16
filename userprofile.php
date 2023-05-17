@@ -12,6 +12,8 @@
     <link href="css/userprofile.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link href="css/added.css" rel="stylesheet">
+
     <!-- Navbar Start -->
     <?php include "includes/navabar.php"; ?>
 
@@ -79,22 +81,7 @@
                                 <div class="h6 text-muted">Comments</div>
                                 <div class="h5"><?php echo $comment_count; ?></div>
                             </li>
-                            <li class="list-group-item">
-                                <div class="h6 text-muted">Themes</div>
-                                <div class="h5">6758</div>
-                            </li>
-                            <li class="mt-4">
-                                <div class="button-container">
-                                    <button class="btn btn-primary">
-                                        <i class="fa fa-pencil"></i>
-                                        <span>Edit profile</span>
-                                    </button>
-                                    <button class="btn btn-block btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        <i class="fa fa-sign-out"></i>
-                                        <span>Delete my account</span>
-                                    </button>
-                                </div>
-                            </li>
+
                         </ul>
                     </div>
                     <div class="card">
@@ -124,38 +111,59 @@
                 </div>
                 <div class="col-lg-6 gedf-main">
                     <!--- \\\\\\\Post-->
-                    <div class="container-xxl bg-white p-1">
-                        <a class="btn btn-primary" href="./postsform.php" role="button" target="_blank">Add a post</a>
+                    <div class="container-xxl bg-white p-3 user-profile-buttons__spacing">
+                        <a class="btn btn-primary mx-2" href="./postsform.php" role="button" target="_blank">Add a post</a>
+                        <button class="btn btn-primary mx-2">
+                            <i class="fa fa-pencil"></i>
+                            <span>Edit profile</span>
+                        </button>
+                        <button class="btn btn-block btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <i class="fa fa-sign-out"></i>
+                            <span>Delete my account</span>
+                        </button>
                     </div>
+
+
                     <!-- Post /////-->
 
                     <div class="card social-timeline-card">
-                        <div class="card-header">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="mr-2">
-                                        <img class="rounded-circle" width="45" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
-                                    </div>
-                                    <div class="ml-2">
-                                        <div class="h5 m-0 text-primary">@JaneSmith</div>
-                                        <div class="h7 text-muted">Miracles Lee Cross</div>
-                                    </div>
+
+
+
+                        <div class="card-body">
+                            
+                        
+                                <img src="..." class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">Category</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
-                                <div>
-                                    <div class="dropdown">
-                                        <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop11" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fa fa-ellipsis-h"></i>
-                                        </button>
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop11">
-                                            <div class="h6 dropdown-header">Configuration</div>
-                                            <a class="dropdown-item" href="#">Save</a>
-                                            <a class="dropdown-item" href="#">Hide</a>
-                                            <a class="dropdown-item" href="#">Report</a>
-                                        </div>
-                                    </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Category</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
-                            </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">An item</li>
+                                    <li class="list-group-item">A second item</li>
+                                    <li class="list-group-item">A third item</li>
+                                </ul>
+                                <div class="card-body">
+                                    <a href="#" class="card-link">Card link</a>
+                                    <a href="#" class="card-link">Another link</a>
+                                </div>
+                            
+
                         </div>
+                        <div class="card-footer">
+                            <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
+                            <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
+                            <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
+                        </div>
+                    </div>
+                    <div class="card social-timeline-card">
+
+
+
                         <div class="card-body">
                             <div class="text-muted h7 mb-2"> <i class="fa fa-clock-o"></i>10 min ago</div>
                             <a class="card-link" href="#">
@@ -276,7 +284,7 @@
                         <div class="card-body">
                             <h5 class="card-title">People you may know</h5>
                             <ul class="friend-list">
-                               <?php include "includes/other-users.php" ;?>
+                                <?php include "includes/other-users.php"; ?>
 
                             </ul>
                         </div>

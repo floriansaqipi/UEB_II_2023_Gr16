@@ -50,15 +50,50 @@ function getCategoryNamesById($post_category_id)
     echo "$post_category_name";
 }
 
+function getFirstnameLastnameById($user_id)
+{
+    global $connection;
+
+    $user_id = mysqli_real_escape_string($connection, $user_id);
+    $query = "SELECT * FROM users WHERE user_id = $user_id ";
+    $user_firstname_lastname_query = mysqli_query($connection, $query);
+
+    confirmQuery($user_firstname_lastname_query);
+
+    while ($row = mysqli_fetch_assoc($user_firstname_lastname_query)) {
+        $user_first_name = $row["firstname"];
+        $user_last_name = $row["lastname"];
+    }
+
+    echo "$user_first_name" . " " . "$user_last_name";
+}
+
+function getUserImageById($user_id)
+{
+    global $connection;
+
+    $user_id = mysqli_real_escape_string($connection, $user_id);
+    $query = "SELECT * FROM users WHERE user_id = $user_id ";
+    $user_image_query = mysqli_query($connection, $query);
+
+    confirmQuery($user_image_query);
+
+    while ($row = mysqli_fetch_assoc($user_image_query)) {
+        $user_image = $row["image"];
+    }
+
+    echo $user_image;
+}
+
 function insertComment()
 {
     global $connection;
     global $contentErr;
     global $post_id;
-    global $comment_author, $comment_content;
+    global $comment_content;
 
-    if (isset($_POST["post_comment"])) {
-        $comment_author = $_POST["comment_author"];
+    if (isset($_POST["post_comment"]) && isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
         $comment_content = trim($_POST["comment_content"]);
 
 
@@ -72,8 +107,13 @@ function insertComment()
         }
 
         if (empty($contentErr)) {
-            $query = "INSERT INTO comments (post_id, author, content, date) ";
-            $query .= "VALUES ($post_id, '$comment_author', '$comment_content', now()) ";
+
+            $post_id = mysqli_real_escape_string($connection, $post_id);
+            $comment_content = mysqli_real_escape_string($connection, $comment_content);
+            $user_id = mysqli_real_escape_string($connection, $user_id);
+
+            $query = "INSERT INTO comments (post_id, user_id, content, date ) ";
+            $query .= "VALUES ($post_id, $user_id, '$comment_content', now()) ";
 
             $insert_comment_query = mysqli_query($connection, $query);
 
@@ -134,7 +174,9 @@ function logInUser()
 
 
         if (empty($row)) {
-            $emailErr = "User with this username does not exist";
+            $emailErr = "User with this email does not exist";
+        }else if($row["verify_status"] == 0){
+            $emailErr = "User exists but email is not yet verified";
         } else {
             $db_user_id = $row["user_id"];
             $db_username = $row["username"];
@@ -143,7 +185,6 @@ function logInUser()
             $db_user_image = $row["image"];
             $db_is_admin = $row["is_admin"];
             $db_password = $row["password"];
-            // $password_hash=password_hash($db_password,PASSWORD_DEFAULT);
             if (!password_verify($user_password, $db_password)) {
                 $passwordErr = "Password is incorrect ";
             }
@@ -198,7 +239,7 @@ function getUserProfileData()
     global $connection;
     global $username, $user_firstname, $user_lastname,  $user_email,
         $user_image, $user_cover_image, $user_bio, $user_about;
-        // $user_is_admin ,
+    // $user_is_admin ,
     if (isset($_SESSION["user_id"])) {
 
         $user_id = $_SESSION["user_id"];
@@ -226,10 +267,11 @@ function getUserProfileData()
 }
 
 
-function getUserPostCount(){
+function getUserPostCount()
+{
     global $connection;
     global $post_count;
-        // $user_is_admin ,
+    // $user_is_admin ,
     if (isset($_SESSION["user_id"])) {
 
         $user_id = $_SESSION["user_id"];
@@ -248,10 +290,11 @@ function getUserPostCount(){
     }
 }
 
-function getUserCommentCount(){
+function getUserCommentCount()
+{
     global $connection;
     global $comment_count;
-        // $user_is_admin ,
+    // $user_is_admin ,
     if (isset($_SESSION["user_id"])) {
 
         $user_id = $_SESSION["user_id"];

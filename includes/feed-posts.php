@@ -9,8 +9,8 @@ if (!$select_all_posts_query) {
 while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
     $post_id = $row["post_id"];
     $post_category_id = $row["category_id"];
+    $user_id = $row["user_id"];
     $post_title = $row["title"];
-    $post_author = $row["author"];
     $post_date = $row["date"];
     $post_image = $row["image"];
     $post_content = substr($row["content"],0, 200);
@@ -32,7 +32,7 @@ while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
                     <h4><?php echo $post_title; ?></h4>
                 </a>
                 <ul class="post-info">
-                    <li><a href="#"><?php echo $post_author; ?></a></li>
+                    <li><a href="#"><?php echo getFirstnameLastnameById($user_id); ?></a></li>
                     <li><a href="#"><?php echo $post_date; ?></a></li>
                     <li><a href="#"><?php echo $post_comment_count; ?> Comments</a></li>
                 </ul>

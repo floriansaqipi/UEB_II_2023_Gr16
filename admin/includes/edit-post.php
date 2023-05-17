@@ -48,7 +48,7 @@
                 <?php editPostAdminInputs(); ?>
                 <?php editPostAdmin(); ?>
                 <form action="" method="post" enctype="multipart/form-data">
-                    <div class="form-group row <?php echo !empty($titleErr) || !empty($contentErr) || !empty($imageErr) ? "has-danger" : "" ?>">
+                    <div class="form-group row <?php echo !empty($titleErr) ? "has-danger" : "" ?>">
                         <label for="example-text-input" class="col-xs-2 col-form-label form-control-label">Title</label>
                         <div class="col-sm-10">
                             <input name="post_title" class="form-control" type="text" value="<?php echo $post_title; ?>" id="example-text-input" placeholder="Enter your post title">
@@ -62,18 +62,22 @@
                                 <?php getCurrentCategoryEdit(); ?>
                                 <?php getNotCurrentCategoriesEdit(); ?>
                             </select>
+                            <div class="form-control-feedback"><?php echo $categoryErr; ?></div>
+
                         </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="author-input" class="col-xs-2 col-form-label form-control-label">Author</label>
-                        <div class="col-sm-10">
-                            <input name="post_author" class="form-control" type="text" value="<?php echo $post_author; ?>" id="author-input" placeholder="Enter Author">
-                        </div>
-                    </div>
-                    <div class="form-group row">
+                    </div>  
+                    <div class="form-group row <?php echo !empty($isPublishedErr) ? "has-danger" : "" ?>">
                         <label for="status-input" class="col-xs-2 col-form-label form-control-label">Post Status</label>
                         <div class="col-sm-10">
-                            <input name="post_status" class="form-control" type="text" value="<?php echo $post_status; ?>" id="status-input" placeholder="Enter status">
+                            <select class="form-control" name="post_is_published" id="exampleSelect1">
+                                <?php echo $post_is_published ? 
+                                "<option value = '1'>Published</option>" . 
+                                "<option value = '0'>Draft</option>"  
+                                : "<option value = '0'>Draft</option>" . 
+                                "<option value = '1'>Published</option>" ?>
+                                
+                            </select>
+                            <div class="form-control-feedback"><?php echo $isPublishedErr; ?></div>
                         </div>
                     </div>
                     <div class="form-group row <?php echo !empty($imageErr) ? "has-danger" : "" ?>">
