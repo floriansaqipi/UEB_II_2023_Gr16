@@ -174,7 +174,9 @@ function logInUser()
 
 
         if (empty($row)) {
-            $emailErr = "User with this username does not exist";
+            $emailErr = "User with this email does not exist";
+        }else if($row["verify_status"] == 0){
+            $emailErr = "User exists but email is not yet verified";
         } else {
             $db_user_id = $row["user_id"];
             $db_username = $row["username"];
@@ -183,7 +185,7 @@ function logInUser()
             $db_user_image = $row["image"];
             $db_is_admin = $row["is_admin"];
             $db_password = $row["password"];
-            if ($user_password !== $db_password) {
+            if (!password_verify($user_password, $db_password)) {
                 $passwordErr = "Password is incorrect ";
             }
         }

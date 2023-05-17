@@ -119,7 +119,7 @@ function deleteCategory()
 
 function getAllPostsTable()
 {
-    global $connection, $post_id;
+    global $connection, $post_id, $user_id;
     $query = "SELECT * FROM posts ";
     $select_posts = mysqli_query($connection, $query);
 
@@ -130,22 +130,23 @@ function getAllPostsTable()
 
     while ($row = mysqli_fetch_assoc($select_posts)) {
         $post_id = $row["post_id"];
-        $post_author = $row["author"];
+        $user_id = $row["user_id"];
         $post_title = $row["title"];
         $post_category_id = $row["category_id"];
-        $post_status = $row["status"];
+        $post_is_published = $row["is_published"];
         $post_image = $row["image"];
         $post_tags = $row["tags"];
-        $post_comment_count = $row["comment_count"];
         $post_date = $row["date"];
 
         echo "<tr>";
         echo "<td> $post_id </td>";
-        echo "<td>$post_author </td>";
-        echo "<td>$post_title </td>";
+        getUserFirstNameLastName();
+        echo "<td><a href='../post-details.php?p_id=$post_id'>$post_title </a></td>";
 
         getCategoryNamesById($post_category_id);
-        echo "<td>$post_status </td>";
+        echo "<td>" ;
+        echo $post_is_published ? "published" : "draft";
+        echo  "</td>";
         echo "<td><img width=100 class='img-responsive' src='../images/$post_image' alt = 'image'></td>";
         echo "<td>$post_tags </td>";
         countSinglePostComments();
@@ -178,6 +179,26 @@ function countSinglePostComments()
         $comment_count = $row["comment_count"];
         echo "<td>$comment_count</td>";
     }
+}
+
+function getUserFirstNameLastName(){
+    global $connection, $user_id;
+
+
+    $user_id = mysqli_real_escape_string($connection, $user_id);
+
+    $query = "SELECT * FROM users WHERE user_id = $user_id ";
+
+    $select_user_firstname_lastname_query = mysqli_query($connection, $query);
+
+    confirmQuery($query);
+
+    if($row = mysqli_fetch_assoc($select_user_firstname_lastname_query)){
+        $user_firstname = $row["firstname"];
+        $user_lastname = $row["lastname"];
+    }
+
+    echo "<td>" . $user_firstname . " " . $user_lastname . "</td>";
 }
 
 function getCategoryNamesById($post_category_id)
@@ -486,7 +507,7 @@ function getPostTitleByIdComment($comment_post_id)
     while ($row = mysqli_fetch_assoc($posts_title_query)) {
         $post_id = $row["post_id"];
         $post_title = $row["title"];
-        echo "<td><a href='../post-details?p_id=$post_id'>$post_title</a></td>";
+        echo "<td><a href='../post-details.php?p_id=$post_id'>$post_title</a></td>";
     }
 }
 
