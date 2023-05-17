@@ -140,6 +140,22 @@ function countSinglePostComments()
     }
 }
 
+function countSinglePostFeedComments()
+{
+    global $connection;
+    global $post_id;
+    $query = "SELECT COUNT(*) comment_count FROM comments WHERE post_id = $post_id AND is_approved = 1";
+
+    $comment_post_count_query = mysqli_query($connection, $query);
+
+    confirmQuery($comment_post_count_query);
+
+    while ($row = mysqli_fetch_array($comment_post_count_query)) {
+        $comment_count = $row["comment_count"];
+        echo $comment_count;
+    }
+}
+
 function logInUser()
 {
     global $connection;
@@ -311,4 +327,125 @@ function getUserCommentCount()
             $comment_count = $row["comment_count"];
         }
     }
+}
+
+
+function generateOptionsCategories()
+{
+    global $connection;
+    try{
+        $query = "SELECT * FROM post_categories ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+    
+        while ($row = $result->fetch_assoc()) {
+            $category_id = $row["category_id"];
+            $category_name = $row["name"];
+            echo "<option value='$category_id'>$category_name</option>";
+        }
+    }catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function insertPostRegular()
+{
+    global $connection;
+    global $titleErr, $imageErr, $contentErr, $isPublishedErr, $categoryErr;
+    global $post_title, $post_image, $post_content, $post_tags;
+    $titleErr = $imageErr = $contentErr = $isPublishedErr = "";
+    $post_title = $post_image = $post_content = "";
+    $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
+    if (isset($_POST["add-post"]) && isset($_SESSION["user_id"])) {
+
+        $post_user_id = $_SESSION["user_id"];
+        $post_title = $_POST["post_title"];
+        $post_category_id = $_POST["post_category"];
+        $post_is_published = $_POST["post_is_published"];
+        $post_image = $_FILES["post_image"]["name"];
+        $post_image_temp = $_FILES["post_image"]["tmp_name"];
+        $post_image_size = $_FILES["post_image"]["size"];
+        $post_tags = $_POST["post_tags"];
+        $post_content = $_POST["post_content"];
+        // $post_date = date('d-m-y');
+        // $post_comment_count = 4;
+        if (empty($post_title)) {
+            $titleErr = "Title can not be empty";
+        } else {
+            $pattern = "/.{3,}/";
+            if (!preg_match($pattern, trim($post_title))) {
+                $titleErr = "Title must be longer than 3 characters";
+            }
+        }
+
+        $category_ids = getPostCategoryIdsArray();
+        if (!in_array($post_category_id, $category_ids)) {
+            $categoryErr = "Tampered with the select values";
+        }
+
+        if (empty($post_content)) {
+            $contentErr = "Content can not be empty";
+        } else {
+            $pattern = "/.{3,}/";
+            if (!preg_match($pattern, trim($post_content))) {
+                $contentErr = "Content must be longer than 3 characters";
+            }
+        }
+
+        if ($post_is_published != "0" && $post_is_published != "1") {
+            $isPublishedErr = "Only accepted values are Regular and Draft";
+        }
+
+        if (file_exists($post_image_temp)) {
+            $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
+
+            if (!in_array($file_extension, $allowed_extensions)) {
+                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($post_image_size > 4000000) {
+                $imageErr = "Image can't be over 4MB";
+            } else {
+
+                move_uploaded_file($post_image_temp, "../images/$post_image");
+            }
+        }else {
+            $post_image = "default_post.jpg";
+        }
+
+
+        if (empty($titleErr) && empty($imageErr) && empty($contentErr) && empty($isPublishedErr) && empty($categoryErr)) {
+            try {
+                $query = "INSERT INTO posts (category_id, user_id, title, date, image, content, tags, is_published) ";
+                $query .= "VALUES (?,  ?, ? , ?, ?, ?, ? , ?) ";
+
+                $statement = $connection->prepare($query);
+                $date = date("y-m-d");
+                $statement->bind_param("iisssssi", $post_category_id,  $post_user_id, $post_title, $date, $post_image, $post_content, $post_tags, $post_is_published);
+                $statement->execute();
+                $statement->close();
+                // $insert_post_admin_query = mysqli_query($connection, $query);
+                // confirmQuery($insert_post_admin_query);
+                header("Location: userprofile.php?source=all_posts");
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+    }
+}
+
+function getPostCategoryIdsArray()
+{
+    global $connection;
+    $categories = [];
+    $query = "SELECT * FROM post_categories ";
+
+    $all_categories_query = mysqli_query($connection, $query);
+    confirmQuery($all_categories_query);
+    while ($row = mysqli_fetch_assoc($all_categories_query)) {
+        $category_id = $row["category_id"];
+        $categories[] = $category_id;
+    }
+    return $categories;
 }

@@ -222,9 +222,9 @@ function insertPostAdmin()
 {
     global $connection;
     global $titleErr, $imageErr, $contentErr, $isPublishedErr, $categoryErr;
-    global $post_title, $post_image, $post_content;
+    global $post_title, $post_image, $post_content, $post_tags;
     $titleErr = $imageErr = $contentErr = $isPublishedErr = "";
-    $post_title = $post_image = $post_content = "";
+    $post_title = $post_image = $post_content = $post_tags = "";
     $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
     if (isset($_POST["add-post"]) && isset($_SESSION["user_id"])) {
 
@@ -271,8 +271,8 @@ function insertPostAdmin()
 
             if (!in_array($file_extension, $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
-            } else if ($post_image_size > 3000000) {
-                $imageErr = "Image can't be over 3MB";
+            } else if ($post_image_size > 4000000) {
+                $imageErr = "Image can't be over 4MB";
             } else {
 
                 move_uploaded_file($post_image_temp, "../images/$post_image");

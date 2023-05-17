@@ -11,7 +11,7 @@
             <a href="feed.php" class="nav-item nav-link <?php echo $page == "feed" ? "active" : " " ?>">Feed</a>
             <?php if (isset($_SESSION["user_id"])) {
             ?>
-                <a href="userprofile.php" class="nav-item nav-link">Your Profile</a>
+                <a href="userprofile.php" class="nav-item nav-link <?php echo $page == "profile" ? "active" : "" ?>">Your Profile</a>
             <?php
                 }
             ?>

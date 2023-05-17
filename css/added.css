@@ -20,3 +20,21 @@ body{
 .user-profile-buttons__spacing{
     padding: 16px !important;
 }
+
+.add-post-user-spacing{
+    padding: 32px;
+}
+
+.path__spacing{
+    padding: 0 !important;
+    content: none !important;
+}
+
+.path__spacing::before{
+    padding: 0 !important;
+    content: none !important;
+}
+
+.header__go-back-button{
+    margin: 12px;
+}

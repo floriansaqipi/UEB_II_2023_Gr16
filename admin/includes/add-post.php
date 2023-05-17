@@ -97,7 +97,7 @@
                     <div class="form-group row">
                         <label for="tags-input" class="col-xs-2 col-form-label form-control-label">Post Tags</label>
                         <div class="col-sm-10">
-                            <input name="post_tags" class="form-control" type="text" value="" id="status-input" placeholder="Enter tags">
+                            <input name="post_tags" class="form-control" type="text" value="<?php echo $post_tags?>" id="status-input" placeholder="Enter tags">
                         </div>
                     </div>
                     <div class="form-group row <?php echo !empty($contentErr) ? "has-danger" : "" ?>">

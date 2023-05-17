@@ -1,5 +1,5 @@
 <?php
-$query = "SELECT * FROM posts;";
+$query = "SELECT * FROM posts WHERE is_published = 1";
 $select_all_posts_query = mysqli_query($connection, $query);
 
 if (!$select_all_posts_query) {
@@ -14,7 +14,6 @@ while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
     $post_date = $row["date"];
     $post_image = $row["image"];
     $post_content = substr($row["content"],0, 200);
-    $post_comment_count = $row["comment_count"];
     $post_tags = $row["tags"];
     $tags_array = explode(",", $post_tags);
     // echo $post_title;
@@ -34,7 +33,7 @@ while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
                 <ul class="post-info">
                     <li><a href="#"><?php echo getFirstnameLastnameById($user_id); ?></a></li>
                     <li><a href="#"><?php echo $post_date; ?></a></li>
-                    <li><a href="#"><?php echo $post_comment_count; ?> Comments</a></li>
+                    <li><a href="#"><?php echo countSinglePostFeedComments(); ?> Comments</a></li>
                 </ul>
                 <p><?php echo $post_content;  ?></p>
                 <div class="post-options">

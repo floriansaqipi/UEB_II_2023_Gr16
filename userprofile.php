@@ -1,3 +1,4 @@
+<?php $page = "profile"; ?>
 <?php include "includes/header.php"; ?>
 <?php isLoggedInRegular(); ?>
 <div class="container-xxl bg-white p-0">
@@ -112,7 +113,7 @@
                 <div class="col-lg-6 gedf-main">
                     <!--- \\\\\\\Post-->
                     <div class="container-xxl bg-white p-3 user-profile-buttons__spacing">
-                        <a class="btn btn-primary mx-2" href="./postsform.php" role="button" target="_blank">Add a post</a>
+                        <a class="btn btn-primary mx-2" href="./add-post.php" role="button" >Add a post</a>
                         <button class="btn btn-primary mx-2">
                             <i class="fa fa-pencil"></i>
                             <span>Edit profile</span>
