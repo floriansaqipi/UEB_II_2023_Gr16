@@ -157,5 +157,33 @@ function logInUser()
                 header("Location: index.php");
             }
         }
+        
+        
+            // check if email exists in database and is verified
+            // $query = "SELECT * FROM users WHERE email='$user_email' AND verify_status=1";
+            // $result = mysqli_query($connection, $query);
+            
+            // if(mysqli_num_rows($result) == 1) {
+            //     $row = mysqli_fetch_assoc($result);
+            //     if(password_verify($user_password, $row['password'])) {
+            //         // login successful
+            //         $_SESSION['user_id'] = $row['id'];
+            //         $_SESSION['username'] = $row['username'];
+            //         header('Location: index.php');
+            //         exit();
+            //     } else {
+            //         $_SESSION['status'] = "Incorrect password";
+            //         header("Location: login.php");
+            //         exit();
+            //     }
+            // } else {
+            //     $_SESSION['status'] = "Email not verified or does not exist";
+            //     header("Location: login.php");
+            //     exit();
+            // }
+        
+        
+
     }
+    
 }
