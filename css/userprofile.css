@@ -385,3 +385,12 @@ a {
 
 
 /*end social*/
+.card .s-nav>li>a.active {
+    text-decoration: none;
+    background-color: #00B074 !important;
+    color: #fff;
+}
+
+.table-padding{
+    padding: 32px;
+}

@@ -1,3 +1,5 @@
+<?php $sub_page = "posts" ?>
+
 <table class="table table-hover">
   <thead>
     <tr>
