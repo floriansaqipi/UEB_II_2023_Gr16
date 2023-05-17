@@ -47,6 +47,7 @@
                 </div>
             </div>
 
+
             <body>
                 <div class="col">
                     <div class="row">
@@ -224,7 +225,8 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Deleting your account will remove all your information from out databse.This cannot be undone.
+                                            Deleting your account will remove all your information from out databse.This
+                                            cannot be undone.
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"
@@ -241,6 +243,43 @@
                                     <button type="button" class="btn btn-primary">Contact Us</button>
                                 </div>
                             </div>
+                            <div class="card mb-10">
+                                <div class="card-body">
+                                    <div class="px-xl-3">
+                                        <button class="btn btn-block btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#comment">
+                                            <i class="fa fa-comment"></i>
+                                            <span>Edit Comment</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal fade" id="comment" tabindex="-1" aria-labelledby="comment"
+                                aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="comment">Edit Comment</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="form-floating">
+                                                <textarea class="form-control" placeholder="Leave a comment here"
+                                                    id="floatingTextarea2" style="height: 100px"></textarea>
+                                                <label for="floatingTextarea2">Comments</label>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Edit comment</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </div>
                     </div>
 
