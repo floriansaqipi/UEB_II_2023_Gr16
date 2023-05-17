@@ -1,4 +1,5 @@
 
+<? session_start(); ?>
 <?php $page = "register"; ?>
 <?php include 'includes/header.php'; ?>
 
