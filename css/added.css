@@ -38,3 +38,8 @@ body{
 .header__go-back-button{
     margin: 12px;
 }
+
+.edit-post-form__image{
+    border-radius: 10px;
+    margin: 32px;
+}
