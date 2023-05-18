@@ -104,6 +104,22 @@ if(empty($_POST['username'])) {
    
 }
 
+$image_temp = $_FILES["image"]["tmp_name"];
+$image_size = $_FILES["image"]["size"];
+
+if (file_exists($image_temp)) {
+    $file_extension = pathinfo($image, PATHINFO_EXTENSION);
+
+    if (!in_array($file_extension, $allowed_extensions)) {
+        $imageErr = "Image can only be of type jpg/jpeg/png/gif";
+    } else if ($image_size > 3000000) {
+        $imageErr = "Image can't be over 3MB";
+    } else {
+
+        move_uploaded_file($image_temp, "../images/$image");
+    }
+}
+
 
 // check if password and confirm password match
 if ($_POST['password'] != $_POST['confirm_password']) {
