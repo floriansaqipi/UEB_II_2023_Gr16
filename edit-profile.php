@@ -133,14 +133,14 @@
                                                     <div class=" mb-3">
                                                         <label for="inputEmail2" class="col-sm-2 col-form-label">Bio</label>
                                                         <div class="col-sm-12">
-                                                            <input name="user_bio" type="email" class="form-control" id="inputEmail2" value="" placeholder="Enter you bio">
+                                                            <input name="user_bio" type="email" class="form-control" id="inputEmail2" value="<?php echo $user_bio ;?>" placeholder="Enter you bio">
                                                         </div>
                                                     </div>
 
 
                                                     <div class="mb-3">
                                                         <label for="exampleFormControlTextarea1" class="form-label">About</label>
-                                                        <textarea name="user_about" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter something about you"></textarea>
+                                                        <textarea name="user_about" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter something about you"><?php echo $user_about ;?></textarea>
                                                     </div>
 
                                                     <div class="row">
