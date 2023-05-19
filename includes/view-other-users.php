@@ -1,10 +1,10 @@
 <?php
-if (isset($_SESSION["user_id"])) {
-    $user_session_id = $_SESSION["user_id"];
+if (isset($_GET["user_id"])) {
+    $user_get_id = $_GET["user_id"];
 
-    $user_session_id = mysqli_real_escape_string($connection, $user_session_id);
+    $user_get_id = mysqli_real_escape_string($connection, $user_get_id);
 
-    $query = "SELECT * FROM users WHERE user_id != $user_session_id LIMIT 10 ";
+    $query = "SELECT * FROM users WHERE user_id != $user_get_id LIMIT 10 ";
 
     $select_ten_users_query = mysqli_query($connection, $query);
 

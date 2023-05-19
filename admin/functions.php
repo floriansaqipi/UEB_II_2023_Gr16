@@ -273,7 +273,7 @@ function insertPostAdmin()
         if (file_exists($post_image_temp)) {
             $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
 
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
             } else if ($post_image_size > 4000000) {
                 $imageErr = "Image can't be over 4MB";
@@ -410,7 +410,7 @@ function editPostAdmin()
         if (file_exists($post_image_temp)) {
             $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
 
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
             } else if ($post_image_size > 3000000) {
                 $imageErr = "Image can't be over 3MB";
@@ -752,7 +752,7 @@ function editUserAdmin()
     global $usernameErr, $firstnameErr, $lastnameErr,
         $emailErr, $imageErr, $coverImageErr, $isAdminErr;
 
-    global $user_id, $username, $user_password, $user_confirm_password, $user_firstname, $user_lastname, $user_email, $user_image,
+    global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
         $user_cover_image, $user_is_admin, $user_bio, $user_about;
 
     $usernameErr = $firstnameErr = $lastnameErr
@@ -827,7 +827,7 @@ function editUserAdmin()
         if (file_exists($user_image_temp)) {
             $file_extension = pathinfo($user_image, PATHINFO_EXTENSION);
 
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
             } else if ($user_image_size > 3000000) {
                 $imageErr = "Image can't be over 3MB";
@@ -841,6 +841,9 @@ function editUserAdmin()
             confirmQuery($select_image_query);
             if ($row = mysqli_fetch_assoc($select_image_query)) {
                 $user_image = $row["image"];
+                if(empty($user_image)){
+                    $user_image = "default.jpg";
+                }
             }else {
                 $user_image = "default.jpg";
             }
@@ -849,7 +852,7 @@ function editUserAdmin()
         if (file_exists($user_cover_image_temp)) {
             $file_extension = pathinfo($user_cover_image, PATHINFO_EXTENSION);
 
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $coverImageErr = "Image can only be of type jpg/jpeg/png/gif";
             } else if ($user_cover_image_size > 4000000) {
                 $coverImageErr = "Image can't be over 4MB";
@@ -863,6 +866,9 @@ function editUserAdmin()
             confirmQuery($select_image_query);
             if ($row = mysqli_fetch_assoc($select_image_query)) {
                 $user_cover_image = $row["cover_image"];
+                if(empty($user_cover_image)){
+                    $user_cover_image = "cover_default.jpg";
+                }
             }else {
                 $user_cover_image = "cover_default.jpg";
             }

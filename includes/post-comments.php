@@ -17,7 +17,7 @@ while ($row = mysqli_fetch_assoc($select_all_comments_of_post_query)) {
                 <img src="images/<?php echo getUserImageById($comment_user_id);?>" alt="">
             </div>
             <div class="right-content">
-                <h4><?php echo getFirstnameLastnameById($user_id); ?><span><?php echo $comment_date_display; ?></span></h4>
+                <h4><a href="view-user-profile.php?user_id=<?php echo $comment_user_id ;?>"><?php echo getFirstnameLastnameById($comment_user_id); ?></a><span><?php echo $comment_date_display; ?></span></h4>
                 <p><?php echo $comment_content_display; ?></p>
             </div>
         </li>
