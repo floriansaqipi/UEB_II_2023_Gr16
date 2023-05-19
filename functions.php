@@ -93,9 +93,9 @@ function insertComment()
     global $comment_content;
 
     if (isset($_POST["post_comment"])) {
-        if(isset($_SESSION["user_id"])){
+        if (isset($_SESSION["user_id"])) {
             $user_id = $_SESSION["user_id"];
-        }else {
+        } else {
             header("Location: login.php");
             die();
         }
@@ -126,7 +126,7 @@ function insertComment()
 
             header("Location: post-details.php?p_id=$post_id");
         }
-    } 
+    }
 }
 
 function countSinglePostComments()
@@ -403,7 +403,7 @@ function insertPostRegular()
         }
 
         if (file_exists($post_image_temp)) {
-           $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
+            $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
 
             if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
@@ -773,7 +773,7 @@ function editUserRegular()
                 $result = $statement->get_result();
                 if ($row = $result->fetch_assoc()) {
                     $user_image = $row["image"];
-                    if(empty($user_image)){
+                    if (empty($user_image)) {
                         $user_image = "default.jpg";
                     }
                 } else {
@@ -806,7 +806,7 @@ function editUserRegular()
                 $result = $statement->get_result();
                 if ($row = $result->fetch_assoc()) {
                     $user_cover_image = $row["cover_image"];
-                    if(empty($user_cover_image)){
+                    if (empty($user_cover_image)) {
                         $user_cover_image = "cover_default.jpg";
                     }
                 } else {
@@ -881,21 +881,21 @@ function editUserPasswordRegular()
         if (empty($user_old_password)) {
             $oldPasswordErr = "Password can not be empty";
         } else {
-            try{
+            try {
 
                 $query = "SELECT * FROM users WHERE user_id = ? ";
                 $statement = $connection->prepare($query);
                 $statement->bind_param("i", $user_id);
                 $statement->execute();
-                $result = $statement->get_result();  
-    
+                $result = $statement->get_result();
+
                 while ($row = $result->fetch_assoc()) {
                     $db_password = $row["password"];
                 }
                 if (!password_verify($user_old_password, $db_password)) {
                     $oldPasswordErr = "Your old password is different";
-                }   
-            }catch (Exception $e) {
+                }
+            } catch (Exception $e) {
                 echo "QUERY FAILED" . $e->getMessage();
                 die();
             }
@@ -918,19 +918,19 @@ function editUserPasswordRegular()
 
             $user_password = password_hash($user_password, PASSWORD_DEFAULT);
 
-            try{
-                
+            try {
+
                 $query = "UPDATE users SET ";
                 $query .= " password = ?";
                 $query .= " WHERE user_id = ?";
-    
+
                 $statement = $connection->prepare($query);
-                $statement->bind_param("si",$user_password, $user_id);
+                $statement->bind_param("si", $user_password, $user_id);
                 $statement->execute();
                 $statement->close();
-    
+
                 header("Location: logout.php");
-            }catch (Exception $e) {
+            } catch (Exception $e) {
                 echo "QUERY FAILED" . $e->getMessage();
                 die();
             }
@@ -939,11 +939,12 @@ function editUserPasswordRegular()
 }
 
 
-function deleteCurrentUserAccount(){
+function deleteCurrentUserAccount()
+{
     global $connection;
-    if(isset($_POST["delete-account"]) && isset($_SESSION["user_id"])){
+    if (isset($_POST["delete-account"]) && isset($_SESSION["user_id"])) {
         $user_id = $_SESSION["user_id"];
-        try{
+        try {
 
             $query = "DELETE FROM users WHERE user_id = ? ";
             $statement = $connection->prepare($query);
@@ -951,9 +952,92 @@ function deleteCurrentUserAccount(){
             $statement->execute();
             $statement->close();
             header("Location: logout.php");
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             echo "QUERY FAILED" . $e->getMessage();
             die();
+        }
+    }
+}
+
+function getUserViewProfileData()
+{
+    global $connection;
+    global $username, $user_firstname, $user_lastname,  $user_email,
+        $user_image, $user_cover_image, $user_bio, $user_about;
+    // $user_is_admin ,
+    if (isset($_GET["user_id"])) {
+
+        $user_id = $_GET["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT * FROM users where user_id = $user_id ";
+
+        $session_user_query = mysqli_query($connection, $query);
+
+        confirmQuery($session_user_query);
+
+        if ($row = mysqli_fetch_assoc($session_user_query)) {
+            $username = $row["username"];
+            $user_firstname = $row["firstname"];
+            $user_lastname = $row["lastname"];
+            $user_email = $row["email"];
+            $user_image = $row["image"];
+            $user_cover_image = $row["cover_image"];
+            // $user_is_admin = $row["user_is_admin"];
+            $user_bio = $row["bio"];
+            $user_about = $row["about"];
+        } else {
+            header("Location: 404.php");
+        }
+    } else {
+        header("Location: 404.php");
+    }
+}
+
+
+function getUserViewPostCount()
+{
+    global $connection;
+    global $post_count;
+    // $user_is_admin ,
+    if (isset($_GET["user_id"])) {
+
+        $user_id = $_GET["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT COUNT(*) as post_count FROM posts WHERE user_id = $user_id ";
+
+        $user_post_count_query = mysqli_query($connection, $query);
+
+        confirmQuery($user_post_count_query);
+
+        if ($row = mysqli_fetch_assoc($user_post_count_query)) {
+            $post_count = $row["post_count"];
+        }
+    }
+}
+
+function getUserViewCommentCount()
+{
+    global $connection;
+    global $comment_count;
+    // $user_is_admin ,
+    if (isset($_GET["user_id"])) {
+
+        $user_id = $_GET["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT COUNT(*) as comment_count FROM comments where user_id = $user_id ";
+
+        $user_comment_count_query = mysqli_query($connection, $query);
+
+        confirmQuery($user_comment_count_query);
+
+        if ($row = mysqli_fetch_assoc($user_comment_count_query)) {
+            $comment_count = $row["comment_count"];
         }
     }
 }
