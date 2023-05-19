@@ -145,12 +145,17 @@ function getAllPostsTable()
         echo "<td><a href='../post-details.php?p_id=$post_id'>$post_title </a></td>";
 
         getCategoryNamesById($post_category_id);
+
+        echo "<td>$post_status </td>";
         echo "<td>";
         echo $post_is_published ? "published" : "draft";
         echo  "</td>";
+
         echo "<td><img width=100 class='img-responsive' src='../images/$post_image' alt = 'image'></td>";
         echo "<td>$post_tags </td>";
+
         countSinglePostComments();
+        
         echo "<td>$post_date</td>";
         echo "<td>
             <a href='posts.php?source=edit_post&p_id={$post_id}' role='button' class='btn btn-inverse-warning waves-effect waves-light'>
