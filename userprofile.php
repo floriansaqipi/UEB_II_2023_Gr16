@@ -58,131 +58,39 @@
                         <div class="col-lg-12">
                             <ul class=" nav nav-tabs justify-content-center s-nav">
                                 <li><a style="" class="<?php echo !isset($_GET["source"]) ? "active" : "" ?>" href="userprofile.php">Timeline</a></li>
-                                <li><a href="userprofile.php?source=all_posts" class="<?php echo isset($_GET["source"]) && $_GET["source"] == "all_posts" ? "active" : "" ?>" >Your posts</a></li>
-                                <li><a href="userprofile.php?source=all_comments" class="<?php echo isset($_GET["source"]) && $_GET["source"] == "all_comments" ? "active" : "" ?>" >Your comments</a></li>
+                                <li><a href="userprofile.php?source=all_posts" class="<?php echo isset($_GET["source"]) && $_GET["source"] == "all_posts" ? "active" : "" ?>">Your posts</a></li>
+                                <li><a href="userprofile.php?source=all_comments" class="<?php echo isset($_GET["source"]) && $_GET["source"] == "all_comments" ? "active" : "" ?>">Your comments</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="h5 text-primary">@<?php echo $username; ?></div>
-                            <div class="h7 "><strong>Name : </strong><?php echo $user_firstname . " " . $user_lastname; ?></div>
-                            <div class="h7"><strong>About : </strong><?php echo $user_about; ?></div>
-                        </div>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item">
-                                <div class="h6 text-muted">Posts</div>
-                                <div class="h5"><?php echo $post_count; ?></div>
-                            </li>
-                            <li class="list-group-item">
-                                <div class="h6 text-muted">Comments</div>
-                                <div class="h5"><?php echo $comment_count; ?></div>
-                            </li>
-
-                            
-                        </ul>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">Latest Posts</h3>
-                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
-                                <div class="carousel-inner">
-                                    <?php include "includes/user-profile-post-slider.php"; ?>
-                                </div>
-                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Previous</span>
-                                </button>
-                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="visually-hidden">Next</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 gedf-main">
-                    <!--- \\\\\\\Post-->
-                    <div class="container-xxl bg-white p-3 user-profile-buttons__spacing">
-                        <a class="btn btn-primary mx-2" href="./add-post.php" role="button">Add a post</a>
-                        <a class="btn btn-primary mx-2" href="./edit-profile.php">
-                            <i class="fa fa-pencil"></i>
-                            <span>Edit profile</span>
-                        </a>
-                        <button class="btn btn-block btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            <i class="fa fa-sign-out"></i>
-                            <span>Delete my account</span>
-                        </button>
-                    </div>
-
-
-                    <!-- Post /////-->
-
-                    <div class="card social-timeline-card">
-
-
-
-                        <div class="card-body">
-
-
-                            <img src="..." class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title">Category</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                            <div class="card-body">
-                                <h5 class="card-title">Category</h5>
-                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                            </div>
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item">An item</li>
-                                <li class="list-group-item">A second item</li>
-                                <li class="list-group-item">A third item</li>
-                            </ul>
-                            <div class="card-body">
-                                <a href="#" class="card-link">Card link</a>
-                                <a href="#" class="card-link">Another link</a>
-                            </div>
-
-
-                        </div>
-                        <div class="card-footer">
-                            <a href="#" class="card-link"><i class="fa fa-gittip"></i> Like</a>
-                            <a href="#" class="card-link"><i class="fa fa-comment"></i> Comment</a>
-                            <a href="#" class="card-link"><i class="fa fa-mail-forward"></i> Share</a>
-                        </div>
-                    </div>
-                    <div class="card social-timeline-card">
-
-
-            <?php
-         if (isset($_GET["source"])) {
-            $source = $_GET["source"];
-         } else {
-            $source = "";
-         }
-
-         switch ($source) {
-            case 'all_posts';
-               include "includes/user-profile-posts.php";
-               break;
-            case 'all_comments';
-               include "includes/user-profile-comments.php";
-               break;
-            default:
-
-               include "includes/user-profile-timeline.php";
-         }
-         ?>
-
             
 
-        </div>
+                <?php
+                if (isset($_GET["source"])) {
+                    $source = $_GET["source"];
+                } else {
+                    $source = "";
+                }
+
+                switch ($source) {
+                    case 'all_posts';
+                        include "includes/user-profile-posts.php";
+                        break;
+                    case 'all_comments';
+                        include "includes/user-profile-comments.php";
+                        break;
+                    default:
+
+                        include "includes/user-profile-timeline.php";
+                }
+                ?>
+
+
+
+            </div>
     </main>
     <!-- Footer Start -->
     <?php include "includes/footer.php"; ?>
