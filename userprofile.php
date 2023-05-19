@@ -1,3 +1,4 @@
+<?php $page = "profile"; ?>
 <?php include "includes/header.php"; ?>
 <?php isLoggedInRegular(); ?>
 <div class="container-xxl bg-white p-0">
@@ -12,6 +13,8 @@
     <link href="css/userprofile.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <link href="css/added.css" rel="stylesheet">
+
     <!-- Navbar Start -->
     <?php include "includes/navabar.php"; ?>
 
@@ -62,6 +65,7 @@
                     </div>
                 </div>
             </div>
+
             <?php
          if (isset($_GET["source"])) {
             $source = $_GET["source"];
@@ -83,6 +87,7 @@
          ?>
 
             
+
         </div>
     </main>
     <!-- Footer Start -->

@@ -16,9 +16,8 @@ if (isset($_SESSION["user_id"])) {
 
 ?>
 
-
         <div class="carousel-item <?php echo $i++ == 0 ? "active" : "" ?>">
-            <img src="images/<?php echo $post_image; ?>" class="d-block w-100" alt="image">
+            <img src="images/<?php echo $post_image ?>" class="d-block w-100" alt="image">
         </div>
 <?php
     }

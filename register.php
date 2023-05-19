@@ -75,8 +75,8 @@
 					<div class="form-input">
 						<label for="useradmin">Choose the way you want to sign up</label>
 						<select name="useradmin" id="useradmin">
-							<option value="admin">Admin</option>
-							<option value="regular">Regular</option>
+							<option value="1">Admin</option>
+							<option value="0">Regular</option>
 						</select>
 					</div>
 

@@ -1,7 +1,7 @@
 <?php
 if (isset($_GET["p_id"])) {
     $post_id = $_GET["p_id"];
-    $query = "SELECT * FROM posts WHERE post_id = $post_id ";
+    $query = "SELECT * FROM posts WHERE post_id = $post_id AND is_published = 1 ";
 
     $select_element_query = mysqli_query($connection, $query);
 
@@ -10,12 +10,11 @@ if (isset($_GET["p_id"])) {
     while ($row = mysqli_fetch_assoc($select_element_query)) {
         $post_id = $row["post_id"];
         $post_category_id = $row["category_id"];
+        $user_id = $row["user_id"];
         $post_title = $row["title"];
-        $post_author = $row["author"];
         $post_date = $row["date"];
         $post_image = $row["image"];
         $post_content = $row["content"];
-        $post_comment_count = $row["comment_count"];
         $post_tags = $row["tags"];
         $tags_array = explode(",", $post_tags);
 
@@ -33,9 +32,9 @@ if (isset($_GET["p_id"])) {
                                 <h4><?php echo $post_title; ?></h4>
                             </a>
                             <ul class="post-info">
-                                <li><a href="#"><?php echo $post_author; ?></a></li>
+                                <li><a href="#"><?php echo getFirstnameLastnameById($user_id); ?></a></li>
                                 <li><a href="#"><?php echo $post_date; ?></a></li>
-                                <li><a href="#"><?php echo $post_comment_count; ?></a></li>
+                                <li><a href="#"><?php echo countSinglePostFeedComments(); ?> Comments</a></li>
                             </ul>
                             <p><?php echo $post_content; ?></p>
                             <div class="post-options">
@@ -83,11 +82,6 @@ if (isset($_GET["p_id"])) {
                     <form class="row g-3 needs-validation" action="" method="post" novalidate>
                         <div class="col-md-12">
                             <h4>Leave a Comment: </h4>
-                        </div>
-                        <div class="col-md-12">
-                            <label for="validationCustom03" class="form-label">Author</label>
-                            <input type="text" name="comment_author" class="form-control" value="<?php echo $comment_author; ?>" placeholder="Enter Author" id="validationCustom03">
-
                         </div>
                         <div class="col-md-12">
                             <label for="validationTextarea" class="form-label">Content</label>

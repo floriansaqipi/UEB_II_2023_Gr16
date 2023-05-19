@@ -16,3 +16,35 @@ body{
 .comment-space{
     margin-top: 32px !important;
 }
+
+.user-profile-buttons__spacing{
+    padding: 16px !important;
+}
+
+.add-post-user-spacing{
+    padding: 32px;
+}
+
+.path__spacing{
+    padding: 0 !important;
+    content: none !important;
+}
+
+.path__spacing::before{
+    padding: 0 !important;
+    content: none !important;
+}
+
+.header__go-back-button{
+    margin: 12px;
+}
+
+.edit-post-form__image{
+    border-radius: 10px;
+    margin: 32px;
+}
+
+.edit-profile__image--profile,
+.edit-profile-container__image--profile{
+    border-radius: 50% !important;
+}
