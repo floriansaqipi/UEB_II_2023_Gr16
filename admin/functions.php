@@ -146,7 +146,6 @@ function getAllPostsTable()
 
         getCategoryNamesById($post_category_id);
 
-        echo "<td>$post_status </td>";
         echo "<td>";
         echo $post_is_published ? "published" : "draft";
         echo  "</td>";
