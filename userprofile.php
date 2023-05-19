@@ -1,3 +1,4 @@
+<?php $page = "profile"; ?>
 <?php include "includes/header.php"; ?>
 <?php isLoggedInRegular(); ?>
 <div class="container-xxl bg-white p-0">
@@ -87,24 +88,18 @@
                     <div class="card">
                         <div class="card-body">
                             <h3 class="card-title">Latest Posts</h3>
-                            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                                <ol class="carousel-indicators">
-
-                                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class=""></li>
-                                    <li data-target="#carouselExampleIndicators" data-slide-to="1" class=""></li>
-                                    <li data-target="#carouselExampleIndicators" data-slide-to="2" class="active"></li>
-                                </ol>
+                            <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
-                                    <?php include "includes/user-profile-post-slider.php" ?>
+                                    <?php include "includes/user-profile-post-slider.php"; ?>
                                 </div>
-                                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -112,11 +107,11 @@
                 <div class="col-lg-6 gedf-main">
                     <!--- \\\\\\\Post-->
                     <div class="container-xxl bg-white p-3 user-profile-buttons__spacing">
-                        <a class="btn btn-primary mx-2" href="./postsform.php" role="button" target="_blank">Add a post</a>
-                        <button class="btn btn-primary mx-2">
+                        <a class="btn btn-primary mx-2" href="./add-post.php" role="button">Add a post</a>
+                        <a class="btn btn-primary mx-2" href="./edit-profile.php">
                             <i class="fa fa-pencil"></i>
                             <span>Edit profile</span>
-                        </button>
+                        </a>
                         <button class="btn btn-block btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             <i class="fa fa-sign-out"></i>
                             <span>Delete my account</span>
@@ -131,27 +126,27 @@
 
 
                         <div class="card-body">
-                            
-                        
-                                <img src="..." class="card-img-top" alt="...">
-                                <div class="card-body">
-                                    <h5 class="card-title">Category</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <div class="card-body">
-                                    <h5 class="card-title">Category</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item">An item</li>
-                                    <li class="list-group-item">A second item</li>
-                                    <li class="list-group-item">A third item</li>
-                                </ul>
-                                <div class="card-body">
-                                    <a href="#" class="card-link">Card link</a>
-                                    <a href="#" class="card-link">Another link</a>
-                                </div>
-                            
+
+
+                            <img src="..." class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Category</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Category</h5>
+                                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">An item</li>
+                                <li class="list-group-item">A second item</li>
+                                <li class="list-group-item">A third item</li>
+                            </ul>
+                            <div class="card-body">
+                                <a href="#" class="card-link">Card link</a>
+                                <a href="#" class="card-link">Another link</a>
+                            </div>
+
 
                         </div>
                         <div class="card-footer">
