@@ -90,7 +90,7 @@
                             <h3 class="card-title">Latest Posts</h3>
                             <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
-                                    <?php include "includes/user-profile-post-slider.php" ;?>
+                                    <?php include "includes/user-profile-post-slider.php"; ?>
                                 </div>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -108,10 +108,10 @@
                     <!--- \\\\\\\Post-->
                     <div class="container-xxl bg-white p-3 user-profile-buttons__spacing">
                         <a class="btn btn-primary mx-2" href="./add-post.php" role="button">Add a post</a>
-                        <button class="btn btn-primary mx-2">
+                        <a class="btn btn-primary mx-2" href="./edit-profile.php">
                             <i class="fa fa-pencil"></i>
                             <span>Edit profile</span>
-                        </button>
+                        </a>
                         <button class="btn btn-block btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             <i class="fa fa-sign-out"></i>
                             <span>Delete my account</span>

@@ -1,3 +1,4 @@
+<?php $page = "profile"; ?>
 <?php include "includes/header.php"; ?>
 <?php isLoggedInRegular(); ?>
 <?php checkPostPrivileges(); ?>

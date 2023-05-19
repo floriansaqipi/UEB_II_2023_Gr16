@@ -43,3 +43,8 @@ body{
     border-radius: 10px;
     margin: 32px;
 }
+
+.edit-profile__image--profile,
+.edit-profile-container__image--profile{
+    border-radius: 50% !important;
+}

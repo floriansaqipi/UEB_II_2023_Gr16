@@ -466,7 +466,7 @@ function checkPostPrivileges()
                 if ($user_id != $db_user_id) {
                     header("Location: 403.php");
                 }
-            }else {
+            } else {
                 header("Location: 404.php");
             }
             $result->close();
@@ -623,5 +623,39 @@ function getNotCurrentCategoriesEdit()
         $category_id = $row["category_id"];
         $category_name = $row["name"];
         echo "<option value='$category_id'>$category_name</option>";
+    }
+}
+
+function editUserRegularInputs()
+{
+    global $connection;
+    global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
+        $user_cover_image, $user_is_admin, $user_bio, $user_about;
+    if (isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        try {
+
+            $query = "SELECT * FROM users WHERE user_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $user_id);
+            $statement->execute();
+            $result = $statement->get_result();
+
+            if ($row = $result->fetch_assoc()) {
+                $user_id = $row["user_id"];
+                $username = $row["username"];
+                $user_firstname = $row["firstname"];
+                $user_lastname = $row["lastname"];
+                $user_email = $row["email"];
+                $user_image = $row["image"];
+                $user_cover_image = $row["cover_image"];
+                $user_is_admin = $row["is_admin"];
+                $user_bio = $row["bio"];
+                $user_about = $row["about"];
+            }
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
     }
 }
