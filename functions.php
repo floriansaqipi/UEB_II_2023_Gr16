@@ -398,15 +398,15 @@ function insertPostRegular()
         }
 
         if (file_exists($post_image_temp)) {
-            $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
+           $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
 
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
             } else if ($post_image_size > 4000000) {
                 $imageErr = "Image can't be over 4MB";
             } else {
 
-                move_uploaded_file($post_image_temp, "../images/$post_image");
+                move_uploaded_file($post_image_temp, "images/$post_image");
             }
         } else {
             $post_image = "default_post.jpg";
@@ -552,13 +552,13 @@ function editPostRegular()
         if (file_exists($post_image_temp)) {
             $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
 
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
             } else if ($post_image_size > 3000000) {
                 $imageErr = "Image can't be over 3MB";
             } else {
 
-                move_uploaded_file($post_image_temp, "../images/$post_image");
+                move_uploaded_file($post_image_temp, "images/$post_image");
             }
         } else {
             $query = "SELECT * FROM posts WHERE post_id = $post_id ";
@@ -631,6 +631,7 @@ function editUserRegularInputs()
     global $connection;
     global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
         $user_cover_image, $user_is_admin, $user_bio, $user_about;
+    global $firstname, $lastname, $image, $user;
     if (isset($_SESSION["user_id"])) {
         $user_id = $_SESSION["user_id"];
         try {
@@ -643,11 +644,11 @@ function editUserRegularInputs()
 
             if ($row = $result->fetch_assoc()) {
                 $user_id = $row["user_id"];
-                $username = $row["username"];
-                $user_firstname = $row["firstname"];
-                $user_lastname = $row["lastname"];
+                $user = $username = $row["username"];
+                $firstname = $user_firstname = $row["firstname"];
+                $lastname = $user_lastname = $row["lastname"];
                 $user_email = $row["email"];
-                $user_image = $row["image"];
+                $image = $user_image = $row["image"];
                 $user_cover_image = $row["cover_image"];
                 $user_is_admin = $row["is_admin"];
                 $user_bio = $row["bio"];
@@ -656,6 +657,204 @@ function editUserRegularInputs()
         } catch (Exception $e) {
             echo "QUERY FAILED" . $e->getMessage();
             die();
+        }
+    }
+}
+
+function editUserRegular()
+{
+    global $connection;
+    global $usernameErr, $firstnameErr, $lastnameErr,
+        $emailErr, $imageErr, $coverImageErr, $isAdminErr;
+
+    global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
+        $user_cover_image, $user_bio, $user_about;
+
+    $usernameErr = $firstnameErr = $lastnameErr
+        = $emailErr = $imageErr = $coverImageErr = $isAdminErr = "";
+    // $post_title = $post_image = $post_content = "";
+    $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
+    if (isset($_POST["edit-user"])) {
+
+        $username = $_POST["username"];
+        $user_firstname = $_POST["user_firstname"];
+        $user_lastname = $_POST["user_lastname"];
+        $user_email = $_POST["user_email"];
+        $user_image = $_FILES["user_image"]["name"];
+        $user_image_temp = $_FILES["user_image"]["tmp_name"];
+        $user_image_size = $_FILES["user_image"]["size"];
+        $user_cover_image = $_FILES["user_cover_image"]["name"];
+        $user_cover_image_temp = $_FILES["user_cover_image"]["tmp_name"];
+        $user_cover_image_size = $_FILES["user_cover_image"]["size"];
+        $user_bio = $_POST["user_bio"];
+        $user_about = $_POST["user_about"];
+
+        $pattern = "/.{3,}/";
+        if (empty($username)) {
+            $usernameErr = "Username can not be empty";
+        } else if (!preg_match($pattern, trim($username))) {
+            $usernameErr = "Username must be longer than 3 characters";
+        } else {
+
+            try {
+                $query = "SELECT * FROM users WHERE username = ? AND user_id != ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("si", $username, $user_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $usernameErr = "Username is taken";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+
+        if (empty($user_firstname)) {
+            $firstnameErr = "Firstname can not be empty ";
+        }
+
+        if (empty($user_lastname)) {
+            $lastnameErr = "Lastname can not be empty ";
+        }
+
+        $pattern = "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/";
+        if (empty($user_email)) {
+            $emailErr = "Email field can not be empty";
+        } else if (!preg_match($pattern, trim($user_email))) {
+            $emailErr = "Email is inavlid";
+        } else {
+            try {
+
+                $query = "SELECT * FROM users WHERE email = ? AND user_id != ? ";
+
+                $statement = $connection->prepare($query);
+                $statement->bind_param("si", $user_email, $user_id);
+                $statement->execute();
+
+                $result = $statement->get_result();
+
+                if ($row = $result->fetch_assoc()) {
+                    $emailErr = "Email is taken";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+
+        if (file_exists($user_image_temp)) {
+            $file_extension = pathinfo($user_image, PATHINFO_EXTENSION);
+
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
+                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($user_image_size > 3000000) {
+                $imageErr = "Image can't be over 3MB";
+            } else {
+
+                move_uploaded_file($user_image_temp, "images/$user_image");
+            }
+        } else {
+            try {
+                $query = "SELECT * FROM users WHERE user_id = ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("i", $user_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $user_image = $row["image"];
+                    if(empty($user_image)){
+                        $user_image = "default.jpg";
+                    }
+                } else {
+                    $user_image = "default.jpg";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+        if (file_exists($user_cover_image_temp)) {
+            $file_extension = pathinfo($user_cover_image, PATHINFO_EXTENSION);
+
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
+                $coverImageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($user_cover_image_size > 4000000) {
+                $coverImageErr = "Image can't be over 4MB";
+            } else {
+
+                move_uploaded_file($user_cover_image_temp, "images/$user_cover_image");
+            }
+        } else {
+            try {
+                $query = "SELECT * FROM users WHERE user_id = ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("i", $user_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $user_cover_image = $row["cover_image"];
+                    if(empty($user_cover_image)){
+                        $user_cover_image = "cover_default.jpg";
+                    }
+                } else {
+                    $user_cover_image = "cover_default.jpg";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+
+
+        if (
+            empty($usernameErr) && empty($firstnameErr) && empty($lastnameErr)
+            && empty($emailErr) && empty($imageErr)
+            && empty($coverImageErr) && empty($isAdminErr)
+        ) {
+
+            try {
+                $query = "UPDATE users SET ";
+                $query .= "username = ?, ";
+                $query .= "firstname = ?, ";
+                $query .= "lastname = ?, ";
+                $query .= "email = ?, ";
+                $query .= "image = ?, ";
+                $query .= "cover_image = ?, ";
+                $query .= "bio = ?, ";
+                $query .= "about = ? ";
+                $query .= "WHERE user_id = ? ";
+
+                $statement = $connection->prepare($query);
+                $statement->bind_param(
+                    "ssssssssi",
+                    $username,
+                    $user_firstname,
+                    $user_lastname,
+                    $user_email,
+                    $user_image,
+                    $user_cover_image,
+                    $user_bio,
+                    $user_about,
+                    $user_id
+                );
+                $statement->execute();
+                $statement->close();
+
+                header("Location: userprofile.php");
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
         }
     }
 }
