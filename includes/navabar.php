@@ -55,6 +55,6 @@
             }
             ?>
         </div>
-        <a href="register.php" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block post-a-job">Register/Login<i class="fa fa-arrow-right ms-3"></i></a>
+        <a href="register.php" class="btn btn-primary rounded-0 py-4 px-lg-5 d-none d-lg-block post-a-job">Register<i class="fa fa-arrow-right ms-3"></i></a>
     </div>
 </nav>
