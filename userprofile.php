@@ -83,6 +83,7 @@
                                 <div class="h5"><?php echo $comment_count; ?></div>
                             </li>
 
+                            
                         </ul>
                     </div>
                     <div class="card">
