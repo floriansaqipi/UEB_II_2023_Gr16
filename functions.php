@@ -858,3 +858,77 @@ function editUserRegular()
         }
     }
 }
+
+
+function editUserPasswordRegular()
+{
+    global $connection;
+    global $user_old_password, $user_password, $user_confirm_password;
+    global $oldPasswordErr, $passwordErr, $confirmPasswordErr;
+    $oldPasswordErr = $passwordErr = $confirmPasswordErr = "";
+    if (isset($_POST["edit-user-password"]) && isset($_SESSION["user_id"])) {
+
+        $user_id = $_SESSION["user_id"];
+        $user_old_password = $_POST["user_old_password"];
+        $user_password = $_POST["user_password"];
+        $user_confirm_password = $_POST["user_confirm_password"];
+
+        if (empty($user_old_password)) {
+            $oldPasswordErr = "Password can not be empty";
+        } else {
+            try{
+
+                $query = "SELECT * FROM users WHERE user_id = ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("i", $user_id);
+                $statement->execute();
+                $result = $statement->get_result();  
+    
+                while ($row = $result->fetch_assoc()) {
+                    $db_password = $row["password"];
+                }
+                if (!password_verify($user_old_password, $db_password)) {
+                    $oldPasswordErr = "Your old password is different";
+                }   
+            }catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+        $pattern = "/^(?=.*\d).{8,}$/";
+        if (empty($user_password)) {
+            $passwordErr = "Password can not be empty";
+        } else if (!preg_match($pattern, trim($user_password))) {
+            $passwordErr = "Password must have length of 8 or more and include one number";
+        }
+
+        if (trim($user_password) != trim($user_confirm_password)) {
+            $passwordErr = "Passwords must match";
+            $confirmPasswordErr = "Passwords must match";
+        }
+
+        if (empty($oldPasswordErr) && empty($passwordErr) && empty($confirmPasswordErr)) {
+
+
+            $user_password = password_hash($user_password, PASSWORD_DEFAULT);
+
+            try{
+                
+                $query = "UPDATE users SET ";
+                $query .= " password = ?";
+                $query .= " WHERE user_id = ?";
+    
+                $statement = $connection->prepare($query);
+                $statement->bind_param("si",$user_password, $user_id);
+                $statement->execute();
+                $statement->close();
+    
+                header("Location: logout.php");
+            }catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+    }
+}

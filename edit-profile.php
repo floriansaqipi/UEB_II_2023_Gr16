@@ -66,7 +66,7 @@
                                                     <p class="mb-0"><?php echo $user; ?></p>
                                                     <div class="text-muted"><small>Last seen 2 hours ago</small></div>
                                                     <div class="mt-2">
-                                                        <a href="./editpassword.php" class="btn btn-primary">
+                                                        <a href="./edit-password.php" class="btn btn-primary">
                                                             <i class="fa fa-fw fa-lock"></i>
                                                             <span>Change Paasword</span>
                                                         </a>

@@ -48,3 +48,10 @@ body{
 .edit-profile-container__image--profile{
     border-radius: 50% !important;
 }
+
+.edit-password__form{
+    margin: 32px;
+    padding: 32px;
+    border: 1.5px solid #f5f5f5;
+    box-shadow: 2px 2px 10px 5px rgba(0, 0, 0,0.1);    
+}
