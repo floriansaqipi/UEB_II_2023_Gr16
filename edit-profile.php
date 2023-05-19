@@ -194,7 +194,10 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-danger">Delete Account</button>
+                                            <?php deleteCurrentUserAccount(); ?>
+                                            <form action="" method="post">
+                                                <button  type="submit" name="delete-account" class="btn btn-danger">Delete Account</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

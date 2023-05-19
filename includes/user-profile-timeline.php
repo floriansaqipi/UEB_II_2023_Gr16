@@ -47,10 +47,6 @@
                 <i class="fa fa-pencil"></i>
                 <span>Edit profile</span>
             </a>
-            <button class="btn btn-block btn-danger mx-2" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <i class="fa fa-sign-out"></i>
-                <span>Delete my account</span>
-            </button>
         </div>
 
 

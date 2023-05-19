@@ -92,8 +92,13 @@ function insertComment()
     global $post_id;
     global $comment_content;
 
-    if (isset($_POST["post_comment"]) && isset($_SESSION["user_id"])) {
-        $user_id = $_SESSION["user_id"];
+    if (isset($_POST["post_comment"])) {
+        if(isset($_SESSION["user_id"])){
+            $user_id = $_SESSION["user_id"];
+        }else {
+            header("Location: login.php");
+            die();
+        }
         $comment_content = trim($_POST["comment_content"]);
 
 
@@ -121,7 +126,7 @@ function insertComment()
 
             header("Location: post-details.php?p_id=$post_id");
         }
-    }
+    } 
 }
 
 function countSinglePostComments()
@@ -929,6 +934,26 @@ function editUserPasswordRegular()
                 echo "QUERY FAILED" . $e->getMessage();
                 die();
             }
+        }
+    }
+}
+
+
+function deleteCurrentUserAccount(){
+    global $connection;
+    if(isset($_POST["delete-account"]) && isset($_SESSION["user_id"])){
+        $user_id = $_SESSION["user_id"];
+        try{
+
+            $query = "DELETE FROM users WHERE user_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $user_id);
+            $statement->execute();
+            $statement->close();
+            header("Location: logout.php");
+        }catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
         }
     }
 }
