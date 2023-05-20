@@ -893,6 +893,13 @@ function getPostsData()
                 echo "<td><a href='userprofile.php?source=all_posts&delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
                 echo "</tr>";
             }
+        }
+        catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+    }
+}
 
 function editUserRegular()
 {
