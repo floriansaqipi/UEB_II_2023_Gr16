@@ -50,6 +50,21 @@ function getCategoryNamesById($post_category_id)
     echo "$post_category_name";
 }
 
+function getCategoryNamesByIdAtTables($post_category_id)
+{
+    global $connection;
+    $query = "SELECT * FROM post_categories WHERE category_id = $post_category_id ";
+    $category_name_query = mysqli_query($connection, $query);
+
+    confirmQuery($category_name_query);
+
+    while ($row = mysqli_fetch_assoc($category_name_query)) {
+        $post_category_name = $row["name"];
+    }
+
+    echo "<td>$post_category_name</td>";
+}
+
 function getFirstnameLastnameById($user_id)
 {
     global $connection;
@@ -137,6 +152,56 @@ function countSinglePostComments()
     while ($row = mysqli_fetch_array($comment_post_count_query)) {
         $comment_count = $row["comment_count"];
         echo "<h2>$comment_count Comments</h2>";
+    }
+}
+
+function countSinglePostCommentsAtTables()
+{
+    global $connection;
+    global $post_id;
+    $query = "SELECT COUNT(*) comment_count FROM comments WHERE post_id = $post_id ";
+
+    $comment_post_count_query = mysqli_query($connection, $query);
+
+    confirmQuery($comment_post_count_query);
+
+    while ($row = mysqli_fetch_array($comment_post_count_query)) {
+        $comment_count = $row["comment_count"];
+        echo "<td>$comment_count</td>";
+    }
+}
+
+function deletePostUser()
+{
+    global $connection;
+    if (isset($_GET["delete"]) && isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        $post_id = $_GET["delete"];
+        try {
+            $query = "SELECT * FROM posts WHERE post_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $post_id);
+            $statement->execute();
+            $result = $statement->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $db_user_id = $row["user_id"];
+                if ($user_id != $db_user_id) {
+                    header("Location: 403.php");
+                    die();
+                }
+            }
+            $result->close();
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+
+        $query = "DELETE FROM posts WHERE post_id = $post_id ";
+
+        $delete_post_user_query = mysqli_query($connection, $query);
+
+        confirmQuery($delete_post_user_query);
+        header("Location: userprofile.php?source=all_posts");
     }
 }
 
@@ -406,7 +471,7 @@ function insertPostRegular()
                 $imageErr = "Image can't be over 4MB";
             } else {
 
-                move_uploaded_file($post_image_temp, "../images/$post_image");
+                move_uploaded_file($post_image_temp, "images/$post_image");
             }
         } else {
             $post_image = "default_post.jpg";
@@ -558,7 +623,7 @@ function editPostRegular()
                 $imageErr = "Image can't be over 3MB";
             } else {
 
-                move_uploaded_file($post_image_temp, "../images/$post_image");
+                move_uploaded_file($post_image_temp, "images/$post_image");
             }
         } else {
             $query = "SELECT * FROM posts WHERE post_id = $post_id ";
@@ -659,3 +724,233 @@ function editUserRegularInputs()
         }
     }
 }
+
+function getPostTitleByIdComment($comment_post_id)
+{
+    global $connection;
+    $query = "SELECT * FROM posts WHERE post_id = $comment_post_id ";
+    $posts_title_query = mysqli_query($connection, $query);
+
+    confirmQuery($posts_title_query);
+
+    while ($row = mysqli_fetch_assoc($posts_title_query)) {
+        $post_id = $row["post_id"];
+        $post_title = $row["title"];
+        echo "<td><a href='post-details.php?p_id=$post_id'>$post_title</a></td>";
+    }
+}
+
+function approveCommentUser()
+{
+    global $connection;
+    if (isset($_GET["approve"]) && isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        $comment_id = $_GET["approve"];
+        try {
+            $query = "SELECT * FROM comments WHERE comment_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $comment_id);
+            $statement->execute();
+            $result = $statement->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $db_user_id = $row["user_id"];
+                if ($user_id != $db_user_id) {
+                    header("Location: 403.php");
+                    die();
+                }
+            }
+            $result->close();
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+
+        $query = "UPDATE comments SET is_approved = 1 WHERE comment_id = $comment_id ";
+
+        $approve_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($approve_comment_query);
+
+        header("Location: userprofile.php?source=all_comments");
+    }
+}
+
+function disapproveCommentUser()
+{
+    global $connection;
+    if (isset($_GET["disapprove"]) && isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        $comment_id = $_GET["disapprove"];
+        try {
+            $query = "SELECT * FROM comments WHERE comment_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $comment_id);
+            $statement->execute();
+            $result = $statement->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $db_user_id = $row["user_id"];
+                if ($user_id != $db_user_id) {
+                    header("Location: 403.php");
+                    die();
+                }
+            }
+            $result->close();
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+
+        $query = "UPDATE comments SET is_approved = 0 WHERE comment_id = $comment_id ";
+
+        $disapprove_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($disapprove_comment_query);
+
+        header("Location: userprofile.php?source=all_comments");
+    }
+}
+
+function deleteCommentUser()
+{
+    global $connection;
+    if (isset($_GET["delete"]) && isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        $comment_id = $_GET["delete"];
+        try {
+            $query = "SELECT * FROM comments WHERE comment_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $comment_id);
+            $statement->execute();
+            $result = $statement->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $db_user_id = $row["user_id"];
+                if ($user_id != $db_user_id) {
+                    header("Location: 403.php");
+                    die();
+                }
+            }
+            $result->close();
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+
+        $query = "DELETE FROM comments WHERE comment_id = $comment_id ";
+
+        $delete_comment_query = mysqli_query($connection, $query);
+
+        confirmQuery($delete_comment_query);
+
+        header("Location: userprofile.php?source=all_comments");
+    }
+}
+
+function getPostsData()
+{
+    global $connection, $post_id, $user_id;
+    if (isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        try {
+
+            $query = "SELECT * FROM posts WHERE user_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $user_id);
+            $statement->execute();
+            $result = $statement->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $post_id = $row["post_id"];
+                $post_title = $row["title"];
+                $post_category_id = $row["category_id"];
+                $post_is_published = $row["is_published"];
+                $post_image = $row["image"];
+                $post_tags = $row["tags"];
+                $post_date = $row["date"];
+
+                echo "<tr>";
+                echo "<td> $post_id </td>";
+                echo "<td><a class='posts_links' href='post-details.php?p_id=$post_id'>$post_title </a></td>";
+
+                getCategoryNamesByIdAtTables($post_category_id);
+
+                echo "<td>";
+                echo $post_is_published ? "published" : "draft";
+                echo  "</td>";
+
+                echo "<td><img width=100 class='img-responsive' src='images/$post_image' alt = 'image'></td>";
+                echo "<td>$post_tags </td>";
+
+                countSinglePostCommentsAtTables();
+                echo "<td>$post_date</td>";
+                echo "<td><a href='edit-post.php?source=edit_post&p_id={$post_id}' class='btn btn-outline-warning' role='button'>Edit</a></td>";
+                echo "<td><a href='userprofile.php?source=all_posts&delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
+                echo "</tr>";
+            }
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+    }
+}
+
+
+
+
+
+function getCommentsData()
+{
+    global $connection, $comment_id, $user_id;
+    if (isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        try {
+
+            $query = "SELECT * FROM comments WHERE user_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $user_id);
+            $statement->execute();
+            $result = $statement->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $comment_id = $row["comment_id"];
+                $comment_user_id = $row["user_id"];
+                $comment_post_id = $row["post_id"];
+                $comment_content = substr($row["content"], 0, 100);
+                $comment_is_approved = $row["is_approved"];
+                $comment_date = $row["date"];
+
+                echo "<tr>";
+                echo "<td>{$comment_id}</td>";
+                getPostTitleByIdComment($comment_post_id);
+                echo "<td>{$comment_content}</td>";
+                echo "<td>";
+                echo $comment_is_approved ? "Yes" : "No";
+                echo "</td>";
+                echo "<td>{$comment_date}</td>";
+                echo "<td>
+                         <a href='userprofile.php?source=all_comments&approve=$comment_id' class='btn btn-outline-success' role='button'>
+                          Publish
+                         </a>
+                      </td>";
+                echo "<td>
+                          <a href='userprofile.php?source=all_comments&disapprove=$comment_id' class='btn btn-outline-warning' role='button'>
+                          Draft
+                          </a>
+                      </td>";
+                echo "<td><a href='userprofile.php?source=all_comments&delete=$comment_id'class='btn btn-outline-danger' role='button'>Delete</a></td>";
+               // echo "<td><input name='editData' type='button' name='edit' value='Edit' data-bodytext='$comment_id' id='$comment_id' class='btn btn-info btn-xs edit_data' /></td>"; 
+
+                echo "</tr>";
+                
+            }
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+        
+    }
+    
+}
+
+
+
+

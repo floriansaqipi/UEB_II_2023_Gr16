@@ -48,3 +48,17 @@ body{
 .edit-profile-container__image--profile{
     border-radius: 50% !important;
 }
+.categories-table td {
+    vertical-align: middle !important;
+}
+
+.posts_links {
+    color: #10bd7e;
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    -webkit-transition: all 0.3s 0s;
+    -moz-transition: all 0.3s 0s;
+    -ms-transition: all 0.3s 0s;
+    transition: all 0.3s 0s;
+}
