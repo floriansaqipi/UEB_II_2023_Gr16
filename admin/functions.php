@@ -1013,3 +1013,28 @@ function getNumberOfComments(){
     echo "<h2 class='dashboard-total-products'>{$comments_count}</h2>";
 
 }
+
+function getUsersOnline() {
+    global $connection, $count_online_users;
+    $session = session_id();
+    $time = time();
+    $time_out_in_seconds = 60;
+    $time_out = $time - $time_out_in_seconds;
+
+    $query = "SELECT * FROM users_online WHERE session='$session'";
+    $send_query = mysqli_query($connection,$query);
+    $count = mysqli_num_rows($send_query);
+
+    if($count == NULL) {
+        $first_time_online_user_query = "INSERT INTO users_online(session,time) VALUES ('$session','$time')";
+        mysqli_query($connection,$first_time_online_user_query);
+    }
+    else {
+        $already_online_query = "UPDATE users_online SET time = '$time' where session  = '$session";
+        mysqli_query($connection,$already_online_query);
+    }
+    $get_online_users_query = "SELECT * users_online WHERE time > '$time ";
+    $users_online_query = mysqli_query($connection, $get_online_users_query);
+    $count_online_users = mysqli_num_rows($users_online_query);
+
+}
