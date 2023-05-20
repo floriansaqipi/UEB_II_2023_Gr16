@@ -1,4 +1,8 @@
 <?php
+include "db.php";
+include "../functions.php";
+$post_id = $_POST["post_id"];
+
 $query = "SELECT * FROM comments WHERE post_id = $post_id AND is_approved = 1 ORDER BY post_id DESC";
 
 $select_all_comments_of_post_query = mysqli_query($connection, $query);
