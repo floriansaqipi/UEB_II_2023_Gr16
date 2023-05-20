@@ -984,3 +984,32 @@ function editUserPasswordAdmin()
         }
     }
 }
+function getNumberOfUsers(){
+    global $connection;
+
+    $query = "SELECT * FROM users";
+    $get_query = mysqli_query($connection,$query);
+    $users_count = mysqli_num_rows($get_query);
+    echo "<h2 class='dashboard-total-products'>{$users_count}</h2>";
+
+}
+
+function getNumberOfPosts(){
+    global $connection;
+
+    $query = "SELECT * FROM posts";
+    $get_query = mysqli_query($connection,$query);
+    $posts_count = mysqli_num_rows($get_query);
+    echo "<h2 class='dashboard-total-products'>{$posts_count}</h2>";
+
+}
+
+function getNumberOfComments(){
+    global $connection;
+
+    $query = "SELECT * FROM comments";
+    $get_query = mysqli_query($connection,$query);
+    $comments_count = mysqli_num_rows($get_query);
+    echo "<h2 class='dashboard-total-products'>{$comments_count}</h2>";
+
+}
