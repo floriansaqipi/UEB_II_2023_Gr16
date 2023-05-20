@@ -32,7 +32,7 @@ if (isset($_GET["p_id"])) {
                                 <h4><?php echo $post_title; ?></h4>
                             </a>
                             <ul class="post-info">
-                                <li><a href="#"><?php echo getFirstnameLastnameById($user_id); ?></a></li>
+                                <li><a href="view-user-profile.php?user_id=<?php echo $user_id ;?>"><?php echo getFirstnameLastnameById($user_id); ?></a></li>
                                 <li><a href="#"><?php echo $post_date; ?></a></li>
                                 <li><a href="#"><?php echo countSinglePostFeedComments(); ?> Comments</a></li>
                             </ul>

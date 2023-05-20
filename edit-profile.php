@@ -50,23 +50,23 @@
                                     <div class="e-profile">
                                         <?php editUserRegularInputs();
                                         ?>
-                                        <?php //editUserRegular(); 
+                                        <?php editUserRegular();
                                         ?>
                                         <div class="row">
                                             <div class="col-12 col-sm-auto mb-3">
                                                 <div class="mx-auto" style="width: 140px;">
                                                     <div class="d-flex justify-content-center align-items-center rounded edit-profile-container__image--profile" style="height: 140px; background-color: rgb(233, 236, 239);">
-                                                        <img width = "140" height="140" class="edit-profile__image--profile" src="images/<?php echo $user_image ;?>" alt="image">
+                                                        <img width="140" height="140" class="edit-profile__image--profile" src="images/<?php echo $image; ?>" alt="image">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col d-flex flex-column flex-sm-row justify-content-between mb-3">
                                                 <div class="text-center text-sm-left mb-2 mb-sm-0">
-                                                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap"><?php echo $user_firstname . " " . $user_lastname ;?></h4>
-                                                    <p class="mb-0"><?php echo $username ;?></p>
+                                                    <h4 class="pt-sm-2 pb-1 mb-0 text-nowrap"><?php echo $firstname . " " . $lastname; ?></h4>
+                                                    <p class="mb-0"><?php echo $user; ?></p>
                                                     <div class="text-muted"><small>Last seen 2 hours ago</small></div>
                                                     <div class="mt-2">
-                                                        <a href="./editpassword.php" class="btn btn-primary">
+                                                        <a href="./edit-password.php" class="btn btn-primary">
                                                             <i class="fa fa-fw fa-lock"></i>
                                                             <span>Change Paasword</span>
                                                         </a>
@@ -83,64 +83,70 @@
                                         </ul>
                                         <div class="tab-content pt-3">
                                             <div class="tab-pane active">
-                                                <form action="" class="row g-3 needs-validation" novalidate>
+                                                <form action="" method="post" class="row g-3 needs-validation" enctype="multipart/form-data" novalidate>
 
                                                     <div class="col-md-6">
                                                         <label for="validationServer01" class="form-label">Username</label>
-                                                        <input name="username" type="text" class="form-control " id="validationServer01" value="<?php echo $username ;?>" placeholder="Enter your username" required>
+                                                        <input name="username" type="text" class="form-control <?php echo !empty($usernameErr) ? "is-invalid" : "" ?>" id="validationServer01" value="<?php echo $username; ?>" placeholder="Enter your username" required>
                                                         <div class="invalid-feedback">
-                                                            Looks good!
+                                                            <?php echo $usernameErr; ?>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="validationServer03" class="form-label">Email</label>
-                                                        <input name="user_email" type="email" class="form-control " id="validationServer03" value="<?php echo $user_email ;?>" aria-describedby="validationServer03Feedback" placeholder="Enter your Email" required>
+                                                        <input name="user_email" type="email" class="form-control <?php echo !empty($emailErr) ? "is-invalid" : "" ?>" id="validationServer03" value="<?php echo $user_email; ?>" aria-describedby="validationServer03Feedback" placeholder="Enter your Email" required>
                                                         <div id="validationServer03Feedback" class="invalid-feedback">
-                                                            Please provide a valid city.
+                                                            <?php echo $emailErr; ?>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="validationServer01" class="form-label">First name</label>
-                                                        <input name="user_firstname" type="text" class="form-control " id="validationServer01" value="<?php echo $user_firstname ;?>" placeholder="Enter your First name" required>
+                                                        <input name="user_firstname" type="text" class="form-control <?php echo !empty($firstnameErr) ? "is-invalid" : "" ?>" id="validationServer01" value="<?php echo $user_firstname; ?>" placeholder="Enter your First name" required>
                                                         <div class="invalid-feedback">
-                                                            Looks good!
+                                                            <?php echo $firstnameErr; ?>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label for="validationServer02" class="form-label">Last name</label>
-                                                        <input name="user_lastname" type="text" class="form-control " id="validationServer02" value="<?php echo $user_lastname ;?>" placeholder="Enter your Last name" required>
+                                                        <input name="user_lastname" type="text" class="form-control <?php echo !empty($lastnameErr) ? "is-invalid" : "" ?>" id="validationServer02" value="<?php echo $user_lastname; ?>" placeholder="Enter your Last name" required>
                                                         <div class="invalid-feedback">
-                                                            Looks good!
+                                                            <?php echo $lastnameErr; ?>
+
                                                         </div>
                                                     </div>
                                                     <div class="col-md-6">
 
                                                         <label for="validationPost" class="form-label">Profile Image</label>
-                                                        <img width="128" class="edit-post-form__image" src="images/<?php echo $user_image ;?>" alt="image">
+                                                        <img width="128" class="edit-post-form__image" src="images/<?php echo $user_image; ?>" alt="image">
 
-                                                        <input name="user_image" value="<?php echo $user_image ;?>" type="file" class="form-control " aria-label="file example" required>
-                                                        <div class="invalid-feedback"></div>
+                                                        <input name="user_image"  type="file" class="form-control <?php echo !empty($imageErr) ? "is-invalid" : "" ?>" aria-label="file example" required>
+                                                        <div class="invalid-feedback">
+                                                            <?php echo $imageErr; ?>
+
+                                                        </div>
                                                     </div>
 
                                                     <div class="col-md-6">
 
                                                         <label for="validationPost" class="form-label">Cover Image</label>
-                                                        <img width="192" height="128" class="edit-post-form__image" src="images/<?php echo $user_cover_image ;?>" alt="image">
+                                                        <img width="192" height="128" class="edit-post-form__image" src="images/<?php echo $user_cover_image; ?>" alt="image">
 
-                                                        <input name="user_cover_image" value="<?php echo $user_cover_image ;?>" type="file" class="form-control <?php echo !empty($imageErr) ? "is-invalid" : "" ?>" aria-label="file example" required>
-                                                        <div class="invalid-feedback"><?php echo $imageErr; ?></div>
+                                                        <input name="user_cover_image" type="file" class="form-control <?php echo !empty($coverImageErr) ? "is-invalid" : "" ?>" aria-label="file example" required>
+                                                        <div class="invalid-feedback"><?php echo $coverImageErr; ?></div>
                                                     </div>
                                                     <div class=" mb-3">
                                                         <label for="inputEmail2" class="col-sm-2 col-form-label">Bio</label>
                                                         <div class="col-sm-12">
-                                                            <input name="user_bio" type="email" class="form-control" id="inputEmail2" value="<?php echo $user_bio ;?>" placeholder="Enter you bio">
+                                                            <input name="user_bio" type="email" class="form-control" id="inputEmail2" value="<?php echo $user_bio; ?>" placeholder="Enter you bio">
                                                         </div>
                                                     </div>
 
 
                                                     <div class="mb-3">
                                                         <label for="exampleFormControlTextarea1" class="form-label">About</label>
-                                                        <textarea name="user_about" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter something about you"><?php echo $user_about ;?></textarea>
+                                                        <textarea name="user_about" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter something about you"><?php echo $user_about; ?></textarea>
                                                     </div>
 
                                                     <div class="row">
@@ -188,7 +194,10 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-danger">Delete Account</button>
+                                            <?php deleteCurrentUserAccount(); ?>
+                                            <form action="" method="post">
+                                                <button  type="submit" name="delete-account" class="btn btn-danger">Delete Account</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>

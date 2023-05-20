@@ -107,8 +107,13 @@ function insertComment()
     global $post_id;
     global $comment_content;
 
-    if (isset($_POST["post_comment"]) && isset($_SESSION["user_id"])) {
-        $user_id = $_SESSION["user_id"];
+    if (isset($_POST["post_comment"])) {
+        if (isset($_SESSION["user_id"])) {
+            $user_id = $_SESSION["user_id"];
+        } else {
+            header("Location: login.php");
+            die();
+        }
         $comment_content = trim($_POST["comment_content"]);
 
 
@@ -465,7 +470,7 @@ function insertPostRegular()
         if (file_exists($post_image_temp)) {
             $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
 
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
             } else if ($post_image_size > 4000000) {
                 $imageErr = "Image can't be over 4MB";
@@ -617,7 +622,7 @@ function editPostRegular()
         if (file_exists($post_image_temp)) {
             $file_extension = pathinfo($post_image, PATHINFO_EXTENSION);
 
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
             } else if ($post_image_size > 3000000) {
                 $imageErr = "Image can't be over 3MB";
@@ -696,6 +701,7 @@ function editUserRegularInputs()
     global $connection;
     global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
         $user_cover_image, $user_is_admin, $user_bio, $user_about;
+    global $firstname, $lastname, $image, $user;
     if (isset($_SESSION["user_id"])) {
         $user_id = $_SESSION["user_id"];
         try {
@@ -708,11 +714,11 @@ function editUserRegularInputs()
 
             if ($row = $result->fetch_assoc()) {
                 $user_id = $row["user_id"];
-                $username = $row["username"];
-                $user_firstname = $row["firstname"];
-                $user_lastname = $row["lastname"];
+                $user = $username = $row["username"];
+                $firstname = $user_firstname = $row["firstname"];
+                $lastname = $user_lastname = $row["lastname"];
                 $user_email = $row["email"];
-                $user_image = $row["image"];
+                $image = $user_image = $row["image"];
                 $user_cover_image = $row["cover_image"];
                 $user_is_admin = $row["is_admin"];
                 $user_bio = $row["bio"];
@@ -724,6 +730,7 @@ function editUserRegularInputs()
         }
     }
 }
+
 
 function getPostTitleByIdComment($comment_post_id)
 {
@@ -886,12 +893,301 @@ function getPostsData()
                 echo "<td><a href='userprofile.php?source=all_posts&delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
                 echo "</tr>";
             }
+
+function editUserRegular()
+{
+    global $connection;
+    global $usernameErr, $firstnameErr, $lastnameErr,
+        $emailErr, $imageErr, $coverImageErr, $isAdminErr;
+
+    global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
+        $user_cover_image, $user_bio, $user_about;
+
+    $usernameErr = $firstnameErr = $lastnameErr
+        = $emailErr = $imageErr = $coverImageErr = $isAdminErr = "";
+    // $post_title = $post_image = $post_content = "";
+    $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
+    if (isset($_POST["edit-user"])) {
+
+        $username = $_POST["username"];
+        $user_firstname = $_POST["user_firstname"];
+        $user_lastname = $_POST["user_lastname"];
+        $user_email = $_POST["user_email"];
+        $user_image = $_FILES["user_image"]["name"];
+        $user_image_temp = $_FILES["user_image"]["tmp_name"];
+        $user_image_size = $_FILES["user_image"]["size"];
+        $user_cover_image = $_FILES["user_cover_image"]["name"];
+        $user_cover_image_temp = $_FILES["user_cover_image"]["tmp_name"];
+        $user_cover_image_size = $_FILES["user_cover_image"]["size"];
+        $user_bio = $_POST["user_bio"];
+        $user_about = $_POST["user_about"];
+
+        $pattern = "/.{3,}/";
+        if (empty($username)) {
+            $usernameErr = "Username can not be empty";
+        } else if (!preg_match($pattern, trim($username))) {
+            $usernameErr = "Username must be longer than 3 characters";
+        } else {
+
+            try {
+                $query = "SELECT * FROM users WHERE username = ? AND user_id != ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("si", $username, $user_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $usernameErr = "Username is taken";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+
+        if (empty($user_firstname)) {
+            $firstnameErr = "Firstname can not be empty ";
+        }
+
+        if (empty($user_lastname)) {
+            $lastnameErr = "Lastname can not be empty ";
+        }
+
+        $pattern = "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/";
+        if (empty($user_email)) {
+            $emailErr = "Email field can not be empty";
+        } else if (!preg_match($pattern, trim($user_email))) {
+            $emailErr = "Email is inavlid";
+        } else {
+            try {
+
+                $query = "SELECT * FROM users WHERE email = ? AND user_id != ? ";
+
+                $statement = $connection->prepare($query);
+                $statement->bind_param("si", $user_email, $user_id);
+                $statement->execute();
+
+                $result = $statement->get_result();
+
+                if ($row = $result->fetch_assoc()) {
+                    $emailErr = "Email is taken";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+
+        if (file_exists($user_image_temp)) {
+            $file_extension = pathinfo($user_image, PATHINFO_EXTENSION);
+
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
+                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($user_image_size > 3000000) {
+                $imageErr = "Image can't be over 3MB";
+            } else {
+
+                move_uploaded_file($user_image_temp, "images/$user_image");
+            }
+        } else {
+            try {
+                $query = "SELECT * FROM users WHERE user_id = ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("i", $user_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $user_image = $row["image"];
+                    if (empty($user_image)) {
+                        $user_image = "default.jpg";
+                    }
+                } else {
+                    $user_image = "default.jpg";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+        if (file_exists($user_cover_image_temp)) {
+            $file_extension = pathinfo($user_cover_image, PATHINFO_EXTENSION);
+
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
+                $coverImageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($user_cover_image_size > 4000000) {
+                $coverImageErr = "Image can't be over 4MB";
+            } else {
+
+                move_uploaded_file($user_cover_image_temp, "images/$user_cover_image");
+            }
+        } else {
+            try {
+                $query = "SELECT * FROM users WHERE user_id = ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("i", $user_id);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $user_cover_image = $row["cover_image"];
+                    if (empty($user_cover_image)) {
+                        $user_cover_image = "cover_default.jpg";
+                    }
+                } else {
+                    $user_cover_image = "cover_default.jpg";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+
+
+        if (
+            empty($usernameErr) && empty($firstnameErr) && empty($lastnameErr)
+            && empty($emailErr) && empty($imageErr)
+            && empty($coverImageErr) && empty($isAdminErr)
+        ) {
+
+            try {
+                $query = "UPDATE users SET ";
+                $query .= "username = ?, ";
+                $query .= "firstname = ?, ";
+                $query .= "lastname = ?, ";
+                $query .= "email = ?, ";
+                $query .= "image = ?, ";
+                $query .= "cover_image = ?, ";
+                $query .= "bio = ?, ";
+                $query .= "about = ? ";
+                $query .= "WHERE user_id = ? ";
+
+                $statement = $connection->prepare($query);
+                $statement->bind_param(
+                    "ssssssssi",
+                    $username,
+                    $user_firstname,
+                    $user_lastname,
+                    $user_email,
+                    $user_image,
+                    $user_cover_image,
+                    $user_bio,
+                    $user_about,
+                    $user_id
+                );
+                $statement->execute();
+                $statement->close();
+
+                header("Location: userprofile.php");
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+    }
+}
+
+
+function editUserPasswordRegular()
+{
+    global $connection;
+    global $user_old_password, $user_password, $user_confirm_password;
+    global $oldPasswordErr, $passwordErr, $confirmPasswordErr;
+    $oldPasswordErr = $passwordErr = $confirmPasswordErr = "";
+    if (isset($_POST["edit-user-password"]) && isset($_SESSION["user_id"])) {
+
+        $user_id = $_SESSION["user_id"];
+        $user_old_password = $_POST["user_old_password"];
+        $user_password = $_POST["user_password"];
+        $user_confirm_password = $_POST["user_confirm_password"];
+
+        if (empty($user_old_password)) {
+            $oldPasswordErr = "Password can not be empty";
+        } else {
+            try {
+
+                $query = "SELECT * FROM users WHERE user_id = ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("i", $user_id);
+                $statement->execute();
+                $result = $statement->get_result();
+
+                while ($row = $result->fetch_assoc()) {
+                    $db_password = $row["password"];
+                }
+                if (!password_verify($user_old_password, $db_password)) {
+                    $oldPasswordErr = "Your old password is different";
+                }
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+        $pattern = "/^(?=.*\d).{8,}$/";
+        if (empty($user_password)) {
+            $passwordErr = "Password can not be empty";
+        } else if (!preg_match($pattern, trim($user_password))) {
+            $passwordErr = "Password must have length of 8 or more and include one number";
+        }
+
+        if (trim($user_password) != trim($user_confirm_password)) {
+            $passwordErr = "Passwords must match";
+            $confirmPasswordErr = "Passwords must match";
+        }
+
+        if (empty($oldPasswordErr) && empty($passwordErr) && empty($confirmPasswordErr)) {
+
+
+            $user_password = password_hash($user_password, PASSWORD_DEFAULT);
+
+            try {
+
+                $query = "UPDATE users SET ";
+                $query .= " password = ?";
+                $query .= " WHERE user_id = ?";
+
+                $statement = $connection->prepare($query);
+                $statement->bind_param("si", $user_password, $user_id);
+                $statement->execute();
+                $statement->close();
+
+                header("Location: logout.php");
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+    }
+}
+
+
+function deleteCurrentUserAccount()
+{
+    global $connection;
+    if (isset($_POST["delete-account"]) && isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        try {
+
+            $query = "DELETE FROM users WHERE user_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $user_id);
+            $statement->execute();
+            $statement->close();
+            header("Location: logout.php");
+
         } catch (Exception $e) {
             echo "QUERY FAILED" . $e->getMessage();
             die();
         }
     }
 }
+
 
 
 
@@ -953,4 +1249,88 @@ function getCommentsData()
 
 
 
+
+
+function getUserViewProfileData()
+{
+    global $connection;
+    global $username, $user_firstname, $user_lastname,  $user_email,
+        $user_image, $user_cover_image, $user_bio, $user_about;
+    // $user_is_admin ,
+    if (isset($_GET["user_id"])) {
+
+        $user_id = $_GET["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT * FROM users where user_id = $user_id ";
+
+        $session_user_query = mysqli_query($connection, $query);
+
+        confirmQuery($session_user_query);
+
+        if ($row = mysqli_fetch_assoc($session_user_query)) {
+            $username = $row["username"];
+            $user_firstname = $row["firstname"];
+            $user_lastname = $row["lastname"];
+            $user_email = $row["email"];
+            $user_image = $row["image"];
+            $user_cover_image = $row["cover_image"];
+            // $user_is_admin = $row["user_is_admin"];
+            $user_bio = $row["bio"];
+            $user_about = $row["about"];
+        } else {
+            header("Location: 404.php");
+        }
+    } else {
+        header("Location: 404.php");
+    }
+}
+
+
+function getUserViewPostCount()
+{
+    global $connection;
+    global $post_count;
+    // $user_is_admin ,
+    if (isset($_GET["user_id"])) {
+
+        $user_id = $_GET["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT COUNT(*) as post_count FROM posts WHERE user_id = $user_id ";
+
+        $user_post_count_query = mysqli_query($connection, $query);
+
+        confirmQuery($user_post_count_query);
+
+        if ($row = mysqli_fetch_assoc($user_post_count_query)) {
+            $post_count = $row["post_count"];
+        }
+    }
+}
+
+function getUserViewCommentCount()
+{
+    global $connection;
+    global $comment_count;
+    
+    if (isset($_GET["user_id"])) {
+
+        $user_id = $_GET["user_id"];
+
+        $user_id = mysqli_real_escape_string($connection, $user_id);
+
+        $query = "SELECT COUNT(*) as comment_count FROM comments where user_id = $user_id ";
+
+        $user_comment_count_query = mysqli_query($connection, $query);
+
+        confirmQuery($user_comment_count_query);
+
+        if ($row = mysqli_fetch_assoc($user_comment_count_query)) {
+            $comment_count = $row["comment_count"];
+        }
+    }
+}
 
