@@ -15,24 +15,8 @@
             <?php
                 }
             ?>
-            <!-- <a href="blog.php" class="nav-item nav-link">Blog</a> -->
-            <a href="about.php" class="nav-item nav-link">About</a>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Jobs</a>
-                <div class="dropdown-menu rounded-0 m-0">
-                    <a href="job-list.html" class="dropdown-item">Job List</a>
-                    <a href="job-detail.html" class="dropdown-item">Job Detail</a>
-                </div>
-            </div>
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
-                <div class="dropdown-menu rounded-0 m-0">
-                    <a href="category.php" class="dropdown-item">Job Category</a>
-                    <a href="testimonial.php" class="dropdown-item">Testimonial</a>
-                    <a href="404.php" class="dropdown-item">404</a>
-                </div>
-            </div>
-            <a href="contact.php" class="nav-item nav-link">Contact</a>
+            
+          
             <?php 
                 if (isset($_SESSION["user_id"]) && $_SESSION["is_admin"] == "1") {
             ?>

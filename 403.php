@@ -69,7 +69,7 @@
                         <h1 class="display-1">403</h1>
                         <h1 class="mb-4">Forbbiden</h1>
                         <p class="mb-4">You do not have acess to the resource!</p>
-                        <a class="btn btn-primary py-3 px-5" href="">Go Back To Home</a>
+                        <a class="btn btn-primary py-3 px-5" href="index.php">Go Back To Home</a>
                     </div>
                 </div>
             </div>
