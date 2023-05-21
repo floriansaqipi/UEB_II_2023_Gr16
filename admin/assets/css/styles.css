@@ -19,3 +19,9 @@ body {
 .change-password-column{
     padding-top: 12px !important;
 }
+
+.card-color-picker-styling{
+    display: flex !important;
+    justify-content: space-around;
+    align-items: center;
+}

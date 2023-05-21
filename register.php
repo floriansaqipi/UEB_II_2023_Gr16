@@ -39,7 +39,10 @@
 					<!-- Input Box -->
 					<div class="form-input ">
 						<span><i class="fa fa-user"></i></span>
-						<input type="text" name="firstName"  placeholder="First name" tabindex="10" >
+						<input class="is-invalid" type="text" name="firstName"  placeholder="First name" tabindex="10" >	
+						<div class="invalid-feedback">
+							smth
+						</div>
 					</div>
 					
 					<div class="form-input">

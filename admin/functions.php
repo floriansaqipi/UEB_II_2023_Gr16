@@ -154,7 +154,7 @@ function getAllPostsTable()
         echo "<td>$post_tags </td>";
 
         countSinglePostComments();
-        
+
         echo "<td>$post_date</td>";
         echo "<td>
             <a href='posts.php?source=edit_post&p_id={$post_id}' role='button' class='btn btn-inverse-warning waves-effect waves-light'>
@@ -281,7 +281,7 @@ function insertPostAdmin()
 
                 move_uploaded_file($post_image_temp, "../images/$post_image");
             }
-        }else {
+        } else {
             $post_image = "default_post.jpg";
         }
 
@@ -841,10 +841,10 @@ function editUserAdmin()
             confirmQuery($select_image_query);
             if ($row = mysqli_fetch_assoc($select_image_query)) {
                 $user_image = $row["image"];
-                if(empty($user_image)){
+                if (empty($user_image)) {
                     $user_image = "default.jpg";
                 }
-            }else {
+            } else {
                 $user_image = "default.jpg";
             }
         }
@@ -866,10 +866,10 @@ function editUserAdmin()
             confirmQuery($select_image_query);
             if ($row = mysqli_fetch_assoc($select_image_query)) {
                 $user_cover_image = $row["cover_image"];
-                if(empty($user_cover_image)){
+                if (empty($user_cover_image)) {
                     $user_cover_image = "cover_default.jpg";
                 }
-            }else {
+            } else {
                 $user_cover_image = "cover_default.jpg";
             }
         }
@@ -951,7 +951,7 @@ function editUserPasswordAdmin()
             }
             if (!password_verify($user_old_password, $db_password)) {
                 $oldPasswordErr = "Your old password is different";
-            }   
+            }
         }
 
         $pattern = "/^(?=.*\d).{8,}$/";
@@ -984,35 +984,37 @@ function editUserPasswordAdmin()
         }
     }
 }
-function getNumberOfUsers(){
+function getNumberOfUsers()
+{
     global $connection;
 
     $query = "SELECT * FROM users";
+
     $get_query = mysqli_query($connection,$query);
     confirmQuery($get_query);
+
     $users_count = mysqli_num_rows($get_query);
     echo "<h2 class='dashboard-total-products'>{$users_count}</h2>";
-
 }
 
-function getNumberOfPosts(){
+function getNumberOfPosts()
+{
     global $connection;
 
     $query = "SELECT * FROM posts";
-    $get_query = mysqli_query($connection,$query);
+    $get_query = mysqli_query($connection, $query);
     $posts_count = mysqli_num_rows($get_query);
     echo "<h2 class='dashboard-total-products'>{$posts_count}</h2>";
-
 }
 
-function getNumberOfComments(){
+function getNumberOfComments()
+{
     global $connection;
 
     $query = "SELECT * FROM comments";
-    $get_query = mysqli_query($connection,$query);
+    $get_query = mysqli_query($connection, $query);
     $comments_count = mysqli_num_rows($get_query);
     echo "<h2 class='dashboard-total-products'>{$comments_count}</h2>";
-
 }
 
 function getNumberOfUsersOnline() {
@@ -1042,4 +1044,349 @@ function getNumberOfUsersOnline() {
     $count_online_users = mysqli_num_rows($users_online_query);
     echo "<h2 class='dashboard-total-products'>{$count_online_users}</h2>";
 
+}
+
+function getUserProfileDataFromSession()
+{
+    global $connection;
+    global $user_id, $user_bio;
+    if (isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        try {
+
+            $query = "SELECT * FROM users WHERE user_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $user_id);
+            $statement->execute();
+            $result = $statement->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $user_bio = $row["bio"];
+            }
+            $statement->close();
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+        getUserSessionPublishedPostsCount($user_id);
+        getUserSessionDraftedPostsCount($user_id);
+        getUserSessionPublishedCommentsCount($user_id);
+        getUserSessionDraftedCommentsCount($user_id);
+    }
+}
+
+
+function getUserSessionPublishedPostsCount($user_id)
+{
+    global $connection;
+    global $user_published_posts_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) user_post_count FROM posts WHERE user_id = ? AND is_published = 1";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i", $user_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $user_published_posts_cnt = $row["user_post_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function getUserSessionDraftedPostsCount($user_id)
+{
+    global $connection;
+    global $user_drafted_posts_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) user_post_count FROM posts WHERE user_id = ? AND is_published = 0";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i", $user_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $user_drafted_posts_cnt = $row["user_post_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function getUserSessionPublishedCommentsCount($user_id)
+{
+    global $connection;
+    global $user_published_comments_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) user_comment_count FROM comments WHERE user_id = ? AND is_approved = 1";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i", $user_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $user_published_comments_cnt = $row["user_comment_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+
+function getUserSessionDraftedCommentsCount($user_id)
+{
+    global $connection;
+    global $user_drafted_comments_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) user_comment_count FROM comments WHERE user_id = ? AND is_approved = 0";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i", $user_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $user_drafted_comments_cnt = $row["user_comment_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+
+function getPostsCount()
+{
+    global $connection, $total_posts_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) post_count FROM posts ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_posts_cnt = $row["post_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function getPublishedPostsCount()
+{
+    global $connection, $total_published_posts_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) post_count FROM posts WHERE is_published = 1 ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_published_posts_cnt = $row["post_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function getDraftedPostsCount()
+{
+    global $connection, $total_drafted_posts_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) post_count FROM posts WHERE is_published = 0 ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_drafted_posts_cnt = $row["post_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function getCommentsCount()
+{
+    global $connection, $total_comments_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) comment_count FROM comments";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_comments_cnt = $row["comment_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+
+function getCommentsPublishedCount()
+{
+    global $connection, $total_published_comments_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) comment_count FROM comments WHERE is_approved = 1 ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_published_comments_cnt = $row["comment_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+
+function getCommentsDraftedCount()
+{
+    global $connection, $total_drafted_comments_cnt;
+    try {
+
+        $query = "SELECT COUNT(*) comment_count FROM comments WHERE is_approved = 0 ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_drafted_comments_cnt = $row["comment_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+
+function getUsersCount()
+{
+    global $connection, $total_users;
+    try {
+
+        $query = "SELECT COUNT(*) users_count FROM users ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_users = $row["users_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function getAdminUsersCount()
+{
+    global $connection, $total_admin_users;
+    try {
+
+        $query = "SELECT COUNT(*) users_count FROM users WHERE is_admin = 1";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_admin_users = $row["users_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function getRegularUsersCount()
+{
+    global $connection, $total_regular_users;
+    try {
+
+        $query = "SELECT COUNT(*) users_count FROM users WHERE is_admin = 0 ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $total_regular_users = $row["users_count"];
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function getChartData()
+{
+    getPostsCount();
+    getPublishedPostsCount();
+    getDraftedPostsCount();
+    getCommentsCount();
+    getCommentsPublishedCount();
+    getCommentsDraftedCount();
+    getUsersCount();
+    getAdminUsersCount();
+    getRegularUsersCount();
+}
+
+function getLoginsChartData(){ 
+    global $connection;
+    try {
+
+        $query = "SELECT * FROM country_logins ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $country_code = $row["code"];
+            $country_logins = $row["login_counter"];
+            echo "['{$country_code}'" . "," . "{$country_logins}],";
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}
+
+function setPreferedColor(){
+    if(isset($_POST["picked_color"])){
+        $color = $_POST["theme_color"];
+        $cookie_name = "theme_color";
+        $cookie_value = "colors : ['$color']";
+        $cookie_expiration = time() + 3600;
+        setcookie($cookie_name, $cookie_value, $cookie_expiration);
+        header("Location: index.php");
+    }
+}
+
+function setDefaultColor(){
+    if(isset($_POST["default_color"])){
+        echo "HEEY";
+        $cookie_name = "theme_color";
+        $cookie_value = "";
+        $cookie_expiration = time() - 3600;
+        setcookie($cookie_name, $cookie_value, $cookie_expiration);
+        header("Location: index.php");
+
+    }
 }

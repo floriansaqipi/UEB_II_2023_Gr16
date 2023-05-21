@@ -34,7 +34,7 @@ if (isset($_GET["p_id"])) {
                             <ul class="post-info">
                                 <li><a href="view-user-profile.php?user_id=<?php echo $user_id ;?>"><?php echo getFirstnameLastnameById($user_id); ?></a></li>
                                 <li><a href="#"><?php echo $post_date; ?></a></li>
-                                <li><a href="#"><?php echo countSinglePostFeedComments(); ?> Comments</a></li>
+                                <li><a href="#" class="comment_cnt_profile"><?php echo countSinglePostFeedComments(); ?> Comments</a></li>
                             </ul>
                             <p><?php echo $post_content; ?></p>
                             <div class="post-options">
@@ -63,31 +63,32 @@ if (isset($_GET["p_id"])) {
                 </div>
                 <div class="col-lg-12">
                     <div class="sidebar-item comments">
-                        <div class="sidebar-heading">
+                        <div class="sidebar-heading" >
                             <?php 
                                 countSinglePostComments();
                             ?>
                             <!-- <h2>4 comments</h2> -->
                         </div>
                         <div class="content">
-                            <ul>
-                                <?php include "includes/post-comments.php" ;?>
+
+                            <ul id="comments-container">
+                                
 
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-12 down-content">
-                    <?php insertComment(); ?>
-                    <form class="row g-3 needs-validation" action="" method="post" novalidate>
+                    <?php // insertComment(); ?>
+                    <form class="row g-3 needs-validation" action="insert-comment.php" method="post" novalidate id="post-comment-form">
                         <div class="col-md-12">
                             <h4>Leave a Comment: </h4>
                         </div>
                         <div class="col-md-12">
                             <label for="validationTextarea" class="form-label">Content</label>
-                            <textarea name="comment_content" class="form-control <?php echo !empty($contentErr) ? "is-invalid" : "" ?>" id="validationTextarea" placeholder="Enter content" required><?php echo $comment_content; ?></textarea>
-                            <div class="invalid-feedback">
-                                <?php echo $contentErr; ?>
+                            <textarea name="comment_content" class="form-control " id="comment_content" placeholder="Enter content" required></textarea>
+                            <div class="invalid-feedback" id="invalid-feedback">
+                                
                             </div>
                         </div>
                         <div class="col-12">
@@ -101,3 +102,4 @@ if (isset($_GET["p_id"])) {
     }
 }
 ?>
+<?php include "comments-scripts.php" ; ?>
