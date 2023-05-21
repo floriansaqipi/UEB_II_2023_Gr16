@@ -1,0 +1,90 @@
+@media (min-width: 992px){
+    .post-a-job {
+        padding-right: 0.5rem !important;
+        padding-left: 0.5rem !important;
+    }
+}
+
+body{
+    background-color: #ffffff;
+}
+
+.form-control:valid{
+    border-color: none !important;
+}
+
+.comment-space{
+    margin-top: 32px !important;
+}
+
+.user-profile-buttons__spacing{
+    padding: 16px !important;
+}
+
+.add-post-user-spacing{
+    padding: 32px;
+}
+
+.path__spacing{
+    padding: 0 !important;
+    content: none !important;
+}
+
+.path__spacing::before{
+    padding: 0 !important;
+    content: none !important;
+}
+
+.header__go-back-button{
+    margin: 12px;
+}
+
+.edit-post-form__image{
+    border-radius: 10px;
+    margin: 32px;
+}
+
+.edit-profile__image--profile,
+.edit-profile-container__image--profile{
+    border-radius: 50% !important;
+}
+
+.categories-table td {
+    vertical-align: middle !important;
+}
+
+.posts_links {
+    color: #10bd7e;
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    -webkit-transition: all 0.3s 0s;
+    -moz-transition: all 0.3s 0s;
+    -ms-transition: all 0.3s 0s;
+    transition: all 0.3s 0s;
+}
+
+.edit-password__form{
+    margin: 32px;
+    padding: 32px;
+    border: 1.5px solid #f5f5f5;
+    box-shadow: 2px 2px 10px 5px rgba(0, 0, 0,0.1);    
+
+}
+
+.main-search__input{
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 32px;
+    border: 1px #a7a7a7;
+    box-shadow: 2px 2px 3px 4px rgba(0, 0, 0,0.1);
+    border-radius: 5px;
+}
+
+.search_container{
+    margin: 0 !important;
+}
+
+.is-invalid-sign-up{
+    border-color: red !important;
+}

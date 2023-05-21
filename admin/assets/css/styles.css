@@ -1,0 +1,27 @@
+body {
+    font-family: 'Heebo', sans-serif;
+}
+.categories-table td{
+    vertical-align: middle !important;
+}
+
+.pad{
+    padding: 24px !important;   
+}
+
+.full-widthi{
+    width: 100%  !important;
+}
+.custom-file-control:lang(en)::after {
+    content: "";
+}
+
+.change-password-column{
+    padding-top: 12px !important;
+}
+
+.card-color-picker-styling{
+    display: flex !important;
+    justify-content: space-around;
+    align-items: center;
+}
