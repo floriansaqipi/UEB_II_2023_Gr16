@@ -156,7 +156,7 @@ function countSinglePostComments()
 
     while ($row = mysqli_fetch_array($comment_post_count_query)) {
         $comment_count = $row["comment_count"];
-        echo "<h2>$comment_count Comments</h2>";
+        echo "<h2 class='comment_cnt_profile'>$comment_count Comments</h2>";
     }
 }
 

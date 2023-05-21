@@ -161,10 +161,13 @@
       <div class="col-lg-8">
         <div class="all-blog-posts">
           <div class="row">
-          <?php include "includes/category-posts.php"; ?>  
+            <div class="col-lg-12" id="posts-container">
+
+              <?php include "includes/category-posts.php"; ?>  
+            </div>
         <div class="col-lg-12">
-          <div class="main-button">
-            <a href="blog.html">View All Posts</a>
+          <div class="main-button" >
+            <a id="load-more-button" href="index.php">Load More Posts</a>
           </div>
         </div>
         </div>
@@ -174,12 +177,7 @@
       <div class="sidebar">
         <div class="row">
           <div class="col-lg-12">
-            <div class="sidebar-item search">
-              <form id="search_form" name="gs" method="GET" action="#">
-                <input type="text" name="q" class="searchText" placeholder="type to search..." autocomplete="on">
-              </form>
-            </div>
-          </div>
+          
           <?php include "includes/recent-posts.php"; ?>
           <!-- Categories -->
           <?php include "includes/feed-categories.php"; ?>
@@ -208,5 +206,5 @@
   </div>
 </section>
 
-
+<?php include "includes/categories-scripts.php" ?>
 <?php include "includes/footer.php" ?>

@@ -1,25 +1,15 @@
 <?php
+    include "db.php";
+    include "../functions.php";
 
-if (isset($_GET["category"])) {
-    $category_id = $_GET["category"];
+// if (isset($_GET["category"])) {
+    $post_cnt = $_POST["post_cnt"];
+    $category_id = $_POST["category_id"];
+    $post_count = $_POST["post_count"];
 
-    try{
+    $post_cnt = mysqli_real_escape_string($connection, $post_cnt);
 
-        $query = "SELECT COUNT(*) post_count FROM posts WHERE category_id = ? AND is_published = 1 ";
-        $statement = $connection->prepare($query);
-        $statement->bind_param("i",$category_id);
-        $statement->execute();
-        $result = $statement->get_result();
-        if($row = $result->fetch_assoc()){
-            $post_count = $row["post_count"];
-        }
-        $statement->close();
-    } catch (Exception $e) {
-        echo "QUERY FAILED" . $e->getMessage();
-        die();
-    }
-
-    $query = "SELECT * FROM posts WHERE category_id = $category_id AND is_published = 1 LIMIT 3";
+    $query = "SELECT * FROM posts WHERE category_id = $category_id AND is_published = 1 LIMIT $post_cnt";
     $select_all_posts_query = mysqli_query($connection, $query);
 
     confirmQuery($select_all_posts_query);
@@ -86,5 +76,13 @@ if (isset($_GET["category"])) {
 
 <?php
     }
-}
+// }
 ?>
+
+<script>
+    var post_count = +"<?php echo $post_count ?>";
+    var post_cnt = +"<?php echo $post_cnt ?>";
+    if(post_cnt >= post_count){
+        $("#load-more-button").remove();
+    }
+</script>

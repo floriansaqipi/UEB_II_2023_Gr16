@@ -158,28 +158,27 @@
 <section class="blog-posts">
   <div class="container">
     <div class="row">
+    <div class="col-lg-8 sidebar search_container">
+        <div class="sidebar-item search">
+          <!-- <form id="search_form" name="gs" method="GET" action="#"> -->
+            <input type="text" name="search" id="post_search" class="searchText main-search__input" placeholder="type to search..." autocomplete="on">
+          <!-- </form> -->
+        </div>
+      </div>
       <div class="col-lg-8">
         <div class="all-blog-posts">
           <div class="row">
-          <?php include "includes/feed-posts.php"; ?>  
-        <div class="col-lg-12">
-          <div class="main-button">
-            <a href="blog.html">View All Posts</a>
-          </div>
-        </div>
+            <div id="posts_search_container">
+
+              <?php include "includes/feed-posts.php"; ?>  
+            </div>
+       
         </div>
       </div>
     </div>
     <div class="col-lg-4">
       <div class="sidebar">
         <div class="row">
-          <div class="col-lg-12">
-            <div class="sidebar-item search">
-              <form id="search_form" name="gs" method="GET" action="#">
-                <input type="text" name="q" class="searchText" placeholder="type to search..." autocomplete="on">
-              </form>
-            </div>
-          </div>
           <?php include "includes/recent-posts.php"; ?>
           <!-- Categories -->
           <?php include "includes/feed-categories.php"; ?>
@@ -208,5 +207,5 @@
   </div>
 </section>
 
-
+<?php include "includes/search-script.php" ;?>
 <?php include "includes/footer.php" ?>

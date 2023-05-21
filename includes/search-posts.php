@@ -1,43 +1,33 @@
 <?php
+include "db.php";
+include "../functions.php";
+if (isset($_POST["search"])) {
 
-if (isset($_GET["category"])) {
-    $category_id = $_GET["category"];
 
-    try{
+    $search = $_POST["search"];
 
-        $query = "SELECT COUNT(*) post_count FROM posts WHERE category_id = ? AND is_published = 1 ";
-        $statement = $connection->prepare($query);
-        $statement->bind_param("i",$category_id);
-        $statement->execute();
-        $result = $statement->get_result();
-        if($row = $result->fetch_assoc()){
-            $post_count = $row["post_count"];
-        }
-        $statement->close();
-    } catch (Exception $e) {
-        echo "QUERY FAILED" . $e->getMessage();
-        die();
-    }
 
-    $query = "SELECT * FROM posts WHERE category_id = $category_id AND is_published = 1 LIMIT 3";
-    $select_all_posts_query = mysqli_query($connection, $query);
+    $query = "SELECT * FROM posts WHERE is_published = 1 AND (title LIKE ? OR tags LIKE ?) ";
+    $statement = $connection->prepare($query);
+    $search_val = "%" . $search . "%";
 
-    confirmQuery($select_all_posts_query);
 
-    while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
+
+    $statement->bind_param("ss", $search_val, $search_val);
+    $statement->execute();
+    $result = $statement->get_result();
+
+    while ($row = $result->fetch_assoc()) {
         $post_id = $row["post_id"];
         $post_category_id = $row["category_id"];
+        $user_id = $row["user_id"];
         $post_title = $row["title"];
-        $post_user_id = $row["user_id"];
         $post_date = $row["date"];
         $post_image = $row["image"];
         $post_content = substr($row["content"], 0, 200);
         $post_tags = $row["tags"];
         $tags_array = explode(",", $post_tags);
         // echo $post_title;
-
-
-
 ?>
         <div class="col-lg-12">
             <div class="blog-post">
@@ -52,7 +42,7 @@ if (isset($_GET["category"])) {
                         <h4><?php echo $post_title; ?></h4>
                     </a>
                     <ul class="post-info">
-                        <li><a href="view-user-profile.php?user_id=<?php echo $post_user_id ;?>"><?php echo getFirstnameLastnameById($post_user_id); ?></a></li>
+                        <li><a href="view-user-profile.php?user_id=<?php echo $user_id; ?>"><?php echo getFirstnameLastnameById($user_id); ?></a></li>
                         <li><a href="#"><?php echo $post_date; ?></a></li>
                         <li><a href="#"><?php echo countSinglePostFeedComments(); ?> Comments</a></li>
                     </ul>

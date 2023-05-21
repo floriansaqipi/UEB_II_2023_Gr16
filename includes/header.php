@@ -32,6 +32,7 @@
     <!-- Customized Bootstrap Stylesheet -->
     <!-- <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    
 
 
     <!-- Template Stylesheet -->
@@ -41,6 +42,8 @@
     <link rel="stylesheet" href="assets/css/owl.css">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/added.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
