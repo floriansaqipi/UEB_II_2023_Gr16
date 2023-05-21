@@ -989,7 +989,10 @@ function getNumberOfUsers()
     global $connection;
 
     $query = "SELECT * FROM users";
-    $get_query = mysqli_query($connection, $query);
+
+    $get_query = mysqli_query($connection,$query);
+    confirmQuery($get_query);
+
     $users_count = mysqli_num_rows($get_query);
     echo "<h2 class='dashboard-total-products'>{$users_count}</h2>";
 }
@@ -1014,28 +1017,33 @@ function getNumberOfComments()
     echo "<h2 class='dashboard-total-products'>{$comments_count}</h2>";
 }
 
-function getUsersOnline()
-{
-    global $connection, $count_online_users;
+function getNumberOfUsersOnline() {
+    global $connection;
     $session = session_id();
     $time = time();
     $time_out_in_seconds = 60;
     $time_out = $time - $time_out_in_seconds;
 
-    $query = "SELECT * FROM users_online WHERE session='$session'";
-    $send_query = mysqli_query($connection, $query);
+    $query = "SELECT * FROM users_online WHERE session = '$session'";
+    confirmQuery($query);
+    $send_query = mysqli_query($connection,$query);
     $count = mysqli_num_rows($send_query);
 
-    if ($count == NULL) {
+    if($count == NULL) {
         $first_time_online_user_query = "INSERT INTO users_online(session,time) VALUES ('$session','$time')";
-        mysqli_query($connection, $first_time_online_user_query);
-    } else {
-        $already_online_query = "UPDATE users_online SET time = '$time' where session  = '$session";
-        mysqli_query($connection, $already_online_query);
+        confirmQuery($first_time_online_user_query);
+        mysqli_query($connection,$first_time_online_user_query);
     }
-    $get_online_users_query = "SELECT * users_online WHERE time > '$time ";
+    else {
+        $already_online_query = "UPDATE users_online SET time = '$time' where session  = '$session'";
+        mysqli_query($connection,$already_online_query);
+    }
+    $get_online_users_query = "SELECT * FROM users_online WHERE time > '$time_out' ";
+    confirmQuery($get_online_users_query);
     $users_online_query = mysqli_query($connection, $get_online_users_query);
     $count_online_users = mysqli_num_rows($users_online_query);
+    echo "<h2 class='dashboard-total-products'>{$count_online_users}</h2>";
+
 }
 
 function getUserProfileDataFromSession()
