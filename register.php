@@ -6,6 +6,7 @@
 
 <?php include "includes/navabar.php"; ?>
 <link href="css/register.css" rel="stylesheet">
+<link href="css/added.css" rel="stylesheet">
 <!-- <script src="js/register.js"></script> -->
 
     
@@ -39,7 +40,7 @@
 					<!-- Input Box -->
 					<div class="form-input ">
 						<span><i class="fa fa-user"></i></span>
-						<input class="is-invalid" type="text" name="firstName"  placeholder="First name" tabindex="10" >	
+						<input class="is-invalid-sign-up" type="text" name="firstName"  placeholder="First name" tabindex="10" >	
 						<div class="invalid-feedback">
 							smth
 						</div>

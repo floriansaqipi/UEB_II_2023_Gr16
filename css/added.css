@@ -84,3 +84,7 @@ body{
 .search_container{
     margin: 0 !important;
 }
+
+.is-invalid-sign-up{
+    border-color: red !important;
+}
