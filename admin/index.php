@@ -311,27 +311,27 @@
                         <div class="user-block-2-activities">
                            <div class="user-block-2-active">
                               <i class="icofont icofont-picture"></i> Published Posts
-                              <label class="label label-primary">480</label>
+                              <label class="label label-primary"><?php echo $user_published_posts_cnt ?></label>
                            </div>
                         </div>
                         <div class="user-block-2-activities">
                            <div class="user-block-2-active">
                               <i class="icofont icofont-picture"></i> Drafted Posts
-                              <label class="label label-primary">390</label>
+                              <label class="label label-primary"><?php echo $user_drafted_posts_cnt ?></label>
                            </div>
                         </div>
 
                         <div class="user-block-2-activities">
                            <div class="user-block-2-active">
                               <i class="icofont icofont-ui-user"></i> Published Comments
-                              <label class="label label-primary">485</label>
+                              <label class="label label-primary"><?php echo $user_published_comments_cnt;?></label>
                            </div>
 
                         </div>
                         <div class="user-block-2-activities">
                            <div class="user-block-2-active">
                               <i class="icofont icofont-picture"></i> Drafted Comments
-                              <label class="label label-primary">506</label>
+                              <label class="label label-primary"><?php echo $user_drafted_comments_cnt;?></label>
                            </div>
                         </div>
                         <div class="text-center">

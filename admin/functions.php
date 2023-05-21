@@ -1041,7 +1041,7 @@ function getUsersOnline() {
 
 function getUserProfileDataFromSession(){
     global $connection;
-    global $user_id, $user_bio, $user_published_posts_cnt, $user_draft_posts_cnt;
+    global $user_id, $user_bio;
     if(isset($_SESSION["user_id"])){
         $user_id = $_SESSION["user_id"];
         try{
@@ -1059,25 +1059,98 @@ function getUserProfileDataFromSession(){
             echo "QUERY FAILED" . $e->getMessage();
             die();
         }
+        getUserSessionPublishedPostsCount($user_id);
+        getUserSessionDraftedPostsCount($user_id);
+        getUserSessionPublishedCommentsCount($user_id);
+        getUserSessionDraftedCommentsCount($user_id);
 
-        try{
-
-            $query = "SELECT * FROM posts WHERE user_id = ? ";
-            $statement = $connection->prepare($query);
-            $statement->bind_param("i",$user_id);
-            $statement->execute();
-            $result = $statement->get_result();
-            if($row = $result->fetch_assoc()){
-                $user_bio = $row["bio"];
-            }
-            $statement->close();
-        }catch (Exception $e) {
-            echo "QUERY FAILED" . $e->getMessage();
-            die();
-        }
+        
         
     }
 }
 
 
-function getUserSession
+function getUserSessionPublishedPostsCount($user_id){
+    global $connection;
+    global $user_published_posts_cnt;
+    try{
+
+        $query = "SELECT COUNT(*) user_post_count FROM posts WHERE user_id = ? AND is_published = 1";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i",$user_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        if($row = $result->fetch_assoc()){
+            $user_published_posts_cnt = $row["user_post_count"];
+        }
+        $statement->close();
+    }catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+
+}
+
+function getUserSessionDraftedPostsCount($user_id){
+    global $connection;
+    global $user_drafted_posts_cnt;
+    try{
+
+        $query = "SELECT COUNT(*) user_post_count FROM posts WHERE user_id = ? AND is_published = 0";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i",$user_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        if($row = $result->fetch_assoc()){
+            $user_drafted_posts_cnt = $row["user_post_count"];
+        }
+        $statement->close();
+    }catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+
+}
+
+function getUserSessionPublishedCommentsCount($user_id){
+    global $connection;
+    global $user_published_comments_cnt;
+    try{
+
+        $query = "SELECT COUNT(*) user_comment_count FROM comments WHERE user_id = ? AND is_approved = 1";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i",$user_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        if($row = $result->fetch_assoc()){
+            $user_published_comments_cnt = $row["user_comment_count"];
+        }
+        $statement->close();
+    }catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+
+}
+
+
+function getUserSessionDraftedCommentsCount($user_id){
+    global $connection;
+    global $user_drafted_comments_cnt;
+    try{
+
+        $query = "SELECT COUNT(*) user_comment_count FROM comments WHERE user_id = ? AND is_approved = 0";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i",$user_id);
+        $statement->execute();
+        $result = $statement->get_result();
+        if($row = $result->fetch_assoc()){
+            $user_drafted_comments_cnt = $row["user_comment_count"];
+        }
+        $statement->close();
+    }catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+
+}
