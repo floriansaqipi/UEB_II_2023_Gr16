@@ -1038,3 +1038,46 @@ function getUsersOnline() {
     $count_online_users = mysqli_num_rows($users_online_query);
 
 }
+
+function getUserProfileDataFromSession(){
+    global $connection;
+    global $user_id, $user_bio, $user_published_posts_cnt, $user_draft_posts_cnt;
+    if(isset($_SESSION["user_id"])){
+        $user_id = $_SESSION["user_id"];
+        try{
+
+            $query = "SELECT * FROM users WHERE user_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i",$user_id);
+            $statement->execute();
+            $result = $statement->get_result();
+            if($row = $result->fetch_assoc()){
+                $user_bio = $row["bio"];
+            }
+            $statement->close();
+        }catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+
+        try{
+
+            $query = "SELECT * FROM posts WHERE user_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i",$user_id);
+            $statement->execute();
+            $result = $statement->get_result();
+            if($row = $result->fetch_assoc()){
+                $user_bio = $row["bio"];
+            }
+            $statement->close();
+        }catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+        
+    }
+}
+
+
+function getUserSession

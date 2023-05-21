@@ -299,36 +299,38 @@
             <!-- 1-3-block row start -->
             <div class="row">
                <div class="col-lg-4">
+                  <?php getUserProfileDataFromSession(); ?>
                   <div class="card">
                      <div class="user-block-2">
-                        <img class="img-fluid" src="assets/images/widget/user-1.png" alt="user-header">
-                        <h5>Josephin Villa</h5>
-                        <h6>Software Engineer</h6>
+                        
+                        <img width="128"class="img-fluid" src="../images/<?php echo $_SESSION["user_image"] ; ?>" alt="user-header">
+                        <h5><?php echo $_SESSION["user_firstname"] . " " . $_SESSION["user_lastname"] ; ?></h5>
+                        <h6><?php echo $user_bio; ?></h6>
                      </div>
                      <div class="card-block">
                         <div class="user-block-2-activities">
                            <div class="user-block-2-active">
-                              <i class="icofont icofont-clock-time"></i> Recent Activities
+                              <i class="icofont icofont-picture"></i> Published Posts
                               <label class="label label-primary">480</label>
                            </div>
                         </div>
                         <div class="user-block-2-activities">
                            <div class="user-block-2-active">
-                              <i class="icofont icofont-users"></i> Current Employees
+                              <i class="icofont icofont-picture"></i> Drafted Posts
                               <label class="label label-primary">390</label>
                            </div>
                         </div>
 
                         <div class="user-block-2-activities">
                            <div class="user-block-2-active">
-                              <i class="icofont icofont-ui-user"></i> Following
+                              <i class="icofont icofont-ui-user"></i> Published Comments
                               <label class="label label-primary">485</label>
                            </div>
 
                         </div>
                         <div class="user-block-2-activities">
                            <div class="user-block-2-active">
-                              <i class="icofont icofont-picture"></i> Pictures
+                              <i class="icofont icofont-picture"></i> Drafted Comments
                               <label class="label label-primary">506</label>
                            </div>
                         </div>
