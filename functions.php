@@ -1430,7 +1430,7 @@ function sendemail_verify($firstName, $email, $verify_token)
     <h2>You have been registered to Jobfinder</h2>
     <h5>Verify your email address to Login with the below given link</h5>
     <br><br>
-    <a href='localhost/xampp/projekti_ueb_2/verify-email.php?token=$verify_token'>Click me</a>
+    <a href='localhost/projekti_ueb_2/verify-email.php?token=$verify_token'>Click me</a>
     ";
     $mail->Body = $email_template;
     $mail->send();
@@ -1440,131 +1440,166 @@ function sendemail_verify($firstName, $email, $verify_token)
 
 function userSignUp()
 {
+    // global $connection;
+    // global $firstName, $lastName, $username, $email, $user_password, $user_confirm_password, $image, $useradmin;
     global $connection;
-    global $firstName, $lastName, $username, $email, $password, $confirm_password, $image, $useradmin;
-    if (isset($_POST['register'])) {
-        $firstName = $_POST["firstName"];
-        $lastName = $_POST["lastName"];
+    global $usernameErr, $firstnameErr, $lastnameErr,
+        $emailErr, $imageErr, $coverImageErr, $isAdminErr, $passwordErr, $confirmPasswordErr;
+
+    global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
+        $user_password, $user_confirm_password, $user_is_admin;
+
+
+    global $confirmation;
+
+    $usernameErr = $firstnameErr = $lastnameErr
+        = $emailErr = $imageErr  = $isAdminErr = $passwordErr = $confirmPasswordErr = "";
+    // $post_title = $post_image = $post_content = "";
+    $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
+    if (isset($_POST["user_register"])) {
+
         $username = $_POST["username"];
-        $email = $_POST["email"];
-        $password = $_POST["password"];
-        $confirm_password = $_POST["confirm_password"];
-        $image = $_POST['image'];
-        $useradmin = $_POST['useradmin'];
+        $user_firstname = $_POST["user_firstname"];
+        $user_lastname = $_POST["user_lastname"];
+        $user_email = $_POST["user_email"];
+        $user_password = $_POST["user_password"];
+        $user_confirm_password = $_POST["user_confirm_password"];
+        $user_image = $_FILES["user_image"]["name"];
+        $user_image_temp = $_FILES["user_image"]["tmp_name"];
+        $user_image_size = $_FILES["user_image"]["size"];
+
+        $user_is_admin = $_POST["user_is_admin"];
+
         $verify_token = md5(rand());
 
-        $firstName = mysqli_real_escape_string($connection, $firstName);
-        $lastName = mysqli_real_escape_string($connection, $lastName);
-        $username = mysqli_real_escape_string($connection, $username);
-        $email = mysqli_real_escape_string($connection, $email);
-        $password = mysqli_real_escape_string($connection, $password);
-        $confirm_password = mysqli_real_escape_string($connection, $confirm_password);
-        $image = mysqli_real_escape_string($connection, $image);
-        $useradmin = mysqli_real_escape_string($connection, $useradmin);
+        $username = mysqli_real_escape_string($connection, $_POST["username"]);
+        $user_firstname = mysqli_real_escape_string($connection, $_POST["user_firstname"]);
+        $user_lastname = mysqli_real_escape_string($connection, $_POST["user_lastname"]);
+        $user_email = mysqli_real_escape_string($connection, $_POST["user_email"]);
+        $user_password = mysqli_real_escape_string($connection, $_POST["user_password"]);
+        $user_confirm_password = mysqli_real_escape_string($connection, $_POST["user_confirm_password"]);
+
+        $user_image = mysqli_real_escape_string($connection, $_FILES["user_image"]["name"]);
+        $user_is_admin = mysqli_real_escape_string($connection, $_POST["user_is_admin"]);
 
 
 
 
-        // FirstName validation
-        if (empty($firstName)) {
-            $_SESSION['error'] = "Please write your first name";
-            header('Location: register.php');
-            exit();
+
+
+        $pattern = "/.{3,}/";
+        if (empty($username)) {
+            $usernameErr = "Username can not be empty";
+        } else if (!preg_match($pattern, trim($username))) {
+            $usernameErr = "Username must be longer than 3 characters";
         } else {
-            $firstName = $_POST['firstName'];
-            if (!preg_match("/^[a-zA-Z ]*$/", $firstName)) {
-                $_SESSION['error'] = "First name can only contain letters and spaces.";
-                header('Location: register.php');
-                exit();
+
+            try {
+                $query = "SELECT * FROM users WHERE username = ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("s", $username);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $usernameErr = "Username is taken";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
             }
         }
 
-        //Last name validation
-        if (empty($lastName)) {
-            $_SESSION['error'] = "Please write your last name";
-            header('Location: register.php');
-            exit();
+
+        if (empty($user_firstname)) {
+            $firstnameErr = "Firstname can not be empty ";
+        }
+
+        if (empty($user_lastname)) {
+            $lastnameErr = "Lastname can not be empty ";
+        }
+
+        $pattern = "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/";
+        if (empty($user_email)) {
+            $emailErr = "Email field can not be empty";
+        } else if (!preg_match($pattern, trim($user_email))) {
+            $emailErr = "Email is inavlid";
         } else {
-            $lastName = $_POST['lastName'];
-            if (!preg_match("/^[a-zA-Z ]*$/", $firstName)) {
-                $_SESSION['error'] = "Last name can only contain letters and spaces.";
-                header('Location: register.php');
-                exit();
+            try {
+
+                $query = "SELECT * FROM users WHERE email = ?  ";
+
+                $statement = $connection->prepare($query);
+                $statement->bind_param("s", $user_email);
+                $statement->execute();
+
+                $result = $statement->get_result();
+
+                if ($row = $result->fetch_assoc()) {
+                    $emailErr = "Email is taken";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
             }
         }
 
-        //User name validation
-        if (empty($_POST['username'])) {
-            $_SESSION['error'] = "Please write a username";
-            header('Location: register.php');
-            exit();
-        } else {
-            $username = $_POST['username'];
-        }
 
-        $image_temp = $_FILES["image"]["tmp_name"];
-        $image_size = $_FILES["image"]["size"];
+        if (file_exists($user_image_temp)) {
+            $file_extension = pathinfo($user_image, PATHINFO_EXTENSION);
 
-        if (file_exists($image_temp)) {
-            $file_extension = pathinfo($image, PATHINFO_EXTENSION);
-
-            if (!in_array($file_extension, $allowed_extensions)) {
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
                 $imageErr = "Image can only be of type jpg/jpeg/png/gif";
-            } else if ($image_size > 3000000) {
+            } else if ($user_image_size > 3000000) {
                 $imageErr = "Image can't be over 3MB";
             } else {
 
-                move_uploaded_file($image_temp, "../images/$image");
+                move_uploaded_file($user_image_temp, "images/$user_image");
             }
-        }
-
-
-        // check if password and confirm password match
-        if ($_POST['password'] != $_POST['confirm_password']) {
-            $_SESSION['status'] = "Password and confirm password do not match.";
-            header("Location: register.php");
-            exit();
-        }
-
-        // check if password is at least 8 characters long
-        if (strlen($_POST['password']) < 8) {
-            $_SESSION['status'] = "Password must be at least 8 characters long.";
-            header("Location: register.php");
-            exit();
-        }
-
-        $hashed_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-
-
-
-
-
-
-        // sendemail_verify("$firstName","$email","$verify_token");
-        // echo "sent or not?";
-        //Email excists or not
-        $check_email_query = "SELECT email from users where email='$email' limit 1";
-        $check_email_query_run = mysqli_query($connection, $check_email_query);
-
-        if (mysqli_num_rows($check_email_query_run) > 0) {
-            $_SESSION['status'] = "This email already excists";
-            header("Location:");
         } else {
+            $user_image = "default.jpg";
+        }
+
+        $pattern = "/^(?=.*\d).{8,}$/";
+        if (empty($user_password)) {
+            $passwordErr = "Password can not be empty";
+        } else if (!preg_match($pattern, trim($user_password))) {
+            $passwordErr = "Password must have length of 8 or more and include one number";
+        }
+
+        if (trim($user_password) != trim($user_confirm_password)) {
+            $passwordErr = "Passwords must match";
+            $confirmPasswordErr = "Passwords must match";
+        }
+
+        if ($user_is_admin != "0" && $user_is_admin != "1") {
+            $isAdminErr = "Only accepted values are admin and regular";
+        }
+
+        $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
+
+        if (
+            empty($usernameErr) && empty($firstnameErr) &&
+            empty($lastnameErr) && empty($emailErr) &&
+            empty($imageErr) && empty($coverImageErr) &&
+            empty($isAdminErr) && empty($passwordErr) && empty($confirmPasswordErr)
+        ) {
             //Insert user/Registered User Data
-            $query = "INSERT INTO users(username,password,firstname,lastname,email,image,verify_token) VALUES('$username','$hashed_password','$firstName','$lastName','$email','$image','$verify_token')";
+            $query = "INSERT INTO users(username,password,firstname,lastname,email,image,is_admin,verify_token)
+             VALUES('$username','$hashed_password','$user_firstname','$user_lastname','$user_email','$user_image',$user_is_admin,'$verify_token')";
             $query_run = mysqli_query($connection, $query);
 
             if ($query_run) {
-                sendemail_verify("$firstName", "$email", "$verify_token");
-                $_SESSION['status'] = "Registration successfull!Please verify your email address.";
+                sendemail_verify("$user_firstname", "$user_email", "$verify_token");
+                // $confirmation = "Registration successfull! Please verify your email address.";
+                $confirmation = "Registration successfull! Please verify your email address.";
             } else {
-                $_SESSION['status'] = "Registration failed!";
-                header("Location:register.php");
+                // $confirmation = "Registration failed!";
+                $confirmation = "Registration failed!";
+                // header("Location:register.php");
             }
+            // header("Location: register.php");
         }
-
-
-        header("Location: register.php");
     }
 }
