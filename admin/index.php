@@ -1,5 +1,6 @@
 <?php $page = "index"; ?>
 <?php include "includes/header.php"; ?>
+<script src="includes/online-users.js"></script>
    <div class="loader-bg">
       <div class="loader-bar">
       </div>
@@ -285,9 +286,10 @@
                </div>
                <div class="col-lg-3 col-md-6">
                   <div class="card dashboard-product">
-                     <span>Products</span>
-                     <h2 class="dashboard-total-products">$<span>30,780</span></h2>
-                     <a href="comments.php" class="btn btn-inverse waves-effect">View Comments</a>
+                     <span>Users Online</span>
+                     <?php getNumberOfUsersOnline(); ?>
+                     <span class="usersonline"></span>
+                     <a href="users.php" class="btn btn-inverse waves-effect">View Users</a>
                      <div class="side-box">
                         <i class="ti-rocket text-danger-color"></i>
                      </div>
