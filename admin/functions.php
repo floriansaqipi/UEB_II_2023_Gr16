@@ -1339,3 +1339,23 @@ function getChartData()
     getAdminUsersCount();
     getRegularUsersCount();
 }
+
+function getLoginsChartData(){ 
+    global $connection;
+    try {
+
+        $query = "SELECT * FROM country_logins ";
+        $statement = $connection->prepare($query);
+        $statement->execute();
+        $result = $statement->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $country_code = $row["code"];
+            $country_logins = $row["login_counter"];
+            echo "['{$country_code}'" . "," . "{$country_logins}],";
+        }
+        $statement->close();
+    } catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+}

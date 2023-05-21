@@ -9,12 +9,8 @@
       function drawRegionsMap() {
         var data = google.visualization.arrayToDataTable([
           ['Country', 'Logins'],
-          ['Germany', 200],
-          ['United States', 300],
-          ['Brazil', 400],
-          ['Canada', 500],
-          ['France', 600],
-          ['RU', 700]
+        <?php getLoginsChartData();?>
+          
         ]);
 
         var options = {
