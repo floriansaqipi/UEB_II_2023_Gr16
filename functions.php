@@ -231,6 +231,7 @@ function logInUser()
     global $connection;
     global $emailErr, $passwordErr;
     global $user_email, $user_password;
+    
 
     if (isset($_POST["login"])) {
         $user_email = $_POST["user_email"];
@@ -283,6 +284,7 @@ function logInUser()
             $_SESSION["user_lastname"] = $db_user_lastname;
             $_SESSION["user_image"] = $db_user_image;
             $_SESSION["is_admin"] = $db_is_admin;
+            insertCountryLoginMetaData();
             if ($db_is_admin === "1") {
                 header("Location: admin/index.php");
             } else {
@@ -316,6 +318,65 @@ function logInUser()
 
 
 
+    }
+}
+
+function insertCountryLoginMetaData(){
+    global $connection;
+    $ip =  $_SERVER["REMOTE_ADDR"];
+    if($ip == "::1"){
+       $ip =  "localhost";
+    }
+    $location = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip='.$ip));
+    $country_name = $location["geoplugin_countryName"];
+    $country_code = $location["geoplugin_countryCode"];
+    try{
+
+        $query = "SELECT * FROM country_logins WHERE code = ? ";
+    
+        $statement = $connection->prepare($query);
+        $statement->bind_param("s",$country_code);
+        $statement->execute();
+        $result = $statement->get_result();
+        if($row = $result->fetch_assoc()){
+            $country_id = $row["country_id"];
+            incrementCurrentCountryLoginCount($country_id);
+        }else {
+            insertNewCountry($country_name,$country_code);
+        }
+        $statement->close();
+    }catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }
+    
+}
+
+function incrementCurrentCountryLoginCount($country_id){
+    global $connection;
+    try{
+        $query = "UPDATE country_logins SET login_counter = login_counter + 1 WHERE country_id = ? ";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("i",$country_id);
+        $statement->execute();
+        $statement->close();
+    }catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
+    }   
+}
+
+function insertNewCountry($country_name, $country_code){
+    global $connection;
+    try{
+        $query = "INSERT INTO country_logins(name, code) VALUES (?, ?)";
+        $statement = $connection->prepare($query);
+        $statement->bind_param("ss",$country_name, $country_code);
+        $statement->execute();
+        $statement->close();
+    }catch (Exception $e) {
+        echo "QUERY FAILED" . $e->getMessage();
+        die();
     }
 }
 
