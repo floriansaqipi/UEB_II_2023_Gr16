@@ -1,10 +1,10 @@
 <?php $page = "index"; ?>
 <?php include "includes/header.php"; ?>
-   <div class="loader-bg">
-      <div class="loader-bar">
-      </div>
-
+<div class="loader-bg">
+   <div class="loader-bar">
    </div>
+
+</div>
 </div>
 <div class="wrapper">
    <!-- Navbar-->
@@ -284,18 +284,20 @@
                      <i class="ti-comment-alt text-success-color"></i>
                   </div>
                </div>
+            </div>
 
-               <div class="col-lg-3 col-md-6">
-                  <div class="card dashboard-product">
-                     <span>Users Online</span>
-                     <?php getNumberOfUsersOnline(); ?>
-                     <a href="users.php" class="btn btn-inverse waves-effect">View Users</a>
-                     <div class="side-box">
-                        <i class="ti-rocket text-danger-color"></i>
-                     </div>
+            <div class="col-lg-3 col-md-6">
+               <div class="card dashboard-product">
+                  <span>Users Online</span>
+                  <?php getNumberOfUsersOnline(); ?>
+                  <a href="users.php" class="btn btn-inverse waves-effect">View Users</a>
+                  <div class="side-box">
+                     <i class="ti-rocket text-danger-color"></i>
+                  </div>
+               </div>
 
             </div>
-       
+
          </div>
          <!-- 4-blocks row end -->
 
@@ -368,48 +370,48 @@
                   <div class="card-block ">
                      <?php setPreferedColor(); ?>
                      <?php setDefaultColor(); ?>
-                     <form action="" method ="post" class="card-color-picker-styling">
-                     
+                     <form action="" method="post" class="card-color-picker-styling">
 
-                              <label for="exampleColorInput" class="form-label">Choose a theme color</label>
-                     
-                     
 
-                              <input type="color" class="" name="theme_color" value="#1b8bf9" id="example-color-input">
+                        <label for="exampleColorInput" class="form-label">Choose a theme color</label>
 
-                              <button name="default_color" type="submit" class="btn btn-info waves-effect waves-light text-uppercase m-r-30">
+
+
+                        <input type="color" class="" name="theme_color" value="#1b8bf9" id="example-color-input">
+
+                        <button name="default_color" type="submit" class="btn btn-info waves-effect waves-light text-uppercase m-r-30">
                            Reset to Default
                         </button>
 
                         <button name="picked_color" type="submit" class="btn btn-info waves-effect waves-light text-uppercase m-r-30">
                            Change to selected color
                         </button>
-                       
 
-                        </div>
-                     </form>
+
                   </div>
+                  </form>
                </div>
             </div>
          </div>
-         <!-- 1-3-block row end -->
-
-         <!-- 2-1 block start -->
-         <div class="row">
-            <div class="col-lg-12 ">
-               <h2 class="text-center">Log in Statistics</h2>
-               <div class="card" style="padding:32px">
-                  <?php include "includes/login-chart-scripts.php" ?>
-                  <div id="regions_div" style="width: auto; height: 500px;"></div>
-
-
-
-
-               </div>
-            </div>
-         </div>
-         <!-- 2-1 block end -->
       </div>
-      <!-- Main content ends -->
-      <!-- Container-fluid ends -->
-      <?php include "includes/footer.php"; ?>
+      <!-- 1-3-block row end -->
+
+      <!-- 2-1 block start -->
+      <div class="row">
+         <div class="col-lg-12 ">
+            <h2 class="text-center">Log in Statistics</h2>
+            <div class="card" style="padding:32px">
+               <?php include "includes/login-chart-scripts.php" ?>
+               <div id="regions_div" style="width: auto; height: 500px;"></div>
+
+
+
+
+            </div>
+         </div>
+      </div>
+      <!-- 2-1 block end -->
+   </div>
+   <!-- Main content ends -->
+   <!-- Container-fluid ends -->
+   <?php include "includes/footer.php"; ?>
