@@ -346,41 +346,45 @@
                </div>
             </div>
             <div class="col-lg-8">
-               <div class="card" style="padding:32px" >
-                  <?php include "includes/analytics-chart-scripts.php" ?>  
+               <div class="card" style="padding:32px">
+                  <?php include "includes/analytics-chart-scripts.php" ?>
                   <div id="columnchart_material" style="width: 100%; height: 500px;"></div>
 
 
-                  
+
                   <!-- <div class="card-block" id="chart_div" style="width: auto; height: 450px;"> -->
-                     <!-- <div id="barchart" style="min-width: 250px; height: 330px; margin: 0 auto"></div> -->
-                     
-                     
+                  <!-- <div id="barchart" style="min-width: 250px; height: 330px; margin: 0 auto"></div> -->
+
+
 
                   <!-- </div> -->
                </div>
             </div>
-            <div class="col-xl-4 col-lg-12 grid-item">
+            <div class="col-xl-8 col-md-12 grid-item">
                <div class="card">
-                  <div class="card-block horizontal-card-img d-flex">
-                     <img class="media-object img-circle" src="assets/images/avatar-3.png" alt="Generic placeholder image">
-                     <div class="d-inlineblock  p-l-20">
-                        <h6>Josephin Doe</h6>
-                        <a href="#">contact@admin.com</a>
-                     </div>
-                     <h6 class="txt-warning rotate-txt">Designer</h6>
-                  </div>
-               </div>
-            </div>
-            <div class="col-xl-4 col-lg-12 grid-item">
-               <div class="card">
-                  <div class="card-block horizontal-card-img d-flex">
-                     <img class="media-object img-circle" src="assets/images/lockscreen.png" alt="Generic placeholder image">
-                     <div class="d-inlineblock  p-l-20">
-                        <h6>Josephin Doe</h6>
-                        <a href="#">contact@admin.com</a>
-                     </div>
-                     <h6 class="txt-danger rotate-txt">Developer</h6>
+                  <div class="card-block ">
+                     <?php setPreferedColor(); ?>
+                     <?php setDefaultColor(); ?>
+                     <form action="" method ="post" class="card-color-picker-styling">
+                     
+
+                              <label for="exampleColorInput" class="form-label">Choose a theme color</label>
+                     
+                     
+
+                              <input type="color" class="" name="theme_color" value="#1b8bf9" id="example-color-input">
+
+                              <button name="default_color" type="submit" class="btn btn-info waves-effect waves-light text-uppercase m-r-30">
+                           Reset to Default
+                        </button>
+
+                        <button name="picked_color" type="submit" class="btn btn-info waves-effect waves-light text-uppercase m-r-30">
+                           Change to selected color
+                        </button>
+                       
+
+                        </div>
+                     </form>
                   </div>
                </div>
             </div>
@@ -389,15 +393,15 @@
 
          <!-- 2-1 block start -->
          <div class="row">
-         <div class="col-lg-12 ">
+            <div class="col-lg-12 ">
                <h2 class="text-center">Log in Statistics</h2>
-               <div class="card" style="padding:32px" >
-                  <?php include "includes/login-chart-scripts.php" ?>  
+               <div class="card" style="padding:32px">
+                  <?php include "includes/login-chart-scripts.php" ?>
                   <div id="regions_div" style="width: auto; height: 500px;"></div>
 
 
-                  
-                 
+
+
                </div>
             </div>
          </div>

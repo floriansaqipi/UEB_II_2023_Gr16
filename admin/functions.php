@@ -1359,3 +1359,26 @@ function getLoginsChartData(){
         die();
     }
 }
+
+function setPreferedColor(){
+    if(isset($_POST["picked_color"])){
+        $color = $_POST["theme_color"];
+        $cookie_name = "theme_color";
+        $cookie_value = "colors : ['$color']";
+        $cookie_expiration = time() + 3600;
+        setcookie($cookie_name, $cookie_value, $cookie_expiration);
+        header("Location: index.php");
+    }
+}
+
+function setDefaultColor(){
+    if(isset($_POST["default_color"])){
+        echo "HEEY";
+        $cookie_name = "theme_color";
+        $cookie_value = "";
+        $cookie_expiration = time() - 3600;
+        setcookie($cookie_name, $cookie_value, $cookie_expiration);
+        header("Location: index.php");
+
+    }
+}
