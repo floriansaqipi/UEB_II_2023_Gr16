@@ -6,20 +6,23 @@
 
 <?php include "includes/navabar.php"; ?>
 <link href="css/register.css" rel="stylesheet">
+<link href="css/added.css" rel="stylesheet">
+<link href="css/extra.css"rel="stylesheet">
 <!-- <script src="js/register.js"></script> -->
 
     
 
        
 
+				<?php userSignUp(); ?>
        
 		<div style="background-image:url('bg.png');"  class="container infinity-container">
 		<div class="alert">
 				<?php
-				if (isset($_SESSION['status'])) {
-					echo "<h4>".$_SESSION['status']."</h4>";
-					unset($_SESSION['status']);
-				}
+				
+					echo "<h4>". $confirmation."</h4>";
+					
+				
 
 				
 				?>
@@ -35,52 +38,77 @@
 					<h4>Create an account</h4>
 				</div>
 				<!-- Form -->
-				<form id="myForm" action="register-code.php" method="POST" class="px-6" autocomplete="on">
+				<form id="myForm" action="" method="post" class="px-6"  enctype="multipart/form-data" novalidate>
 					<!-- Input Box -->
 					<div class="form-input ">
 						<span><i class="fa fa-user"></i></span>
-						<input class="is-invalid" type="text" name="firstName"  placeholder="First name" tabindex="10" >	
+						<input class="<?php echo !empty($firstnameErr) ? "is-invalid-sign-up" : "" ?>" type="text" name="user_firstname" value="<?php echo $user_firstname; ?>"  placeholder="First name" tabindex="10" >	
 						<div class="invalid-feedback">
-							smth
+							<?php echo $firstnameErr ; ?>
 						</div>
 					</div>
 					
 					<div class="form-input">
 						<span><i class="fa fa-user"></i></span>
-						<input  type="text" name="lastName"  placeholder="Last name" tabindex="10" >
+						<input class="<?php echo !empty($lastnameErr) ? "is-invalid-sign-up" : "" ?>" type="text" name="user_lastname" value="<?php echo $user_lastname; ?>"  placeholder="Last name" tabindex="10" >
+						<div class="invalid-feedback">
+							<?php echo $lastnameErr ; ?>
+						</div>
 					</div>
 					<div class="form-input">
 						<span><i class="fa fa-user"></i></span>
-						<input type="text" name="username"  placeholder="Username" tabindex="10" >
+						<input class="<?php echo !empty($usernameErr) ? "is-invalid-sign-up" : "" ?>" type="text" name="username" value="<?php echo $username; ?>" placeholder="Username" tabindex="10" >
+						<div class="invalid-feedback">
+							<?php echo $usernameErr ; ?>
+							
+						</div>
 					</div>
 				
 					<div class="form-input">
 						<span><i class="fa fa-envelope"> </i></span>
-						<input type="email" name="email" placeholder="Email Address" tabindex="10">
+						<input class="<?php echo !empty($emailErr) ? "is-invalid-sign-up" : "" ?>" type="email" name="user_email" value="<?php echo $user_email; ?>" placeholder="Email Address" tabindex="10">
+						<div class="invalid-feedback">
+						<?php echo $emailErr ; ?>
+							
+						</div>
 					</div>
 					
 					<div class="form-input">
 						<span><i class="fa fa-lock"></i></span>
-						<input id="password" type="password" name="password" placeholder="Password">
-						<!-- <div id="password-error" class="error-message"></div> -->
+						<input class="<?php echo !empty($passwordErr) ? "is-invalid-sign-up" : "" ?>" id="password" type="password" name="user_password" value="<?php echo $user_password; ?>" placeholder="Password">
+						<div class="invalid-feedback">
+						<?php echo $passwordErr ; ?>
+							
+						</div>
 					</div>
 					<div class="form-input">
 						<span><i class="fa fa-lock"></i></span>
-						<input id="confirm-password" type="password" name="confirm_password" placeholder="Confirm Password">
-						<!-- <div id="confirm-password-error" class="error-message"></div> -->
+						<input class="<?php echo !empty($confirmPasswordErr) ? "is-invalid-sign-up" : "" ?>" id="confirm-password" type="password" name="user_confirm_password" value="<?php echo $user_confirm_password; ?>" placeholder="Confirm Password">
+						<div class="invalid-feedback">
+						<?php echo $confirmPasswordErr ; ?>
+							
+						</div>
 					</div>
 
 					<div class="form-input">
 						<span><i class="fa fa-image"></i></span>
-						<input type="file" name="image" accept="image/png,image/jpeg">
+						<input class="<?php echo !empty($imageErr) ? "is-invalid-sign-up" : "" ?>" type="file" name="user_image" accept="image/png,image/jpeg">
+						<div class="invalid-feedback">
+						<?php echo $imageErr ; ?>
+							
+						</div>
 					</div>
 
 					<div class="form-input">
 						<label for="useradmin">Choose the way you want to sign up</label>
-						<select name="useradmin" id="useradmin">
+						<select class="<?php !empty($isAdminErr) ? "is-invalid-sign-up" : "" ?>" name="user_is_admin" id="useradmin">
 							<option value="1">Admin</option>
 							<option value="0">Regular</option>
 						</select>
+						<div class="invalid-feedback">
+						<?php echo $isAdminErr ; ?>
+							
+						</div>
 					</div>
 
 
@@ -88,7 +116,7 @@
 
 					<!-- Register Button -->
 					<div class="col-12 ">
-					<button name="register" class="btn btn-primary" type="submit">Submit form</button>
+					<button name="user_register" class="btn btn-primary" type="submit">Submit form</button>
 				</div>
 					<div class="text-center mb-5" style="color: #777;">Already have an account? 
 						<a class="login-link" href="login.php">Login here</a>

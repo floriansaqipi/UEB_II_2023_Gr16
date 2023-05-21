@@ -28,12 +28,12 @@ if (isset($_GET['token'])) {
             
 
         }else{
-        $_SESSION['status']="Email already verified.Please Login";
+        $_SESSION['status']="Email already verified. Please Login";
         header("Location:login.php");
         exit(0);
         }
     }else{
-        $_SESSION['status']="This token does not excists";
+        $_SESSION['status']="This token does not exist";
         header("Location:login.php");
     }
 

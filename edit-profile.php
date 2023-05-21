@@ -154,12 +154,7 @@
                                                             <button name="edit-user" class="btn btn-primary" type="submit">Save
                                                                 Changes</button>
                                                         </div>
-                                                        <div class="col d-flex justify-content-end">
-                                                            <button class="btn btn-block btn-primary">
-                                                                <i class="fa fa-sign-out"></i>
-                                                                <span>Logout</span>
-                                                            </button>
-                                                        </div>
+                                                        
                                                     </div>
                                                 </form>
 
@@ -209,16 +204,7 @@
                                     <button type="button" class="btn btn-primary">Contact Us</button>
                                 </div>
                             </div>
-                            <div class="card mb-10">
-                                <div class="card-body">
-                                    <div class="px-xl-3">
-                                        <button class="btn btn-block btn-primary" data-bs-toggle="modal" data-bs-target="#comment">
-                                            <i class="fa fa-comment"></i>
-                                            <span>Edit Comment</span>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            
                             <div class="modal fade" id="comment" tabindex="-1" aria-labelledby="comment" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

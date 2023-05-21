@@ -231,7 +231,7 @@ function logInUser()
     global $connection;
     global $emailErr, $passwordErr;
     global $user_email, $user_password;
-    
+
 
     if (isset($_POST["login"])) {
         $user_email = $_POST["user_email"];
@@ -321,60 +321,62 @@ function logInUser()
     }
 }
 
-function insertCountryLoginMetaData(){
+function insertCountryLoginMetaData()
+{
     global $connection;
     $ip =  $_SERVER["REMOTE_ADDR"];
-    if($ip == "::1"){
-       $ip =  "localhost";
+    if ($ip == "::1") {
+        $ip =  "localhost";
     }
-    $location = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip='.$ip));
+    $location = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip));
     $country_name = $location["geoplugin_countryName"];
     $country_code = $location["geoplugin_countryCode"];
-    try{
+    try {
 
         $query = "SELECT * FROM country_logins WHERE code = ? ";
-    
+
         $statement = $connection->prepare($query);
-        $statement->bind_param("s",$country_code);
+        $statement->bind_param("s", $country_code);
         $statement->execute();
         $result = $statement->get_result();
-        if($row = $result->fetch_assoc()){
+        if ($row = $result->fetch_assoc()) {
             $country_id = $row["country_id"];
             incrementCurrentCountryLoginCount($country_id);
-        }else {
-            insertNewCountry($country_name,$country_code);
+        } else {
+            insertNewCountry($country_name, $country_code);
         }
         $statement->close();
-    }catch (Exception $e) {
+    } catch (Exception $e) {
         echo "QUERY FAILED" . $e->getMessage();
         die();
     }
-    
 }
 
-function incrementCurrentCountryLoginCount($country_id){
+function incrementCurrentCountryLoginCount($country_id)
+{
     global $connection;
-    try{
+    try {
         $query = "UPDATE country_logins SET login_counter = login_counter + 1 WHERE country_id = ? ";
         $statement = $connection->prepare($query);
-        $statement->bind_param("i",$country_id);
+        $statement->bind_param("i", $country_id);
         $statement->execute();
         $statement->close();
-    }catch (Exception $e) {
+    } catch (Exception $e) {
         echo "QUERY FAILED" . $e->getMessage();
         die();
-    }   
+    }
 }
 
-function insertNewCountry($country_name, $country_code){
+function insertNewCountry($country_name, $country_code)
+{
     global $connection;
-    try{
+    try {
         $query = "INSERT INTO country_logins(name, code) VALUES (?, ?)";
         $statement = $connection->prepare($query);
-        $statement->bind_param("ss",$country_name, $country_code);
+        $statement->bind_param("ss", $country_name, $country_code);
         $statement->execute();
         $statement->close();
-    }catch (Exception $e) {
+    } catch (Exception $e) {
         echo "QUERY FAILED" . $e->getMessage();
         die();
     }
@@ -1033,8 +1035,7 @@ function getPostsData()
                 echo "<td><a href='userprofile.php?delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
                 echo "</tr>";
             }
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             echo "QUERY FAILED" . $e->getMessage();
             die();
         }
@@ -1327,7 +1328,6 @@ function deleteCurrentUserAccount()
             $statement->execute();
             $statement->close();
             header("Location: logout.php");
-
         } catch (Exception $e) {
             echo "QUERY FAILED" . $e->getMessage();
             die();
@@ -1379,19 +1379,16 @@ function getCommentsData()
                           Draft
                           </a>
                       </td>";
+
                 echo "<td><a href='userprofile.php?source=all_comments&delete={$comment_id}'class='btn btn-outline-danger' role='button'>Delete</a></td>";
                 echo "<td><a href='edit-comment.php?c_id={$comment_id}'class='btn btn-outline-info' role='button'>Edit</a></td>";
-
                 echo "</tr>";
-                
             }
         } catch (Exception $e) {
             echo "QUERY FAILED" . $e->getMessage();
             die();
         }
-        
     }
-    
 }
 
 
@@ -1462,7 +1459,7 @@ function getUserViewCommentCount()
 {
     global $connection;
     global $comment_count;
-    
+
     if (isset($_GET["user_id"])) {
 
         $user_id = $_GET["user_id"];
@@ -1481,3 +1478,207 @@ function getUserViewCommentCount()
     }
 }
 
+
+require 'vendor/autoload.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+function sendemail_verify($firstName, $email, $verify_token)
+{
+
+    $mail = new PHPMailer(true);
+    // $mail->SMTPDebug = 2;
+    $mail->isSMTP();                                            //Send using SMTP
+    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+    $mail->Username   = 'erezamerovci@gmail.com';                     //SMTP username
+    $mail->Password   = 'vmugsqvwfaqhggry';                               //SMTP password
+
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+    $mail->setFrom('erezamerovci@gmail.com', $firstName);
+    $mail->addAddress($email);     //Add a recipient
+
+    $mail->isHTML(true);                                  //Set email format to HTML
+    $mail->Subject = 'Email verification from Jobfinder';
+
+    $email_template = "
+    <h2>You have been registered to Jobfinder</h2>
+    <h5>Verify your email address to Login with the below given link</h5>
+    <br><br>
+    <a href='localhost/projekti_ueb_2/verify-email.php?token=$verify_token'>Click me</a>
+    ";
+    $mail->Body = $email_template;
+    $mail->send();
+    // echo 'Message has been sent';
+
+}
+
+function userSignUp()
+{
+    // global $connection;
+    // global $firstName, $lastName, $username, $email, $user_password, $user_confirm_password, $image, $useradmin;
+    global $connection;
+    global $usernameErr, $firstnameErr, $lastnameErr,
+        $emailErr, $imageErr, $coverImageErr, $isAdminErr, $passwordErr, $confirmPasswordErr;
+
+    global $user_id, $username, $user_firstname, $user_lastname, $user_email, $user_image,
+        $user_password, $user_confirm_password, $user_is_admin;
+
+
+    global $confirmation;
+
+    $usernameErr = $firstnameErr = $lastnameErr
+        = $emailErr = $imageErr  = $isAdminErr = $passwordErr = $confirmPasswordErr = "";
+    // $post_title = $post_image = $post_content = "";
+    $allowed_extensions = ["jpg", "png", "gif", "jpeg"];
+    if (isset($_POST["user_register"])) {
+
+        $username = $_POST["username"];
+        $user_firstname = $_POST["user_firstname"];
+        $user_lastname = $_POST["user_lastname"];
+        $user_email = $_POST["user_email"];
+        $user_password = $_POST["user_password"];
+        $user_confirm_password = $_POST["user_confirm_password"];
+        $user_image = $_FILES["user_image"]["name"];
+        $user_image_temp = $_FILES["user_image"]["tmp_name"];
+        $user_image_size = $_FILES["user_image"]["size"];
+
+        $user_is_admin = $_POST["user_is_admin"];
+
+        $verify_token = md5(rand());
+
+        $username = mysqli_real_escape_string($connection, $_POST["username"]);
+        $user_firstname = mysqli_real_escape_string($connection, $_POST["user_firstname"]);
+        $user_lastname = mysqli_real_escape_string($connection, $_POST["user_lastname"]);
+        $user_email = mysqli_real_escape_string($connection, $_POST["user_email"]);
+        $user_password = mysqli_real_escape_string($connection, $_POST["user_password"]);
+        $user_confirm_password = mysqli_real_escape_string($connection, $_POST["user_confirm_password"]);
+
+        $user_image = mysqli_real_escape_string($connection, $_FILES["user_image"]["name"]);
+        $user_is_admin = mysqli_real_escape_string($connection, $_POST["user_is_admin"]);
+
+
+
+
+
+
+        $pattern = "/.{3,}/";
+        if (empty($username)) {
+            $usernameErr = "Username can not be empty";
+        } else if (!preg_match($pattern, trim($username))) {
+            $usernameErr = "Username must be longer than 3 characters";
+        } else {
+
+            try {
+                $query = "SELECT * FROM users WHERE username = ? ";
+                $statement = $connection->prepare($query);
+                $statement->bind_param("s", $username);
+                $statement->execute();
+                $result = $statement->get_result();
+                if ($row = $result->fetch_assoc()) {
+                    $usernameErr = "Username is taken";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+
+        if (empty($user_firstname)) {
+            $firstnameErr = "Firstname can not be empty ";
+        }
+
+        if (empty($user_lastname)) {
+            $lastnameErr = "Lastname can not be empty ";
+        }
+
+        $pattern = "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/";
+        if (empty($user_email)) {
+            $emailErr = "Email field can not be empty";
+        } else if (!preg_match($pattern, trim($user_email))) {
+            $emailErr = "Email is inavlid";
+        } else {
+            try {
+
+                $query = "SELECT * FROM users WHERE email = ?  ";
+
+                $statement = $connection->prepare($query);
+                $statement->bind_param("s", $user_email);
+                $statement->execute();
+
+                $result = $statement->get_result();
+
+                if ($row = $result->fetch_assoc()) {
+                    $emailErr = "Email is taken";
+                }
+                $statement->close();
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+
+
+        if (file_exists($user_image_temp)) {
+            $file_extension = pathinfo($user_image, PATHINFO_EXTENSION);
+
+            if (!in_array(strtolower($file_extension), $allowed_extensions)) {
+                $imageErr = "Image can only be of type jpg/jpeg/png/gif";
+            } else if ($user_image_size > 3000000) {
+                $imageErr = "Image can't be over 3MB";
+            } else {
+
+                move_uploaded_file($user_image_temp, "images/$user_image");
+            }
+        } else {
+            $user_image = "default.jpg";
+        }
+
+        $pattern = "/^(?=.*\d).{8,}$/";
+        if (empty($user_password)) {
+            $passwordErr = "Password can not be empty";
+        } else if (!preg_match($pattern, trim($user_password))) {
+            $passwordErr = "Password must have length of 8 or more and include one number";
+        }
+
+        if (trim($user_password) != trim($user_confirm_password)) {
+            $passwordErr = "Passwords must match";
+            $confirmPasswordErr = "Passwords must match";
+        }
+
+        if ($user_is_admin != "0" && $user_is_admin != "1") {
+            $isAdminErr = "Only accepted values are admin and regular";
+        }
+
+        $hashed_password = password_hash($user_password, PASSWORD_DEFAULT);
+
+        if (
+            empty($usernameErr) && empty($firstnameErr) &&
+            empty($lastnameErr) && empty($emailErr) &&
+            empty($imageErr) && empty($coverImageErr) &&
+            empty($isAdminErr) && empty($passwordErr) && empty($confirmPasswordErr)
+        ) {
+            //Insert user/Registered User Data
+            $query = "INSERT INTO users(username,password,firstname,lastname,email,image,is_admin,verify_token)
+             VALUES('$username','$hashed_password','$user_firstname','$user_lastname','$user_email','$user_image',$user_is_admin,'$verify_token')";
+            $query_run = mysqli_query($connection, $query);
+
+            if ($query_run) {
+                sendemail_verify("$user_firstname", "$user_email", "$verify_token");
+                // $confirmation = "Registration successfull! Please verify your email address.";
+                $confirmation = "Registration successfull! Please verify your email address.";
+            } else {
+                // $confirmation = "Registration failed!";
+                $confirmation = "Registration failed!";
+                // header("Location:register.php");
+            }
+            // header("Location: register.php");
+        }
+    }
+}
