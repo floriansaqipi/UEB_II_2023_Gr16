@@ -608,6 +608,85 @@ function checkPostPrivileges()
     }
 }
 
+function checkCommentPrivileges()
+{
+    global $connection;
+    if (isset($_GET["c_id"]) && isset($_SESSION["user_id"])) {
+        $user_id = $_SESSION["user_id"];
+        $comment_id = $_GET["c_id"];
+        try {
+            $query = "SELECT * FROM comments WHERE comment_id = ? ";
+            $statement = $connection->prepare($query);
+            $statement->bind_param("i", $comment_id);
+            $statement->execute();
+            $result = $statement->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $db_user_id = $row["user_id"];
+                if ($user_id != $db_user_id) {
+                    header("Location: 403.php");
+                }
+            } else {
+                header("Location: 404.php");
+            }
+            $result->close();
+        } catch (Exception $e) {
+            echo "QUERY FAILED" . $e->getMessage();
+            die();
+        }
+    }
+}
+
+function getCommentContent()
+{
+    global $connection,$comment_content, $comment_id ;
+    if (isset($_GET["c_id"])) {
+        $comment_id = $_GET["c_id"];
+        $query = "SELECT * FROM comments WHERE comment_id = $comment_id ";
+        $get_comments_content_query = mysqli_query($connection, $query);
+        confirmQuery($get_comments_content_query);
+
+        while ($row = mysqli_fetch_assoc($get_comments_content_query)) {
+            $comment_id = $row["comment_id"];
+            $comment_content = $row["content"];
+        }
+    }
+}
+
+function editCommentRegular()
+{
+    global $connection, $contentErr, $comment_content, $comment_id;
+
+    if (isset($_POST["edit-comment"])) {
+
+        $comment_content = $_POST["comment_content"];
+        if (empty($comment_content)) {
+            $contentErr = "Content can not be empty";
+        } else {
+            $pattern = "/.{1,}/";
+            if (!preg_match($pattern, trim($comment_content))) {
+                $contentErr = "Content must be longer than 1 characters";
+            }
+        }
+    
+
+        if (empty($contentErr)) {
+            try {
+                $query = "UPDATE comments SET content = ? ";
+                $query .= "WHERE comment_id = ? ";
+
+                $statement = $connection->prepare($query);
+                $statement->bind_param("si",$comment_content,$comment_id);
+                $statement->execute();
+                $statement->close();
+                header("Location: userprofile.php?source=all_comments");
+            } catch (Exception $e) {
+                echo "QUERY FAILED" . $e->getMessage();
+                die();
+            }
+        }
+    }
+}
+
 
 
 function editPostRegularInputs()
@@ -950,8 +1029,8 @@ function getPostsData()
 
                 countSinglePostCommentsAtTables();
                 echo "<td>$post_date</td>";
-                echo "<td><a href='edit-post.php?source=edit_post&p_id={$post_id}' class='btn btn-outline-warning' role='button'>Edit</a></td>";
-                echo "<td><a href='userprofile.php?source=all_posts&delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
+                echo "<td><a href='edit-post.php?p_id={$post_id}' class='btn btn-outline-warning' role='button'>Edit</a></td>";
+                echo "<td><a href='userprofile.php?delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
                 echo "</tr>";
             }
         }
@@ -1291,17 +1370,17 @@ function getCommentsData()
                 echo "</td>";
                 echo "<td>{$comment_date}</td>";
                 echo "<td>
-                         <a href='userprofile.php?source=all_comments&approve=$comment_id' class='btn btn-outline-success' role='button'>
+                         <a href='userprofile.php?source=all_comments&approve={$comment_id}' class='btn btn-outline-success' role='button'>
                           Publish
                          </a>
                       </td>";
                 echo "<td>
-                          <a href='userprofile.php?source=all_comments&disapprove=$comment_id' class='btn btn-outline-warning' role='button'>
+                          <a href='userprofile.php?source=all_comments&disapprove={$comment_id}' class='btn btn-outline-warning' role='button'>
                           Draft
                           </a>
                       </td>";
-                echo "<td><a href='userprofile.php?source=all_comments&delete=$comment_id'class='btn btn-outline-danger' role='button'>Delete</a></td>";
-               // echo "<td><input name='editData' type='button' name='edit' value='Edit' data-bodytext='$comment_id' id='$comment_id' class='btn btn-info btn-xs edit_data' /></td>"; 
+                echo "<td><a href='userprofile.php?source=all_comments&delete={$comment_id}'class='btn btn-outline-danger' role='button'>Delete</a></td>";
+                echo "<td><a href='edit-comment.php?c_id={$comment_id}'class='btn btn-outline-info' role='button'>Edit</a></td>";
 
                 echo "</tr>";
                 
