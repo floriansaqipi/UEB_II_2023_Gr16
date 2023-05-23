@@ -79,9 +79,9 @@
                         </div>
                         <div class="col-sm-10">
                             <img width="128"  src="../images/<?php echo $user_cover_image ;?>" alt="image">
-                            <label for="file" class="custom-file" style="width : 100%; margin-top: 16px">
-                                <input name="user_cover_image" type="file" id="file" class="custom-file-input">
-                                <span class="custom-file-control" id="file-span">Choose file</span>
+                            <label for="cover_file" class="custom-file" style="width : 100%; margin-top: 16px">
+                                <input name="user_cover_image" type="file" id="cover_file" class="custom-file-input">
+                                <span class="custom-file-control" id="file-spans">Choose file</span>
                             </label>
                         </div>
                         <div class="col-sm-2">
@@ -89,7 +89,7 @@
                         </div>
                         <div class="col-sm-10">
                             
-                            <div class="form-control-feedback"><?php echo $imageErr; ?></div>
+                            <div class="form-control-feedback"><?php echo $coverImageErr; ?></div>
                         </div>
                     </div>
                     <div class="form-group row <?php echo !empty($isAdminErr) ? "has-danger" : "" ?>">

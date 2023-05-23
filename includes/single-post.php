@@ -79,7 +79,7 @@ if (isset($_GET["p_id"])) {
                     </div>
                 </div>
                 <div class="col-lg-12 down-content">
-                    <?php // insertComment(); ?>
+                    <?php if(isset($_SESSION["user_id"])) { ?>
                     <form class="row g-3 needs-validation" action="insert-comment.php" method="post" novalidate id="post-comment-form">
                         <div class="col-md-12">
                             <h4>Leave a Comment: </h4>
@@ -95,6 +95,7 @@ if (isset($_GET["p_id"])) {
                             <button class="btn btn-primary" type="submit" name="post_comment">Post Comment</button>
                         </div>
                     </form>
+                    <?php } ?>
                 </div>
             </div>
         </div>

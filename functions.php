@@ -1032,7 +1032,7 @@ function getPostsData()
                 countSinglePostCommentsAtTables();
                 echo "<td>$post_date</td>";
                 echo "<td><a href='edit-post.php?p_id={$post_id}' class='btn btn-outline-warning' role='button'>Edit</a></td>";
-                echo "<td><a href='userprofile.php?delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
+                echo "<td><a href='userprofile.php?source=all_posts &delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
                 echo "</tr>";
             }
         } catch (Exception $e) {
@@ -1598,10 +1598,10 @@ function userSignUp()
             $lastnameErr = "Lastname can not be empty ";
         }
 
-        $pattern = "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/";
+        // $pattern = "/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/";
         if (empty($user_email)) {
             $emailErr = "Email field can not be empty";
-        } else if (!preg_match($pattern, trim($user_email))) {
+        } else if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
             $emailErr = "Email is inavlid";
         } else {
             try {

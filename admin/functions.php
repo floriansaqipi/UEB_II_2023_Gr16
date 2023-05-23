@@ -819,7 +819,7 @@ function editUserAdmin()
             confirmQuery($get_user_by_email_query);
 
             if ($row = mysqli_fetch_assoc($get_user_by_email_query)) {
-                $emailErr = "Username is taken";
+                $emailErr = "Email is taken";
             }
         }
 
