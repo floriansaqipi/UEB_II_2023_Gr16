@@ -1381,7 +1381,7 @@ function setPreferedColor(){
 
 function setDefaultColor(){
     if(isset($_POST["default_color"])){
-        echo "HEEY";
+        //echo "HEEY";
         $cookie_name = "theme_color";
         $cookie_value = "";
         $cookie_expiration = time() - 3600;
