@@ -1032,7 +1032,7 @@ function getPostsData()
                 countSinglePostCommentsAtTables();
                 echo "<td>$post_date</td>";
                 echo "<td><a href='edit-post.php?p_id={$post_id}' class='btn btn-outline-warning' role='button'>Edit</a></td>";
-                echo "<td><a href='userprofile.php?source=all_posts &delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
+                echo "<td><a href='userprofile.php?source=all_posts&delete={$post_id}' class='btn btn-outline-danger' role='button'>Delete</a></td>";
                 echo "</tr>";
             }
         } catch (Exception $e) {
