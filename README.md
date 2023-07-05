@@ -9,7 +9,8 @@ Projekti ka të bëjë me ndërtimin e një uebfaqeje të quajtur **"JOBFINDER"*
 
 Për krijimin e uebfaqes janë përdorur HTML,CSS,JavaScript,PHP,AJAX.
 
-
+Linku i një video e cila shfaq çfarë ofron projekti:
+https://drive.google.com/drive/folders/1U2B6ex4-XNJD_ML2sc7KgbmjbZr-LSRX?usp=sharing
 
 ### Kontributorët
 - [Florian Saqipi](https://github.com/floriansaqipi)
